@@ -255,8 +255,8 @@ body {
     minmax(80px, max-content)
     minmax(80px, max-content)
     minmax(80px, max-content)
-    minmax(80px, max-content)
-    1fr;
+    1fr
+    auto;
   row-gap: 4px;
   padding: 16px;
 }
@@ -277,6 +277,12 @@ body {
   background: rgba(238,238,238,0.04);
   border-radius: 8px;
 }
+.pos-row.data:hover .col-close {
+  background: #242424;
+}
+.pos-row.data:hover .col-close::before {
+  background: linear-gradient(to right, transparent, #242424);
+}
 
 /* Cell base */
 .cell {
@@ -296,6 +302,27 @@ body {
 }
 
 /* Column definitions — grid sizing via grid-template-columns, cells use flex for inner alignment */
+.col-close {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  background: var(--bg1);
+  padding-left: 12px;
+  gap: 6px;
+  align-self: stretch;
+  overflow: visible;
+}
+.col-close::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: -14px;
+  bottom: -14px;
+  width: 24px;
+  background: linear-gradient(to right, transparent, var(--bg1));
+  pointer-events: none;
+}
+.header .col-close { background: var(--bg1); }
 .col-symbol       { padding-left: 11px; }
 .col-size         { justify-content: flex-end; }
 .col-entry        { justify-content: flex-end; }
@@ -417,6 +444,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 32px;
+  min-width: 60px;
   padding: 0 12px;
   border-radius: 8px;
   background: transparent;
@@ -556,11 +584,11 @@ body {
             <div class="cell header-cell col-mark">Mark price</div>
             <div class="cell header-cell col-liq">Liq. price</div>
             <div class="cell header-cell col-margin">Margin</div>
-            <div class="cell header-cell col-close">Close</div>
             <div class="cell header-cell col-tp">Take profit</div>
             <div class="cell header-cell col-sl">Stop loss</div>
             <div class="cell header-cell col-leverage">Leverage</div>
             <div class="cell header-cell col-flip">Flip</div>
+            <div class="cell header-cell col-close">Close</div>
           </div>
 
           <!-- Data Row 1: BTC Long (positive P&L) -->
@@ -611,9 +639,6 @@ body {
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
               </div>
             </div>
-            <div class="cell col-close">
-              <button class="btn-close-pos">Close</button>
-            </div>
             <div class="cell col-tp">
               <span style="font-size:13px;color:#f7f7f7;">750,123.12</span>
               <span class="tp-count">(10)</span>
@@ -635,6 +660,10 @@ body {
             </div>
             <div class="cell col-flip">
               <button class="btn-flip">Flip to long</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
             </div>
           </div>
 
@@ -683,9 +712,6 @@ body {
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
               </div>
             </div>
-            <div class="cell col-close">
-              <button class="btn-close-pos">Close</button>
-            </div>
             <div class="cell col-tp">
               <span class="set-link">Set</span>
               <div class="icon-btn">
@@ -706,6 +732,10 @@ body {
             </div>
             <div class="cell col-flip">
               <button class="btn-flip">Flip to short</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
             </div>
           </div>
 
@@ -757,9 +787,6 @@ body {
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
               </div>
             </div>
-            <div class="cell col-close">
-              <button class="btn-close-pos">Close</button>
-            </div>
             <div class="cell col-tp">
               <span style="font-size:13px;color:#f7f7f7;">750,123.12</span>
               <span class="tp-count">(3)</span>
@@ -781,6 +808,10 @@ body {
             </div>
             <div class="cell col-flip">
               <button class="btn-flip">Flip to long</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
             </div>
           </div>
         </div>
