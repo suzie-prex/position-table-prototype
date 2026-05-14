@@ -320,6 +320,7 @@ body {
   bottom: -14px;
   width: 24px;
   background: linear-gradient(to right, transparent, var(--bg1));
+  border-right: 1px solid var(--border);
   pointer-events: none;
 }
 .header .col-close { background: var(--bg1); }
@@ -558,7 +559,7 @@ body {
       <!-- Tab bar -->
       <div class="pos-tabs">
         <div class="tabs-left">
-          <div class="tab active">Positions (3)</div>
+          <div class="tab active">Positions (5)</div>
           <div class="tab">Orders (3)</div>
           <div class="tab">History</div>
           <div class="tab">Social</div>
@@ -591,9 +592,8 @@ body {
             <div class="cell header-cell col-close">Close</div>
           </div>
 
-          <!-- Data Row 1: BTC Long (positive P&L) -->
           <div class="pos-row data">
-            <div class="cell col-symbol" style="border-left: 3px solid var(--negative); padding-left: 8px;">
+            <div class="cell col-symbol" style="border-left: 3px solid var(--positive); padding-left: 8px;">
               <div class="cell-stack" style="gap:4px;">
                 <span class="symbol-name">BTC</span>
                 <span class="isolation-badge">Isolated 10x</span>
@@ -602,10 +602,10 @@ body {
             <div class="cell col-pnl">
               <div class="cell-stack">
                 <div class="cell-row" style="gap:2px;">
-                  <span class="positive" style="font-size:13px;">+1,000.12</span>
+                  <span class="positive" style="font-size:13px;">+92,837.50</span>
                   <span class="positive" style="font-size:13px;">USDT</span>
                 </div>
-                <span class="positive" style="font-size:11px;">+80.42%</span>
+                <span class="positive" style="font-size:11px;">+76.96%</span>
               </div>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
@@ -618,21 +618,21 @@ body {
             <div class="cell col-size">
               <div class="cell-stack align-right">
                 <div class="cell-row" style="gap:2px;">
-                  <span style="font-size:13px;color:#f7f7f7;">12.123456</span>
+                  <span style="font-size:13px;color:#f7f7f7;">12.5000</span>
                   <span style="font-size:13px;color:#f7f7f7;">BTC</span>
                 </div>
-                <span style="font-size:11px;color:var(--text-s);">123,456.12 USDT</span>
+                <span style="font-size:11px;color:var(--text-s);">1,298,087 USDT</span>
               </div>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
               </div>
             </div>
-            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">750,123.12</span></div>
-            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">750,123.12</span></div>
-            <div class="cell col-liq"><span class="negative" style="font-size:13px;">750,123.12</span></div>
+            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">96,420.00</span></div>
+            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">103,847.00</span></div>
+            <div class="cell col-liq"><span class="negative" style="font-size:13px;">87,213.00</span></div>
             <div class="cell col-margin">
               <div class="cell-row" style="gap:4px;">
-                <span style="font-size:13px;color:#f7f7f7;">23.12</span>
+                <span style="font-size:13px;color:#f7f7f7;">129,808</span>
                 <span style="font-size:13px;color:#f7f7f7;">USDT</span>
               </div>
               <div class="icon-btn">
@@ -640,92 +640,20 @@ body {
               </div>
             </div>
             <div class="cell col-tp">
-              <span style="font-size:13px;color:#f7f7f7;">750,123.12</span>
-              <span class="tp-count">(10)</span>
+              <span style="font-size:13px;color:#f7f7f7;">120,000.00</span>
+              <span class="tp-count">(5)</span>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
               </div>
             </div>
             <div class="cell col-sl">
-              <span class="set-link">Set</span>
+              <span style="font-size:13px;color:#f7f7f7;">92,000.00</span>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
               </div>
             </div>
             <div class="cell col-leverage">
-              <span style="font-size:13px;color:#f7f7f7;">100</span>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
-              </div>
-            </div>
-            <div class="cell col-flip">
-              <button class="btn-flip">Flip to long</button>
-            </div>
-            <div class="cell col-close">
-              <button class="btn-close-pos">Partial</button>
-              <button class="btn-close-pos">Full</button>
-            </div>
-          </div>
-
-          <!-- Data Row 2: ETH Long (negative P&L, timer) -->
-          <div class="pos-row data">
-            <div class="cell col-symbol" style="border-left: 3px solid var(--positive); padding-left: 8px;">
-              <div class="cell-stack" style="gap:4px;">
-                <span class="symbol-name">ETH</span>
-                <span class="isolation-badge">Isolated 10x</span>
-              </div>
-            </div>
-            <div class="cell col-pnl">
-              <div class="cell-stack">
-                <div class="cell-row" style="gap:2px;">
-                  <span class="negative" style="font-size:13px;">-1,000.12</span>
-                  <span class="negative" style="font-size:13px;">USDT</span>
-                </div>
-                <span class="negative" style="font-size:11px;">-80.42%</span>
-              </div>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
-              </div>
-              <span class="timer-badge"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="currentColor"/></svg>00:54</span>
-            </div>
-            <div class="cell col-size">
-              <div class="cell-stack align-right">
-                <div class="cell-row" style="gap:2px;">
-                  <span style="font-size:13px;color:#f7f7f7;">123.123456</span>
-                  <span style="font-size:13px;color:#f7f7f7;">ETH</span>
-                </div>
-                <span style="font-size:11px;color:var(--text-s);">123,456.12 USDT</span>
-              </div>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-              </div>
-            </div>
-            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">250,123.12</span></div>
-            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">250,123.12</span></div>
-            <div class="cell col-liq"><span class="negative" style="font-size:13px;">190,123.12</span></div>
-            <div class="cell col-margin">
-              <div class="cell-row" style="gap:4px;">
-                <span style="font-size:13px;color:#f7f7f7;">650.12</span>
-                <span style="font-size:13px;color:#f7f7f7;">USDT</span>
-              </div>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-              </div>
-            </div>
-            <div class="cell col-tp">
-              <span class="set-link">Set</span>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
-              </div>
-            </div>
-            <div class="cell col-sl">
-              <span class="set-link">Set</span>
-              <div class="icon-btn">
-                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
-              </div>
-            </div>
-            <div class="cell col-leverage">
-              <span style="font-size:13px;color:#f7f7f7;">50</span>
+              <span style="font-size:13px;color:#f7f7f7;">10</span>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
               </div>
@@ -739,48 +667,44 @@ body {
             </div>
           </div>
 
-          <!-- Data Row 3: 1MBABYDOGE Long (negative P&L) -->
           <div class="pos-row data">
             <div class="cell col-symbol" style="border-left: 3px solid var(--negative); padding-left: 8px;">
               <div class="cell-stack" style="gap:4px;">
-                <span class="symbol-name">1MBABYDOGE</span>
-                <span class="isolation-badge">Isolated 10x</span>
+                <span class="symbol-name">ETH</span>
+                <span class="isolation-badge">Isolated 5x</span>
               </div>
             </div>
             <div class="cell col-pnl">
               <div class="cell-stack">
                 <div class="cell-row" style="gap:2px;">
-                  <span class="negative" style="font-size:13px;">-1,000.12</span>
-                  <span class="negative" style="font-size:13px;">USDT</span>
+                  <span class="positive" style="font-size:13px;">+114,240.00</span>
+                  <span class="positive" style="font-size:13px;">USDT</span>
                 </div>
-                <span class="negative" style="font-size:11px;">-80.42%</span>
+                <span class="positive" style="font-size:11px;">+48.25%</span>
               </div>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
               </div>
-              <div class="icon-btn boost-btn">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="#CFE600"/></svg>
-                <div class="tooltip">Profit boost</div>
-              </div>
+              <span class="timer-badge"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="currentColor"/></svg>00:54</span>
             </div>
             <div class="cell col-size">
               <div class="cell-stack align-right">
                 <div class="cell-row" style="gap:2px;">
-                  <span style="font-size:13px;color:#f7f7f7;">1.123456</span>
-                  <span style="font-size:13px;color:#f7f7f7;">1MBABYDOGE</span>
+                  <span style="font-size:13px;color:#f7f7f7;">420.0000</span>
+                  <span style="font-size:13px;color:#f7f7f7;">ETH</span>
                 </div>
-                <span style="font-size:11px;color:var(--text-s);">6.12 USDT</span>
+                <span style="font-size:11px;color:var(--text-s);">1,070,160 USDT</span>
               </div>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
               </div>
             </div>
-            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">1.12</span></div>
-            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">0.82</span></div>
-            <div class="cell col-liq"><span class="negative" style="font-size:13px;">0.60</span></div>
+            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">2,820.00</span></div>
+            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">2,548.00</span></div>
+            <div class="cell col-liq"><span class="negative" style="font-size:13px;">3,384.00</span></div>
             <div class="cell col-margin">
               <div class="cell-row" style="gap:4px;">
-                <span style="font-size:13px;color:#f7f7f7;">20.12</span>
+                <span style="font-size:13px;color:#f7f7f7;">236,880</span>
                 <span style="font-size:13px;color:#f7f7f7;">USDT</span>
               </div>
               <div class="icon-btn">
@@ -788,7 +712,7 @@ body {
               </div>
             </div>
             <div class="cell col-tp">
-              <span style="font-size:13px;color:#f7f7f7;">750,123.12</span>
+              <span style="font-size:13px;color:#f7f7f7;">2,100.00</span>
               <span class="tp-count">(3)</span>
               <div class="icon-btn">
                 <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
@@ -814,6 +738,232 @@ body {
               <button class="btn-close-pos">Full</button>
             </div>
           </div>
+
+          <div class="pos-row data">
+            <div class="cell col-symbol" style="border-left: 3px solid var(--positive); padding-left: 8px;">
+              <div class="cell-stack" style="gap:4px;">
+                <span class="symbol-name">SOL</span>
+                <span class="isolation-badge">Isolated 20x</span>
+              </div>
+            </div>
+            <div class="cell col-pnl">
+              <div class="cell-stack">
+                <div class="cell-row" style="gap:2px;">
+                  <span class="positive" style="font-size:13px;">+59,325.00</span>
+                  <span class="positive" style="font-size:13px;">USDT</span>
+                </div>
+                <span class="positive" style="font-size:11px;">+109.15%</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
+              </div>
+              <div class="icon-btn boost-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="#CFE600"/></svg>
+                <div class="tooltip">Profit boost</div>
+              </div>
+            </div>
+            <div class="cell col-size">
+              <div class="cell-stack align-right">
+                <div class="cell-row" style="gap:2px;">
+                  <span style="font-size:13px;color:#f7f7f7;">3,500.00</span>
+                  <span style="font-size:13px;color:#f7f7f7;">SOL</span>
+                </div>
+                <span style="font-size:11px;color:var(--text-s);">603,225 USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">155.40</span></div>
+            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">172.35</span></div>
+            <div class="cell col-liq"><span class="negative" style="font-size:13px;">147.63</span></div>
+            <div class="cell col-margin">
+              <div class="cell-row" style="gap:4px;">
+                <span style="font-size:13px;color:#f7f7f7;">54,390</span>
+                <span style="font-size:13px;color:#f7f7f7;">USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-tp">
+              <span style="font-size:13px;color:#f7f7f7;">210.00</span>
+              <span class="tp-count">(2)</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-sl">
+              <span style="font-size:13px;color:#f7f7f7;">145.00</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-leverage">
+              <span style="font-size:13px;color:#f7f7f7;">20</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-flip">
+              <button class="btn-flip">Flip to short</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
+            </div>
+          </div>
+
+          <div class="pos-row data">
+            <div class="cell col-symbol" style="border-left: 3px solid var(--negative); padding-left: 8px;">
+              <div class="cell-stack" style="gap:4px;">
+                <span class="symbol-name">XRP</span>
+                <span class="isolation-badge">Isolated 25x</span>
+              </div>
+            </div>
+            <div class="cell col-pnl">
+              <div class="cell-stack">
+                <div class="cell-row" style="gap:2px;">
+                  <span class="positive" style="font-size:13px;">+55,250.00</span>
+                  <span class="positive" style="font-size:13px;">USDT</span>
+                </div>
+                <span class="positive" style="font-size:11px;">+131.07%</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
+              </div>
+              <div class="icon-btn boost-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="#CFE600"/></svg>
+                <div class="tooltip">Profit boost</div>
+              </div>
+            </div>
+            <div class="cell col-size">
+              <div class="cell-stack align-right">
+                <div class="cell-row" style="gap:2px;">
+                  <span style="font-size:13px;color:#f7f7f7;">425,000</span>
+                  <span style="font-size:13px;color:#f7f7f7;">XRP</span>
+                </div>
+                <span style="font-size:11px;color:var(--text-s);">998,750 USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">2.4800</span></div>
+            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">2.3500</span></div>
+            <div class="cell col-liq"><span class="negative" style="font-size:13px;">2.5792</span></div>
+            <div class="cell col-margin">
+              <div class="cell-row" style="gap:4px;">
+                <span style="font-size:13px;color:#f7f7f7;">42,160</span>
+                <span style="font-size:13px;color:#f7f7f7;">USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-tp">
+              <span style="font-size:13px;color:#f7f7f7;">1.8000</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-sl">
+              <span style="font-size:13px;color:#f7f7f7;">2.5800</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-leverage">
+              <span style="font-size:13px;color:#f7f7f7;">25</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-flip">
+              <button class="btn-flip">Flip to long</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
+            </div>
+          </div>
+
+          <div class="pos-row data">
+            <div class="cell col-symbol" style="border-left: 3px solid var(--positive); padding-left: 8px;">
+              <div class="cell-stack" style="gap:4px;">
+                <span class="symbol-name">DOGE</span>
+                <span class="isolation-badge">Isolated 20x</span>
+              </div>
+            </div>
+            <div class="cell col-pnl">
+              <div class="cell-stack">
+                <div class="cell-row" style="gap:2px;">
+                  <span class="positive" style="font-size:13px;">+22,050.00</span>
+                  <span class="positive" style="font-size:13px;">USDT</span>
+                </div>
+                <span class="positive" style="font-size:11px;">+57.67%</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M18 2.1a3.9 3.9 0 11-3.2 6.1L9.9 11v2l4.9 2.8a3.9 3.9 0 11-.6 1.7L9 14.5a3.9 3.9 0 110-5l5.2-3A3.9 3.9 0 0118 2.1z"/></svg>
+              </div>
+              <div class="icon-btn boost-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.64223 1.52386C8.56105 1.41499 8.43908 1.34383 8.30436 1.32674C8.16964 1.30964 8.03376 1.34807 7.92796 1.4332C6.68117 2.43642 5.8116 3.89184 5.56881 5.55091C5.1311 5.23361 4.74666 4.84701 4.43173 4.40721C4.34509 4.28622 4.20907 4.21011 4.06063 4.19956C3.9122 4.18902 3.76678 4.24514 3.66391 4.35267C2.63365 5.42961 2 6.89122 2 8.49977C2 11.8135 4.68629 14.4998 8 14.4998C11.3137 14.4998 14 11.8135 14 8.49977C14 6.05917 12.5429 3.95999 10.4532 3.0227C9.71372 2.66171 9.10311 2.14189 8.64223 1.52386ZM10.5 9.50003C10.5 10.8807 9.38071 12 8 12C6.61929 12 5.5 10.8807 5.5 9.50003C5.5 9.22714 5.54372 8.96446 5.62455 8.71862C6.04353 9.02835 6.52513 9.25823 7.04687 9.38577C7.1908 8.45192 7.65771 7.62463 8.32993 7.02161C9.5547 7.18308 10.5 8.23116 10.5 9.50003Z" fill="#CFE600"/></svg>
+                <div class="tooltip">Profit boost</div>
+              </div>
+            </div>
+            <div class="cell col-size">
+              <div class="cell-stack align-right">
+                <div class="cell-row" style="gap:2px;">
+                  <span style="font-size:13px;color:#f7f7f7;">3,500,000</span>
+                  <span style="font-size:13px;color:#f7f7f7;">DOGE</span>
+                </div>
+                <span style="font-size:11px;color:var(--text-s);">786,800 USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-entry"><span style="font-size:13px;color:#f7f7f7;">0.21850</span></div>
+            <div class="cell col-mark"><span style="font-size:13px;color:#f7f7f7;">0.22480</span></div>
+            <div class="cell col-liq"><span class="negative" style="font-size:13px;">0.20757</span></div>
+            <div class="cell col-margin">
+              <div class="cell-row" style="gap:4px;">
+                <span style="font-size:13px;color:#f7f7f7;">38,237</span>
+                <span style="font-size:13px;color:#f7f7f7;">USDT</span>
+              </div>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+            </div>
+            <div class="cell col-tp">
+              <span style="font-size:13px;color:#f7f7f7;">0.30000</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-sl">
+              <span class="set-link">Set</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-leverage">
+              <span style="font-size:13px;color:#f7f7f7;">20</span>
+              <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M15.2 4.5l4.3 4.3-9.5 9.5H5.7v-4.3l9.5-9.5zm1.4-1.4a1 1 0 011.4 0l2.9 2.9a1 1 0 010 1.4l-1.4 1.4-4.3-4.3 1.4-1.4z"/></svg>
+              </div>
+            </div>
+            <div class="cell col-flip">
+              <button class="btn-flip">Flip to short</button>
+            </div>
+            <div class="cell col-close">
+              <button class="btn-close-pos">Partial</button>
+              <button class="btn-close-pos">Full</button>
+            </div>
+          </div>
+
+
+
         </div>
       </div>
     </div>
