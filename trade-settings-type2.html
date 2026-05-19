@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Settings – Type 2 (Inline Toggle)</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: #0a0a12;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; gap: 32px;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    overflow-x: auto; overflow-y: hidden;
+  }
+
+  /* Case switcher */
+  .case-bar {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .case-bar .case-label {
+    font-size: 12px; color: #555; margin-right: 4px;
+  }
+  .case-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid #333; background: #1a1a28; color: #888;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .case-btn.active {
+    background: #f0b90b; color: #0d0d14; border-color: #f0b90b; font-weight: 600;
+  }
+
+  .device {
+    width: 375px; height: 812px;
+    background: #0d0d14; border-radius: 40px;
+    overflow: hidden; position: relative;
+    border: 3px solid #222;
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+  .status-bar {
+    height: 54px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 28px 8px; font-size: 12px; font-weight: 600; color: #fff;
+    background: #0d0d14; position: relative; z-index: 100;
+  }
+  .status-bar .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px; background: #000; border-radius: 0 0 18px 18px;
+  }
+
+  .screen {
+    position: absolute; inset: 0;
+    background: #0d0d14;
+    display: none; flex-direction: column; z-index: 1;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+  .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .scrollable::-webkit-scrollbar { display: none; }
+
+  .order-top-bar { display: flex; align-items: center; padding: 8px 16px; gap: 8px; }
+  .order-symbol { font-size: 17px; font-weight: 700; color: #fff; }
+  .order-symbol .tag { font-size: 10px; color: #888; background: #1a1a28; padding: 2px 5px; border-radius: 3px; margin-left: 4px; font-weight: 500; }
+  .order-top-icons { margin-left: auto; display: flex; gap: 6px; }
+  .order-top-icons .icon-btn { width: 28px; height: 28px; background: #1a1a28; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #888; cursor: pointer; }
+
+  .order-controls { display: flex; align-items: center; padding: 0; gap: 6px; }
+  .ctrl-btn {
+    height: 28px; padding: 0 10px; border-radius: 6px;
+    border: none; background: #1e1e32;
+    color: #e0e0e8; font-size: 12px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; gap: 4px;
+    transition: all 0.15s; font-family: inherit;
+  }
+
+  .order-body { display: flex; flex: 1; }
+  .orderbook-col { width: 150px; padding: 0 8px 0 16px; flex-shrink: 0; }
+  .ob-header { display: flex; justify-content: space-between; font-size: 10px; color: #555; padding-bottom: 6px; }
+  .ob-row { display: flex; justify-content: space-between; font-size: 11px; height: 20px; align-items: center; }
+  .ob-row .price { font-weight: 500; }
+  .ob-row .price.sell { color: #ea3943; }
+  .ob-row .price.buy { color: #0ecb81; }
+  .ob-row .qty { color: #555; }
+  .ob-mid { padding: 8px 0; font-size: 18px; font-weight: 700; color: #f0b90b; }
+  .ob-mid .sub { font-size: 10px; color: #555; font-weight: 400; display: block; }
+
+  .form-col { flex: 1; padding: 0 16px 0 8px; display: flex; flex-direction: column; gap: 8px; }
+  .order-tabs { display: flex; background: #12121e; border-radius: 8px; padding: 2px; }
+  .order-tab { flex: 1; height: 28px; border: none; background: none; color: #666; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .order-tab.active { background: #1e1e32; color: #fff; }
+  .form-input { height: 36px; background: #12121e; border: 1px solid #1e1e32; border-radius: 8px; display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: #888; }
+  .form-input .label { color: #555; margin-right: auto; }
+  .form-input .val { color: #ccc; }
+  .form-input .unit { color: #555; margin-left: 4px; }
+  .slider-mini { width: 100%; height: 3px; background: #1e1e32; border-radius: 2px; position: relative; margin: 4px 0; }
+  .slider-mini::after { content: ''; position: absolute; left: 0; top: -4px; width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; border: 2px solid #fff; }
+  .avail-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+  .avail-row .val { color: #888; }
+  .btn-buy { height: 36px; border: none; border-radius: 8px; background: #0ecb81; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-sell { height: 36px; border: none; border-radius: 8px; background: #ea3943; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+  .order-bottom-tabs { display: flex; height: 38px; border-top: 1px solid #1a1a28; align-items: center; padding: 0 16px; gap: 16px; flex-shrink: 0; }
+  .order-bottom-tabs span { font-size: 12px; color: #555; cursor: pointer; }
+  .order-bottom-tabs span.active { color: #fff; font-weight: 600; }
+  .position-list { flex-shrink: 0; padding: 8px 16px 16px; }
+  .pos-card { background: #12121e; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .pos-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .pos-card-header .sym { font-size: 13px; font-weight: 600; color: #fff; }
+  .pos-card-header .badge { font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: 500; }
+  .badge.long { background: #0ecb8122; color: #0ecb81; }
+  .badge.iso { background: #3b82f622; color: #3b82f6; }
+  .pos-card-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; margin-top: 4px; }
+  .pos-card-row .pnl-pos { color: #0ecb81; font-weight: 600; }
+
+  .bottom-nav {
+    height: 58px; display: flex; align-items: center; justify-content: space-around;
+    border-top: 1px solid #1a1a28; background: #0d0d14; flex-shrink: 0;
+  }
+  .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: #555; cursor: pointer; }
+  .bottom-nav-item.active { color: #fff; }
+  .bottom-nav-item .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+
+  /* ====== OVERLAY & BOTTOM SHEETS ====== */
+  .overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 50;
+    display: none; opacity: 0; transition: opacity 0.2s;
+  }
+  .overlay.visible { display: block; opacity: 1; }
+
+  .bottom-sheet {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: #16162a; border-radius: 16px 16px 0 0;
+    z-index: 60; transform: translateY(100%);
+    transition: transform 0.3s ease-out, visibility 0s 0.3s;
+    max-height: 88%; display: flex; flex-direction: column;
+    visibility: hidden;
+  }
+  .bottom-sheet.open { transform: translateY(0); visibility: visible; transition: transform 0.3s ease-out, visibility 0s 0s; }
+  .sheet-handle-bar { width: 36px; height: 4px; background: #333; border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+  .sheet-title { font-size: 16px; font-weight: 600; color: #fff; padding: 14px 20px 10px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+  .sheet-badge {
+    font-size: 11px; font-weight: 600; color: #f0b90b; background: rgba(240,185,11,0.12);
+    padding: 2px 8px; border-radius: 10px;
+    display: none;
+  }
+  .sheet-badge.show { display: inline-flex; }
+  .confirm-hint {
+    font-size: 12px; color: #f0b90b; text-align: center;
+    padding: 8px 0 0; display: none;
+  }
+  .confirm-hint.show { display: block; }
+  .sheet-scroll { overflow-y: auto; padding: 0 20px 24px; flex: 1; }
+  .sheet-scroll::-webkit-scrollbar { display: none; }
+
+  .radio-opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid #1e1e32; cursor: pointer;
+  }
+  .radio-opt:last-of-type { border-bottom: none; }
+  .radio-circle {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid #444; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-opt.selected .radio-circle { border-color: #f0b90b; }
+  .radio-opt.selected .radio-circle::after { content: ''; width: 10px; height: 10px; background: #f0b90b; border-radius: 50%; }
+  .radio-opt .r-label { font-size: 14px; color: #e0e0e8; font-weight: 500; }
+  .radio-opt .r-desc { font-size: 11px; color: #666; margin-top: 3px; line-height: 1.45; }
+  .radio-opt.disabled { pointer-events: none; opacity: 0.4; }
+
+  .r-sub-label { font-size: 13px; color: #ccc; font-weight: 500; margin-top: 10px; }
+  .learn-more { display: block; font-size: 12px; color: #888; margin-top: 8px; text-decoration: underline; text-underline-offset: 2px; }
+
+  .warning-box {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #2a1a10; border-radius: 8px;
+    padding: 10px 12px; margin-top: 12px;
+  }
+  .warning-box .w-icon { font-size: 13px; flex-shrink: 0; }
+  .warning-box .w-text { font-size: 11px; color: #f59e0b; line-height: 1.4; }
+
+  .sheet-btn {
+    width: 100%; height: 44px; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    margin-top: 16px; font-family: inherit; transition: background 0.2s, color 0.2s, opacity 0.15s;
+    background: #f0b90b; color: #0d0d14;
+  }
+  .sheet-btn:active { opacity: 0.85; }
+  .sheet-btn.disabled { background: #2a2a3e; color: #555; pointer-events: none; }
+
+  /* Toggle row */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-top: 1px solid #1e1e32; margin-top: 12px;
+  }
+  .toggle-label-group { display: flex; flex-direction: column; gap: 2px; }
+  .toggle-label { font-size: 13px; color: #ccc; font-weight: 500; }
+  .toggle-sub { font-size: 11px; color: #555; }
+  .toggle-row.disabled { opacity: 0.35; pointer-events: none; }
+  .toggle-switch {
+    width: 44px; height: 24px; border-radius: 12px;
+    background: #2a2a3e; position: relative; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-switch.on { background: #f0b90b; }
+  .toggle-switch::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; transition: transform 0.2s;
+  }
+  .toggle-switch.on::after { transform: translateX(20px); }
+
+  /* Caution list inside sheets */
+  .sheet-cautions {
+    background: #12121e; border-radius: 8px;
+    padding: 12px 14px; margin-top: 10px;
+    display: none;
+  }
+  .sheet-cautions.visible { display: block; }
+  .sheet-caution-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 10px; color: #666; line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .sheet-caution-item:last-child { margin-bottom: 0; }
+  .sheet-caution-dot {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: #555; flex-shrink: 0; margin-top: 5px;
+  }
+
+  /* Default leverage indicator */
+  .default-lev-indicator {
+    font-size: 11px; color: #f0b90b; margin-top: 8px;
+    display: none;
+  }
+  .default-lev-indicator.visible { display: block; }
+
+  /* Leverage sheet */
+  .lev-container { margin-bottom: 4px; }
+  .lev-val-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .lev-val-row .lev-val { font-size: 28px; font-weight: 700; color: #fff; }
+  .lev-val-row .lev-btns { display: flex; gap: 6px; }
+  .lev-val-row .lev-btns button {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid #2a2a3e; background: #12121e;
+    color: #ccc; font-size: 18px; cursor: pointer; font-family: inherit;
+  }
+  .lev-track {
+    width: 100%; height: 4px; background: #2a2a3e;
+    border-radius: 2px; position: relative; cursor: pointer;
+  }
+  .lev-track-fill {
+    position: absolute; left: 0; top: 0; height: 4px;
+    background: #f0b90b; border-radius: 2px; width: 0%; transition: width 0.15s;
+  }
+  .lev-track-thumb {
+    position: absolute; top: -6px; width: 16px; height: 16px;
+    background: #f0b90b; border-radius: 50%;
+    border: 2px solid #fff; left: 0%;
+    transform: translateX(-50%); transition: left 0.15s;
+  }
+  .lev-ticks {
+    display: flex; justify-content: space-between;
+    margin-top: 8px; font-size: 10px; color: #444;
+  }
+  .helper-text { font-size: 11px; color: #555; margin-top: 12px; line-height: 1.4; }
+
+  /* Toast */
+  .toast {
+    position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #1e1e38; border: 1px solid #2a2a3e;
+    color: #e0e0e8; font-size: 13px; padding: 10px 20px; border-radius: 10px;
+    z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .flow-hint {
+    position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+    background: #f0b90b22; border: 1px solid #f0b90b44;
+    color: #f0b90b; font-size: 11px; padding: 6px 14px; border-radius: 20px;
+    z-index: 200; pointer-events: none;
+    animation: pulse 2s ease-in-out infinite; white-space: nowrap;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+  .page-layout {
+    display: flex; align-items: center; gap: 32px;
+  }
+  .proto-col {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .proto-info {
+    width: 220px; padding: 18px; flex-shrink: 0;
+    background: #13131f; border: 1px solid #2a2a3e; border-radius: 16px;
+    align-self: flex-start; margin-top: 60px;
+  }
+  .proto-info-type {
+    font-size: 11px; font-weight: 700; color: #f0b90b;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .proto-info-title {
+    font-size: 15px; font-weight: 600; color: #e0e0e8; margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .proto-info-list { list-style: none; padding: 0; margin: 0; }
+  .proto-info-list li {
+    font-size: 12px; color: #888; line-height: 1.6;
+    padding-left: 14px; position: relative; margin-bottom: 6px;
+  }
+  .proto-info-list li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 4px; height: 4px; border-radius: 50%; background: #444;
+  }
+  .proto-nav {
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid #2a2a3e;
+  }
+  .proto-nav-label { font-size: 10px; color: #555; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .proto-nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 10px;
+    background: #1a1a2e; border: 1px solid #2a2a3e;
+    cursor: pointer; text-decoration: none; transition: border-color 0.2s;
+  }
+  .proto-nav-link:hover { border-color: #444; }
+  .proto-nav-link .nav-type { font-size: 11px; font-weight: 600; color: #ccc; }
+  .proto-nav-link .nav-desc { font-size: 10px; color: #666; }
+  .proto-nav-link .nav-arrow { margin-left: auto; font-size: 14px; color: #555; }
+</style>
+</head>
+<body>
+
+<div class="page-layout">
+<div class="proto-col">
+
+<div class="case-bar">
+  <span class="case-label">Case</span>
+  <button class="case-btn active" id="case-pos-open" onclick="switchCase('open')">Position Open</button>
+  <button class="case-btn" id="case-pos-none" onclick="switchCase('none')">No Position</button>
+</div>
+
+<div class="device">
+  <div class="status-bar">
+    <div class="notch"></div>
+    <span>09:30 PM</span>
+    <div style="display:flex;gap:5px;align-items:center;font-size:11px;">📶 🔋</div>
+  </div>
+
+  <div class="screen active" id="screen-order">
+    <!-- Status bar -->
+    <div class="order-top-bar">
+      <div class="order-symbol">BTC <span class="tag">Perp</span></div>
+      <div class="order-top-icons">
+        <div class="icon-btn">🔍</div>
+        <div class="icon-btn">📊</div>
+        <div class="icon-btn">⚙️</div>
+        <div class="icon-btn">⋮</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 4px;font-size:12px;color:#0ecb81;font-weight:500;">+38.20%</div>
+
+    <div class="scrollable">
+      <!-- Two-column layout: orderbook + form -->
+      <div class="order-body">
+        <!-- Left column: Order book -->
+        <div class="orderbook-col">
+          <div style="font-size:9px;color:#555;margin-bottom:2px;">Funding rate / Countdown</div>
+          <div style="font-size:10px;color:#888;margin-bottom:6px;">0.0100% / 02:32:50</div>
+          <div class="ob-header"><span>Price (USDT)</span><span>Amount (BTC)</span></div>
+          <div class="ob-row"><span class="price sell">122,026.2</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price sell">122,025.8</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price sell">122,024.7</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price sell">122,024.4</span><span class="qty">215.95</span></div>
+          <div class="ob-row"><span class="price sell">122,024.1</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price sell">122,023.8</span><span class="qty">215.95</span></div>
+          <div class="ob-row"><span class="price sell">122,023.6</span><span class="qty">323.82</span></div>
+          <div class="ob-mid">122,023.5<span class="sub">≈ $122,023.5</span></div>
+          <div class="ob-row"><span class="price buy">122,023.5</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,023.3</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,022.7</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price buy">122,022.3</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,021.8</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price buy">122,021.4</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price buy">122,021.2</span><span class="qty">215.95</span></div>
+          <!-- Buy/Sell ratio bar -->
+          <div style="display:flex;align-items:center;margin-top:6px;height:4px;border-radius:2px;overflow:hidden;">
+            <div style="width:88%;height:100%;background:#0ecb81;"></div>
+            <div style="width:12%;height:100%;background:#ea3943;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;margin-top:3px;">
+            <span style="color:#0ecb81;">B 88%</span>
+            <span style="color:#ea3943;">12% S</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+            <span style="font-size:10px;color:#555;">Depth 0.1 ∨</span>
+          </div>
+        </div>
+
+        <!-- Right column: Order form -->
+        <div class="form-col">
+          <!-- Controls row -->
+          <div class="order-controls">
+            <div class="ctrl-btn" id="chip-margin" onclick="openSheet('sheet-margin')">Isolated <span style="font-size:8px;color:#666;">∨</span></div>
+            <div class="ctrl-btn" id="chip-lev" onclick="openSheet('sheet-leverage')">1x <span style="font-size:8px;color:#666;">∨</span></div>
+          </div>
+          <!-- Price + BBO row -->
+          <div style="display:flex;gap:6px;">
+            <div class="form-input" style="flex:1;height:32px;background:#1a1a28;border:none;">
+              <span class="label" style="font-size:10px;">Price (USDT)</span>
+              <span class="val" style="font-size:11px;">122,023.5</span>
+            </div>
+            <div class="form-input" style="width:40px;height:32px;background:#1a1a28;border:none;justify-content:center;">
+              <span style="font-size:11px;color:#ccc;">BBO</span>
+            </div>
+          </div>
+          <!-- Limit dropdown -->
+          <div class="form-input" style="height:32px;background:#1a1a28;border:none;">
+            <span style="font-size:12px;color:#ccc;">Limit</span>
+            <span style="margin-left:auto;font-size:10px;color:#555;">∨</span>
+          </div>
+          <!-- Margin + USDT row -->
+          <div style="display:flex;gap:6px;">
+            <div class="form-input" style="flex:1;height:32px;background:#1a1a28;border:none;">
+              <span class="label" style="font-size:10px;">Margin</span>
+            </div>
+            <div class="form-input" style="width:70px;height:32px;background:#1a1a28;border:none;justify-content:center;">
+              <span style="font-size:11px;color:#ccc;">USDT</span>
+              <span style="font-size:10px;color:#555;margin-left:3px;">∨</span>
+            </div>
+          </div>
+          <!-- Slider dots -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 2px;position:relative;">
+            <div style="position:absolute;left:8px;right:8px;top:50%;height:1px;background:#2a2a3e;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+          </div>
+          <!-- Available -->
+          <div class="avail-row" style="font-size:11px;"><span>Available</span><span class="val">9,999.99 USDT ⊕</span></div>
+          <!-- TP/SL checkbox -->
+          <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#888;">
+            <span style="font-size:14px;color:#555;">☐</span> TP/SL
+          </div>
+          <!-- Buy section -->
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Max</span><span style="color:#888;">55.613795 BTC</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Margin</span><span style="color:#555;">-</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Est. liq. price</span><span style="color:#555;">-</span></div>
+          </div>
+          <button class="btn-buy" style="height:32px;background:#0ecb81;font-size:13px;">Buy / Long</button>
+          <!-- Sell section -->
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Max</span><span style="color:#888;">55.613795 BTC</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Margin</span><span style="color:#555;">-</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Est. liq. price</span><span style="color:#555;">-</span></div>
+          </div>
+          <button class="btn-sell" style="height:32px;background:#ea3943;font-size:13px;">Sell / Short</button>
+        </div>
+      </div>
+
+      <!-- Bottom tabs -->
+      <div class="order-bottom-tabs">
+        <span class="active">Positions (3)</span>
+        <span>Orders (6)</span>
+        <span>📜 History</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 16px 0;font-size:11px;">
+        <label style="display:flex;align-items:center;gap:4px;color:#888;"><span style="color:#f0b90b;">☑</span> Show all symbols</label>
+        <span style="color:#888;cursor:pointer;">Close all</span>
+      </div>
+
+      <!-- Position cards -->
+      <div class="position-list">
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <span class="sym">BTC</span>
+            <span style="font-size:9px;color:#555;">🔗</span>
+            <span class="badge iso">Isolated 1x</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <span style="font-size:11px;color:#555;">↗</span>
+              <span style="font-size:11px;color:#555;">📌</span>
+            </div>
+          </div>
+          <div class="pos-card-row"><span>Unrealized P&L</span><span class="pnl-pos">+92,837.50 USDT (+76.96%)</span></div>
+          <div class="pos-card-row"><span>Size</span><span style="color:#aaa;">12.5000 BTC</span></div>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <span class="sym">ETH</span>
+            <span style="font-size:9px;color:#555;">🔗</span>
+            <span class="badge iso">Isolated 1x</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <span style="font-size:11px;color:#555;">↗</span>
+              <span style="font-size:11px;color:#555;">📌</span>
+            </div>
+          </div>
+          <div class="pos-card-row"><span>Unrealized P&L</span><span class="pnl-pos">+114,240.00 USDT (+48.25%)</span></div>
+          <div class="pos-card-row"><span>Size</span><span style="color:#aaa;">420.0000 ETH</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom navigation -->
+    <div class="bottom-nav">
+      <div class="bottom-nav-item"><div class="nav-icon">📈</div>Market</div>
+      <div class="bottom-nav-item"><div class="nav-icon">👥</div>Copy</div>
+      <div class="bottom-nav-item active"><div class="nav-icon">🔀</div>Trade</div>
+      <div class="bottom-nav-item"><div class="nav-icon">💎</div>Earn+</div>
+      <div class="bottom-nav-item"><div class="nav-icon">💰</div>Assets</div>
+    </div>
+
+    <div class="flow-hint" id="flow-hint">Tap margin or leverage to open settings</div>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+    <!-- SHEET: MARGIN MODE -->
+    <div class="bottom-sheet" id="sheet-margin">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-title">Margin mode</div>
+      <div class="sheet-scroll">
+        <div class="radio-group">
+          <div class="radio-opt selected" onclick="selectSheetRadio(this)">
+            <div class="radio-circle"></div>
+            <div>
+              <div class="r-label">Isolated</div>
+              <div class="r-desc">Each position uses its own margin balance. Losses are limited to that position only. You can adjust margin for each position separately.</div>
+            </div>
+          </div>
+          <div class="radio-opt" onclick="selectSheetRadio(this)">
+            <div class="radio-circle"></div>
+            <div>
+              <div class="r-label">Cross</div>
+              <div class="r-desc">All positions under the same asset share one margin balance. If liquidated, your entire balance and positions may be lost.</div>
+              <div class="r-sub-label">Cross asset</div>
+              <div class="r-desc">Multiple currencies can be used together as collateral margin in this mode.</div>
+              <a class="learn-more" href="#">Learn more</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default toggle (hidden when position open) -->
+        <div id="margin-toggle-row">
+        <div class="toggle-row">
+          <div class="toggle-label-group">
+            <span class="toggle-label" id="margin-toggle-label">Apply to all symbols as default</span>
+            <span class="toggle-sub" id="margin-default-val">Currently set to: Isolated</span>
+          </div>
+          <div class="toggle-switch" id="margin-toggle" onclick="toggleMarginDefault()"></div>
+        </div>
+        <div class="sheet-cautions" id="margin-cautions">
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not override symbols you have already configured manually.</span>
+          </div>
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not apply to symbols with open positions or pending orders.</span>
+          </div>
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not apply to API trades.</span>
+          </div>
+        </div>
+        </div><!-- /margin-toggle-row -->
+
+        <div class="warning-box" id="margin-warning" style="display:none;">
+          <div class="w-icon">⚠️</div>
+          <div class="w-text">Close all your positions and pending orders to switch margin modes.</div>
+        </div>
+
+        <button class="sheet-btn" onclick="confirmMargin()">Confirm</button>
+      </div>
+    </div>
+
+    <!-- SHEET: LEVERAGE -->
+    <div class="bottom-sheet" id="sheet-leverage">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-title">Adjust leverage</div>
+      <div class="sheet-scroll">
+        <div class="lev-container">
+          <div class="lev-val-row">
+            <div class="lev-val" id="sheet-lev-val">1x</div>
+            <div class="lev-btns">
+              <button onclick="adjustSheetLev(-1)">−</button>
+              <button onclick="adjustSheetLev(1)">+</button>
+            </div>
+          </div>
+          <div class="lev-track" onclick="handleSheetLevClick(event)">
+            <div class="lev-track-fill" id="sheet-lev-fill"></div>
+            <div class="lev-track-thumb" id="sheet-lev-thumb"></div>
+          </div>
+          <div class="lev-ticks">
+            <span>1x</span><span>30x</span><span>60x</span><span>90x</span><span>120x</span><span>150x</span>
+          </div>
+        </div>
+        <div class="helper-text">You can set leverage based on your position's margin and requirements.</div>
+
+        <!-- Default toggle -->
+        <div class="toggle-row">
+          <div class="toggle-label-group">
+            <span class="toggle-label" id="lev-toggle-label">Apply to all symbols as default</span>
+            <span class="toggle-sub" id="lev-default-val">Currently set to: 1x</span>
+          </div>
+          <div class="toggle-switch" id="lev-toggle" onclick="toggleLevDefault()"></div>
+        </div>
+        <div class="default-lev-indicator" id="default-lev-indicator"></div>
+        <div class="sheet-cautions" id="lev-cautions">
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not override symbols you have already configured manually.</span>
+          </div>
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not apply to symbols with open positions or pending orders.</span>
+          </div>
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>If the default leverage exceeds a symbol's maximum, the symbol's maximum will be applied instead.</span>
+          </div>
+          <div class="sheet-caution-item">
+            <div class="sheet-caution-dot"></div>
+            <span>Does not apply to API trades.</span>
+          </div>
+        </div>
+
+        <button class="sheet-btn" onclick="confirmLeverage()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+</div><!-- /proto-col -->
+
+<div class="proto-info">
+  <div class="proto-info-type">Type 2 — Inline Toggle</div>
+  <div class="proto-info-title">설정 흐름 안에서 바로 적용, 효율성 우선</div>
+  <ul class="proto-info-list">
+    <li>토글의 영향 범위를 이해하는 학습 비용 있음</li>
+    <li>기능 발견성이 높음 (시트 안에 항상 노출)</li>
+    <li>빠른 조작, 컨텍스트 스위칭 없음</li>
+  </ul>
+  <div class="proto-nav">
+    <div class="proto-nav-label">Compare with</div>
+    <a class="proto-nav-link" href="/trade-settings-utility">
+      <div>
+        <div class="nav-type">Type 1 — Separate Settings</div>
+        <div class="nav-desc">명확성 우선</div>
+      </div>
+      <span class="nav-arrow">›</span>
+    </a>
+  </div>
+</div>
+
+</div><!-- /page-layout -->
+
+<script>
+  const DEFAULT_MAX_LEV = 50;
+  const SYMBOL_MAX_LEV = 150;
+
+  const state = {
+    sheetLev: 1,
+    marginToggle: false,
+    levToggle: false,
+    selectedMargin: 'Isolated',
+    hasOpenPosition: true   // BTC, ETH positions are open
+  };
+
+  // Sheet basics
+  function openSheet(id) {
+    // Reset toggles on every entry
+    state.marginToggle = false;
+    state.levToggle = false;
+    document.getElementById('margin-toggle').classList.remove('on');
+    document.getElementById('margin-cautions').classList.remove('visible');
+    document.getElementById('lev-toggle').classList.remove('on');
+    document.getElementById('lev-cautions').classList.remove('visible');
+    document.getElementById('default-lev-indicator').classList.remove('visible');
+
+    // Margin sheet: reset radio + toggle/caution visibility
+    if (id === 'sheet-margin') {
+      const currentMargin = document.getElementById('chip-margin').textContent.trim().replace(/\s*[▾∨].*/s, '');
+      const radios = document.querySelectorAll('#sheet-margin .radio-opt');
+      radios.forEach(r => {
+        const label = r.querySelector('.r-label').textContent;
+        r.classList.toggle('selected', label === currentMargin);
+      });
+      state.selectedMargin = currentMargin;
+
+      const toggleRow = document.querySelector('#margin-toggle-row .toggle-row');
+      const btn = document.querySelector('#sheet-margin .sheet-btn');
+      const warn = document.getElementById('margin-warning');
+      if (state.hasOpenPosition) {
+        radios.forEach(r => r.classList.add('disabled'));
+        toggleRow.classList.add('disabled');
+        btn.classList.add('disabled');
+        warn.style.display = '';
+      } else {
+        radios.forEach(r => r.classList.remove('disabled'));
+        toggleRow.classList.remove('disabled');
+        btn.classList.remove('disabled');
+        warn.style.display = 'none';
+      }
+    }
+
+    document.getElementById('overlay').classList.add('visible');
+    document.getElementById(id).classList.add('open');
+    hide('flow-hint');
+  }
+  function closeSheet() {
+    document.getElementById('overlay').classList.remove('visible');
+    document.querySelectorAll('.bottom-sheet').forEach(s => s.classList.remove('open'));
+    // Reset toggle label copy
+    document.querySelectorAll('.toggle-label').forEach(el => el.textContent = 'Apply to all symbols as default');
+  }
+  function selectSheetRadio(el) {
+    el.closest('.sheet-scroll').querySelectorAll('.radio-opt').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    const label = el.querySelector('.r-label').textContent;
+    state.selectedMargin = label.includes('Cross') ? 'Cross' : 'Isolated';
+  }
+  function hide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+  // Symbol leverage (per-symbol, max 150x)
+  function setSheetLev(val) {
+    state.sheetLev = Math.max(1, Math.min(SYMBOL_MAX_LEV, val));
+    const pct = ((state.sheetLev - 1) / (SYMBOL_MAX_LEV - 1)) * 100;
+    document.getElementById('sheet-lev-val').textContent = state.sheetLev + 'x';
+    document.getElementById('sheet-lev-fill').style.width = pct + '%';
+    document.getElementById('sheet-lev-thumb').style.left = pct + '%';
+    updateDefaultLevIndicator();
+  }
+  function adjustSheetLev(d) { setSheetLev(state.sheetLev + d); }
+  function handleSheetLevClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setSheetLev(Math.round(pct * (SYMBOL_MAX_LEV - 1)) + 1);
+  }
+
+  // Toggle: margin default (only visible when no open position)
+  function toggleMarginDefault() {
+    state.marginToggle = !state.marginToggle;
+    document.getElementById('margin-toggle').classList.toggle('on', state.marginToggle);
+    document.getElementById('margin-cautions').classList.toggle('visible', state.marginToggle);
+    document.getElementById('margin-toggle-label').textContent = state.marginToggle
+      ? 'Applying to all symbols as default'
+      : 'Apply to all symbols as default';
+  }
+
+  // Toggle: leverage default
+  function toggleLevDefault() {
+    state.levToggle = !state.levToggle;
+    document.getElementById('lev-toggle').classList.toggle('on', state.levToggle);
+    document.getElementById('lev-cautions').classList.toggle('visible', state.levToggle);
+    document.getElementById('default-lev-indicator').classList.toggle('visible', state.levToggle);
+    document.getElementById('lev-toggle-label').textContent = state.levToggle
+      ? 'Applying to all symbols as default'
+      : 'Apply to all symbols as default';
+    updateDefaultLevIndicator();
+  }
+
+  function updateDefaultLevIndicator() {
+    if (!state.levToggle) return;
+    const el = document.getElementById('default-lev-indicator');
+    const clamped = Math.min(state.sheetLev, DEFAULT_MAX_LEV);
+    if (state.sheetLev > DEFAULT_MAX_LEV) {
+      el.textContent = 'Will be applied as ' + clamped + 'x (max)';
+    } else {
+      el.textContent = 'Will be applied as ' + clamped + 'x';
+    }
+  }
+
+  // Confirm actions
+  function confirmMargin() {
+    closeSheet();
+    const marginVal = state.selectedMargin;
+    document.getElementById('chip-margin').innerHTML = marginVal + ' <span style="font-size:8px;color:#666;">∨</span>';
+    if (state.marginToggle) {
+      state.defaultMargin = marginVal;
+      document.getElementById('margin-default-val').textContent = 'Currently set to: ' + marginVal;
+      showToast('Margin mode successfully applied');
+    } else {
+      showToast('Margin mode set to ' + marginVal);
+    }
+  }
+
+  function confirmLeverage() {
+    closeSheet();
+    document.getElementById('chip-lev').innerHTML = state.sheetLev + 'x <span style="font-size:8px;color:#666;">∨</span>';
+    if (state.levToggle) {
+      const clamped = Math.min(state.sheetLev, DEFAULT_MAX_LEV);
+      state.defaultLev = clamped;
+      document.getElementById('lev-default-val').textContent = 'Currently set to: ' + clamped + 'x';
+      showToast('Leverage successfully applied');
+    } else {
+      showToast('Leverage set to ' + state.sheetLev + 'x');
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ---- Case switcher ----
+  function switchCase(mode) {
+    // Close any open sheets first
+    closeSheet();
+
+    // Toggle buttons
+    document.getElementById('case-pos-open').classList.toggle('active', mode === 'open');
+    document.getElementById('case-pos-none').classList.toggle('active', mode === 'none');
+
+    state.hasOpenPosition = (mode === 'open');
+
+    // Position cards + tab count
+    const posCards = document.querySelector('.position-list');
+    const posTab = document.querySelector('.order-bottom-tabs .active');
+    if (mode === 'open') {
+      posCards.style.display = '';
+      posTab.textContent = 'Positions (3)';
+    } else {
+      posCards.style.display = 'none';
+      posTab.textContent = 'Positions (0)';
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Settings – Type 1 (Separate Settings Modal)</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: #0a0a12;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; gap: 32px;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    overflow-x: auto; overflow-y: hidden;
+  }
+
+  /* Case switcher */
+  .case-bar {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .case-bar .case-label {
+    font-size: 12px; color: #555; margin-right: 4px;
+  }
+  .case-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid #333; background: #1a1a28; color: #888;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .case-btn.active {
+    background: #f0b90b; color: #0d0d14; border-color: #f0b90b; font-weight: 600;
+  }
+
+  .device {
+    width: 375px; height: 812px;
+    background: #0d0d14; border-radius: 40px;
+    overflow: hidden; position: relative;
+    border: 3px solid #222;
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+  .status-bar {
+    height: 54px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 28px 8px; font-size: 12px; font-weight: 600; color: #fff;
+    background: #0d0d14; position: relative; z-index: 100;
+  }
+  .status-bar .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px; background: #000; border-radius: 0 0 18px 18px;
+  }
+
+  .screen {
+    position: absolute; inset: 0;
+    background: #0d0d14;
+    display: none; flex-direction: column; z-index: 1;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+  .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .scrollable::-webkit-scrollbar { display: none; }
+
+  /* Order screen */
+  .order-top-bar { display: flex; align-items: center; padding: 8px 16px; gap: 8px; }
+  .order-symbol { font-size: 17px; font-weight: 700; color: #fff; }
+  .order-symbol .tag { font-size: 10px; color: #888; background: #1a1a28; padding: 2px 5px; border-radius: 3px; margin-left: 4px; font-weight: 500; }
+  .order-top-icons { margin-left: auto; display: flex; gap: 6px; }
+  .order-top-icons .icon-btn { width: 28px; height: 28px; background: #1a1a28; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #888; cursor: pointer; }
+
+  .order-controls { display: flex; align-items: center; padding: 0; gap: 6px; }
+  .ctrl-btn {
+    height: 28px; padding: 0 10px; border-radius: 6px;
+    border: none; background: #1e1e32;
+    color: #e0e0e8; font-size: 12px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; gap: 4px;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .ctrl-btn:active { background: #222240; }
+
+  /* Defaults link on order form (first-time only) */
+
+
+  .order-body { display: flex; flex: 1; }
+  .orderbook-col { width: 150px; padding: 0 8px 0 16px; flex-shrink: 0; }
+  .ob-header { display: flex; justify-content: space-between; font-size: 10px; color: #555; padding-bottom: 6px; }
+  .ob-row { display: flex; justify-content: space-between; font-size: 11px; height: 20px; align-items: center; }
+  .ob-row .price { font-weight: 500; }
+  .ob-row .price.sell { color: #ea3943; }
+  .ob-row .price.buy { color: #0ecb81; }
+  .ob-row .qty { color: #555; }
+  .ob-mid { padding: 8px 0; font-size: 18px; font-weight: 700; color: #f0b90b; }
+  .ob-mid .sub { font-size: 10px; color: #555; font-weight: 400; display: block; }
+
+  .form-col { flex: 1; padding: 0 16px 0 8px; display: flex; flex-direction: column; gap: 8px; }
+  .order-tabs { display: flex; background: #12121e; border-radius: 8px; padding: 2px; }
+  .order-tab { flex: 1; height: 28px; border: none; background: none; color: #666; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .order-tab.active { background: #1e1e32; color: #fff; }
+  .form-input { height: 36px; background: #12121e; border: 1px solid #1e1e32; border-radius: 8px; display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: #888; }
+  .form-input .label { color: #555; margin-right: auto; }
+  .form-input .val { color: #ccc; }
+  .form-input .unit { color: #555; margin-left: 4px; }
+  .slider-mini { width: 100%; height: 3px; background: #1e1e32; border-radius: 2px; position: relative; margin: 4px 0; }
+  .slider-mini::after { content: ''; position: absolute; left: 0; top: -4px; width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; border: 2px solid #fff; }
+  .avail-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+  .avail-row .val { color: #888; }
+  .btn-buy { height: 36px; border: none; border-radius: 8px; background: #0ecb81; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-sell { height: 36px; border: none; border-radius: 8px; background: #ea3943; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+  .order-bottom-tabs { display: flex; height: 38px; border-top: 1px solid #1a1a28; align-items: center; padding: 0 16px; gap: 16px; flex-shrink: 0; }
+  .order-bottom-tabs span { font-size: 12px; color: #555; cursor: pointer; }
+  .order-bottom-tabs span.active { color: #fff; font-weight: 600; }
+  .position-list { flex-shrink: 0; padding: 8px 16px 16px; }
+  .pos-card { background: #12121e; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .pos-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .pos-card-header .sym { font-size: 13px; font-weight: 600; color: #fff; }
+  .pos-card-header .badge { font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: 500; }
+  .badge.long { background: #0ecb8122; color: #0ecb81; }
+  .badge.iso { background: #3b82f622; color: #3b82f6; }
+  .pos-card-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; margin-top: 4px; }
+  .pos-card-row .pnl-pos { color: #0ecb81; font-weight: 600; }
+
+  .bottom-nav {
+    height: 58px; display: flex; align-items: center; justify-content: space-around;
+    border-top: 1px solid #1a1a28; background: #0d0d14; flex-shrink: 0;
+  }
+  .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: #555; cursor: pointer; }
+  .bottom-nav-item.active { color: #fff; }
+  .bottom-nav-item .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+
+  /* ====== OVERLAY & BOTTOM SHEETS ====== */
+  .overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 50;
+    display: none; opacity: 0; transition: opacity 0.2s;
+  }
+  .overlay.visible { display: block; opacity: 1; }
+
+  .bottom-sheet {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: #16162a; border-radius: 16px 16px 0 0;
+    z-index: 60; transform: translateY(100%);
+    transition: transform 0.3s ease-out, visibility 0s 0.3s;
+    max-height: 88%; display: flex; flex-direction: column;
+    visibility: hidden;
+  }
+  .bottom-sheet.open { transform: translateY(0); visibility: visible; transition: transform 0.3s ease-out, visibility 0s 0s; }
+  .sheet-handle-bar { width: 36px; height: 4px; background: #333; border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+  .sheet-title { font-size: 16px; font-weight: 600; color: #fff; padding: 14px 20px 10px; flex-shrink: 0; }
+  .sheet-scroll { overflow-y: auto; padding: 0 20px 24px; flex: 1; }
+  .sheet-scroll::-webkit-scrollbar { display: none; }
+
+  .radio-opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; cursor: pointer;
+    border: 1px solid #2a2a3e; border-radius: 12px;
+    margin-bottom: 10px; background: #1a1a2e;
+  }
+  .radio-opt:last-of-type { margin-bottom: 0; }
+  .radio-opt.selected { border-color: #f0b90b33; }
+  .radio-circle {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid #444; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-opt.selected .radio-circle { border-color: #f0b90b; }
+  .radio-opt.selected .radio-circle::after { content: ''; width: 10px; height: 10px; background: #f0b90b; border-radius: 50%; }
+  .radio-opt .r-label { font-size: 14px; color: #e0e0e8; font-weight: 500; }
+  .radio-opt .r-desc { font-size: 11px; color: #666; margin-top: 3px; line-height: 1.45; }
+  .radio-opt.disabled { pointer-events: none; opacity: 0.4; }
+
+  .r-sub-label { font-size: 13px; color: #ccc; font-weight: 500; margin-top: 10px; }
+  .learn-more { display: block; font-size: 12px; color: #888; margin-top: 8px; text-decoration: underline; text-underline-offset: 2px; }
+
+  .warning-box {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #2a1a10; border-radius: 8px;
+    padding: 10px 12px; margin-top: 12px;
+  }
+  .warning-box .w-icon { font-size: 13px; flex-shrink: 0; }
+  .warning-box .w-text { font-size: 11px; color: #f59e0b; line-height: 1.4; }
+
+  .sheet-btn {
+    width: 100%; height: 44px; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    margin-top: 16px; font-family: inherit; transition: opacity 0.15s;
+    background: #f0b90b; color: #0d0d14;
+  }
+  .sheet-btn:active { opacity: 0.85; }
+  .sheet-btn.disabled { background: #2a2a3e; color: #555; pointer-events: none; }
+
+  /* Deep link in modals */
+  .sheet-deeplink {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 16px; margin-top: 12px;
+    border: 1px solid #2a2a3e; border-radius: 12px;
+    background: #1a1a2e; cursor: pointer;
+  }
+  .sheet-deeplink:active { opacity: 0.6; }
+  .sheet-deeplink .dl-text-group { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .sheet-deeplink .dl-text { font-size: 13px; color: #ccc; font-weight: 500; }
+  .sheet-deeplink .dl-sub { font-size: 11px; color: #555; }
+  .sheet-deeplink .dl-arrow { font-size: 14px; color: #555; }
+
+  /* Leverage sheet */
+  .lev-container {
+    margin-bottom: 4px; padding: 16px;
+    border: 1px solid #2a2a3e; border-radius: 12px;
+    background: #1a1a2e;
+  }
+  .lev-val-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .lev-val-row .lev-val { font-size: 28px; font-weight: 700; color: #fff; }
+  .lev-val-row .lev-btns { display: flex; gap: 6px; }
+  .lev-val-row .lev-btns button {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid #2a2a3e; background: #12121e;
+    color: #ccc; font-size: 18px; cursor: pointer; font-family: inherit;
+  }
+  .lev-track {
+    width: 100%; height: 4px; background: #2a2a3e;
+    border-radius: 2px; position: relative; cursor: pointer;
+  }
+  .lev-track-fill {
+    position: absolute; left: 0; top: 0; height: 4px;
+    background: #f0b90b; border-radius: 2px;
+    width: 0%; transition: width 0.15s;
+  }
+  .lev-track-thumb {
+    position: absolute; top: -6px; width: 16px; height: 16px;
+    background: #f0b90b; border-radius: 50%;
+    border: 2px solid #fff; left: 0%;
+    transform: translateX(-50%); transition: left 0.15s;
+  }
+  .lev-ticks {
+    display: flex; justify-content: space-between;
+    margin-top: 8px; font-size: 10px; color: #444;
+  }
+  .helper-text { font-size: 11px; color: #555; margin-top: 12px; line-height: 1.4; }
+
+  /* ====== TRADE SETTINGS (stack push page) ====== */
+  .ts-page {
+    position: absolute; inset: 0; z-index: 80;
+    background: #0d0d14;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .ts-page.open { transform: translateX(0); }
+
+  .ts-header {
+    display: flex; align-items: center;
+    padding: 60px 16px 12px;
+    flex-shrink: 0; position: relative; gap: 8px;
+    background: #0d0d14;
+  }
+  .ts-back {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: none; border: none;
+    color: #ccc; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-family: inherit; flex-shrink: 0;
+  }
+  .ts-back:active { opacity: 0.6; }
+  .ts-title { font-size: 17px; font-weight: 600; color: #fff; flex: 1; text-align: center; padding-right: 32px; }
+
+  .ts-body {
+    flex: 1; overflow-y: auto; padding: 20px 20px 0;
+  }
+  .ts-body::-webkit-scrollbar { display: none; }
+
+  .ts-section { margin-bottom: 28px; }
+  .ts-section-label { font-size: 13px; color: #888; font-weight: 500; margin-bottom: 12px; }
+
+  /* Margin type radio pills */
+  .ts-seg {
+    display: flex; gap: 10px;
+  }
+  .ts-seg-item {
+    flex: 1; height: 44px; border: 1px solid #2a2a3e; border-radius: 10px;
+    background: #1a1a2e; color: #888; font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .ts-seg-item::before {
+    content: ''; width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid #444; flex-shrink: 0;
+  }
+  .ts-seg-item.active { border-color: #3b82f6; color: #fff; background: #1a1a2e; }
+  .ts-seg-item.active::before {
+    border-color: #3b82f6;
+    background: radial-gradient(circle, #3b82f6 40%, transparent 41%);
+  }
+  .ts-seg-item:active { opacity: 0.7; }
+
+  /* Leverage control — card container */
+  .ts-lev-card {
+    border: 1px solid #2a2a3e; border-radius: 12px;
+    background: #1a1a2e; padding: 16px;
+  }
+  .ts-lev-display {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .ts-lev-val { font-size: 32px; font-weight: 700; color: #fff; }
+  .ts-lev-btns { display: flex; gap: 6px; }
+  .ts-lev-btns button {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid #2a2a3e; background: #12121e;
+    color: #ccc; font-size: 18px; cursor: pointer; font-family: inherit;
+  }
+  .ts-lev-btns button:active { background: #222240; }
+  .ts-lev-track {
+    width: 100%; height: 4px; background: #2a2a3e;
+    border-radius: 2px; position: relative; cursor: pointer;
+  }
+  .ts-lev-fill {
+    position: absolute; left: 0; top: 0; height: 4px;
+    background: #3b82f6; border-radius: 2px; transition: width 0.15s;
+  }
+  .ts-lev-thumb {
+    position: absolute; top: -6px; width: 16px; height: 16px;
+    background: #3b82f6; border-radius: 50%;
+    border: 2px solid #fff;
+    transform: translateX(-50%); transition: left 0.15s;
+  }
+  .ts-lev-ticks {
+    display: flex; justify-content: space-between;
+    margin-top: 8px; font-size: 10px; color: #444;
+  }
+
+  /* Caution list */
+  .ts-cautions {
+    background: #12121e; border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .ts-caution-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 11px; color: #666; line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .ts-caution-item:last-child { margin-bottom: 0; }
+  .ts-caution-dot {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: #555; flex-shrink: 0; margin-top: 6px;
+  }
+
+  .ts-reset {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 12px 0; margin-top: 8px; cursor: pointer;
+  }
+  .ts-reset:active { opacity: 0.6; }
+  .ts-reset.disabled { pointer-events: none; opacity: 0.35; }
+  .ts-reset-text { font-size: 13px; color: #ccc; text-decoration: underline; text-underline-offset: 3px; }
+
+  .ts-footer {
+    padding: 12px 20px 28px; flex-shrink: 0;
+  }
+  .ts-save-btn {
+    width: 100%; height: 48px; border: none; border-radius: 10px;
+    background: #3b82f6; color: #fff;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .ts-save-btn:active { opacity: 0.85; }
+  .ts-save-btn.disabled { background: #2a2a3e; color: #555; pointer-events: none; }
+
+  /* Toast */
+  .toast {
+    position: absolute; bottom: 80px; left: 20px; right: 20px;
+    transform: translateY(20px);
+    background: #1e1e38; border: 1px solid #2a2a3e;
+    color: #e0e0e8; font-size: 13px; padding: 10px 20px; border-radius: 10px;
+    z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none;
+    text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  .flow-hint {
+    position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+    background: #f0b90b22; border: 1px solid #f0b90b44;
+    color: #f0b90b; font-size: 11px; padding: 6px 14px; border-radius: 20px;
+    z-index: 200; pointer-events: none;
+    animation: pulse 2s ease-in-out infinite; white-space: nowrap;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+  .page-layout {
+    display: flex; align-items: center; gap: 32px;
+  }
+  .proto-col {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .proto-info {
+    width: 220px; padding: 18px; flex-shrink: 0;
+    background: #13131f; border: 1px solid #2a2a3e; border-radius: 16px;
+    align-self: flex-start; margin-top: 60px;
+  }
+  .proto-info-type {
+    font-size: 11px; font-weight: 700; color: #3b82f6;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .proto-info-title {
+    font-size: 15px; font-weight: 600; color: #e0e0e8; margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .proto-info-list { list-style: none; padding: 0; margin: 0; }
+  .proto-info-list li {
+    font-size: 12px; color: #888; line-height: 1.6;
+    padding-left: 14px; position: relative; margin-bottom: 6px;
+  }
+  .proto-info-list li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 4px; height: 4px; border-radius: 50%; background: #444;
+  }
+  .proto-nav {
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid #2a2a3e;
+  }
+  .proto-nav-label { font-size: 10px; color: #555; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .proto-nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 10px;
+    background: #1a1a2e; border: 1px solid #2a2a3e;
+    cursor: pointer; text-decoration: none; transition: border-color 0.2s;
+  }
+  .proto-nav-link:hover { border-color: #444; }
+  .proto-nav-link .nav-type { font-size: 11px; font-weight: 600; color: #ccc; }
+  .proto-nav-link .nav-desc { font-size: 10px; color: #666; }
+  .proto-nav-link .nav-arrow { margin-left: auto; font-size: 14px; color: #555; }
+</style>
+</head>
+<body>
+
+<div class="page-layout">
+<div class="proto-col">
+
+<div class="case-bar">
+  <span class="case-label">Case</span>
+  <button class="case-btn active" id="case-pos-open" onclick="switchCase('open')">Position Open</button>
+  <button class="case-btn" id="case-pos-none" onclick="switchCase('none')">No Position</button>
+</div>
+
+<div class="device">
+  <div class="status-bar">
+    <div class="notch"></div>
+    <span>09:30 PM</span>
+    <div style="display:flex;gap:5px;align-items:center;font-size:11px;">📶 🔋</div>
+  </div>
+
+  <div class="screen active" id="screen-order">
+    <!-- Top bar -->
+    <div class="order-top-bar">
+      <div class="order-symbol">BTC <span class="tag">Perp</span></div>
+      <div class="order-top-icons">
+        <div class="icon-btn">🔍</div>
+        <div class="icon-btn">📊</div>
+        <div class="icon-btn">⚙️</div>
+        <div class="icon-btn">⋮</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 4px;font-size:12px;color:#0ecb81;font-weight:500;">+38.20%</div>
+
+    <div class="scrollable">
+      <!-- Two-column layout: orderbook + form -->
+      <div class="order-body">
+        <!-- Left column: Order book -->
+        <div class="orderbook-col">
+          <div style="font-size:9px;color:#555;margin-bottom:2px;">Funding rate / Countdown</div>
+          <div style="font-size:10px;color:#888;margin-bottom:6px;">0.0100% / 02:32:50</div>
+          <div class="ob-header"><span>Price (USDT)</span><span>Amount (BTC)</span></div>
+          <div class="ob-row"><span class="price sell">122,026.2</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price sell">122,025.8</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price sell">122,024.7</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price sell">122,024.4</span><span class="qty">215.95</span></div>
+          <div class="ob-row"><span class="price sell">122,024.1</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price sell">122,023.8</span><span class="qty">215.95</span></div>
+          <div class="ob-row"><span class="price sell">122,023.6</span><span class="qty">323.82</span></div>
+          <div class="ob-mid">122,023.5<span class="sub">≈ $122,023.5</span></div>
+          <div class="ob-row"><span class="price buy">122,023.5</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,023.3</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,022.7</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price buy">122,022.3</span><span class="qty">2.48K</span></div>
+          <div class="ob-row"><span class="price buy">122,021.8</span><span class="qty">431.85</span></div>
+          <div class="ob-row"><span class="price buy">122,021.4</span><span class="qty">6.47K</span></div>
+          <div class="ob-row"><span class="price buy">122,021.2</span><span class="qty">215.95</span></div>
+          <!-- Buy/Sell ratio bar -->
+          <div style="display:flex;align-items:center;margin-top:6px;height:4px;border-radius:2px;overflow:hidden;">
+            <div style="width:88%;height:100%;background:#0ecb81;"></div>
+            <div style="width:12%;height:100%;background:#ea3943;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;margin-top:3px;">
+            <span style="color:#0ecb81;">B 88%</span>
+            <span style="color:#ea3943;">12% S</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+            <span style="font-size:10px;color:#555;">Depth 0.1 ∨</span>
+          </div>
+        </div>
+
+        <!-- Right column: Order form -->
+        <div class="form-col">
+          <!-- Controls row -->
+          <div class="order-controls">
+            <div class="ctrl-btn" onclick="openSheet('sheet-margin')">Isolated <span style="font-size:8px;color:#666;">∨</span></div>
+            <div class="ctrl-btn" onclick="openSheet('sheet-leverage')">1x <span style="font-size:8px;color:#666;">∨</span></div>
+          </div>
+          <!-- Price + BBO row -->
+          <div style="display:flex;gap:6px;">
+            <div class="form-input" style="flex:1;height:32px;background:#1a1a28;border:none;">
+              <span class="label" style="font-size:10px;">Price (USDT)</span>
+              <span class="val" style="font-size:11px;">122,023.5</span>
+            </div>
+            <div class="form-input" style="width:40px;height:32px;background:#1a1a28;border:none;justify-content:center;">
+              <span style="font-size:11px;color:#ccc;">BBO</span>
+            </div>
+          </div>
+          <!-- Limit dropdown -->
+          <div class="form-input" style="height:32px;background:#1a1a28;border:none;">
+            <span style="font-size:12px;color:#ccc;">Limit</span>
+            <span style="margin-left:auto;font-size:10px;color:#555;">∨</span>
+          </div>
+          <!-- Margin + USDT row -->
+          <div style="display:flex;gap:6px;">
+            <div class="form-input" style="flex:1;height:32px;background:#1a1a28;border:none;">
+              <span class="label" style="font-size:10px;">Margin</span>
+            </div>
+            <div class="form-input" style="width:70px;height:32px;background:#1a1a28;border:none;justify-content:center;">
+              <span style="font-size:11px;color:#ccc;">USDT</span>
+              <span style="font-size:10px;color:#555;margin-left:3px;">∨</span>
+            </div>
+          </div>
+          <!-- Slider dots -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 2px;position:relative;">
+            <div style="position:absolute;left:8px;right:8px;top:50%;height:1px;background:#2a2a3e;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#2a2a3e;border:1.5px solid #444;z-index:1;"></div>
+          </div>
+          <!-- Available -->
+          <div class="avail-row" style="font-size:11px;"><span>Available</span><span class="val">9,999.99 USDT ⊕</span></div>
+          <!-- TP/SL checkbox -->
+          <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#888;">
+            <span style="font-size:14px;color:#555;">☐</span> TP/SL
+          </div>
+          <!-- Buy section -->
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Max</span><span style="color:#888;">55.613795 BTC</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Margin</span><span style="color:#555;">-</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Est. liq. price</span><span style="color:#555;">-</span></div>
+          </div>
+          <button class="btn-buy" style="height:32px;background:#0ecb81;font-size:13px;">Buy / Long</button>
+          <!-- Sell section -->
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Max</span><span style="color:#888;">55.613795 BTC</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Margin</span><span style="color:#555;">-</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#555;">Est. liq. price</span><span style="color:#555;">-</span></div>
+          </div>
+          <button class="btn-sell" style="height:32px;background:#ea3943;font-size:13px;">Sell / Short</button>
+        </div>
+      </div>
+
+      <!-- Bottom tabs -->
+      <div class="order-bottom-tabs">
+        <span class="active">Positions (3)</span>
+        <span>Orders (6)</span>
+        <span>📜 History</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 16px 0;font-size:11px;">
+        <label style="display:flex;align-items:center;gap:4px;color:#888;"><span style="color:#f0b90b;">☑</span> Show all symbols</label>
+        <span style="color:#888;cursor:pointer;">Close all</span>
+      </div>
+
+      <!-- Position cards -->
+      <div class="position-list">
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <span class="sym">BTC</span>
+            <span style="font-size:9px;color:#555;">🔗</span>
+            <span class="badge iso">Isolated 1x</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <span style="font-size:11px;color:#555;">↗</span>
+              <span style="font-size:11px;color:#555;">📌</span>
+            </div>
+          </div>
+          <div class="pos-card-row"><span>Unrealized P&L</span><span class="pnl-pos">+92,837.50 USDT (+76.96%)</span></div>
+          <div class="pos-card-row"><span>Size</span><span style="color:#aaa;">12.5000 BTC</span></div>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <span class="sym">ETH</span>
+            <span style="font-size:9px;color:#555;">🔗</span>
+            <span class="badge iso">Isolated 1x</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <span style="font-size:11px;color:#555;">↗</span>
+              <span style="font-size:11px;color:#555;">📌</span>
+            </div>
+          </div>
+          <div class="pos-card-row"><span>Unrealized P&L</span><span class="pnl-pos">+114,240.00 USDT (+48.25%)</span></div>
+          <div class="pos-card-row"><span>Size</span><span style="color:#aaa;">420.0000 ETH</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom navigation -->
+    <div class="bottom-nav">
+      <div class="bottom-nav-item"><div class="nav-icon">📈</div>Market</div>
+      <div class="bottom-nav-item"><div class="nav-icon">👥</div>Copy</div>
+      <div class="bottom-nav-item active"><div class="nav-icon">🔀</div>Trade</div>
+      <div class="bottom-nav-item"><div class="nav-icon">💎</div>Earn+</div>
+      <div class="bottom-nav-item"><div class="nav-icon">💰</div>Assets</div>
+    </div>
+
+    <div class="flow-hint" id="flow-hint">Tap a modal or default settings link</div>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+    <!-- SHEET: MARGIN MODE -->
+    <div class="bottom-sheet" id="sheet-margin">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-title">Margin mode</div>
+      <div class="sheet-scroll">
+        <div class="radio-group">
+          <div class="radio-opt selected" onclick="selectSheetRadio(this)">
+            <div class="radio-circle"></div>
+            <div>
+              <div class="r-label">Isolated</div>
+              <div class="r-desc">Each position uses its own margin balance. Losses are limited to that position only. You can adjust margin for each position separately.</div>
+            </div>
+          </div>
+          <div class="radio-opt" onclick="selectSheetRadio(this)">
+            <div class="radio-circle"></div>
+            <div>
+              <div class="r-label">Cross</div>
+              <div class="r-desc">All positions under the same asset share one margin balance. If liquidated, your entire balance and positions may be lost.</div>
+              <div class="r-sub-label">Cross asset</div>
+              <div class="r-desc">Multiple currencies can be used together as collateral margin in this mode.</div>
+              <a class="learn-more" href="#">Learn more</a>
+            </div>
+          </div>
+        </div>
+        <div class="warning-box">
+          <div class="w-icon">⚠️</div>
+          <div class="w-text">Close all positions and pending orders to switch margin modes.</div>
+        </div>
+        <div class="sheet-deeplink" onclick="openTradeSettings('sheet-margin');">
+          <div class="dl-text-group">
+            <span class="dl-text">Default leverage & margin mode</span>
+            <span class="dl-sub" id="dl-default-margin">Currently set to: Isolated, 1x</span>
+          </div>
+          <span class="dl-arrow">›</span>
+        </div>
+        <button class="sheet-btn" onclick="confirmMarginSheet()">Confirm</button>
+      </div>
+    </div>
+
+    <!-- SHEET: LEVERAGE -->
+    <div class="bottom-sheet" id="sheet-leverage">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-title">Adjust leverage</div>
+      <div class="sheet-scroll">
+        <div class="lev-container">
+          <div class="lev-val-row">
+            <div class="lev-val" id="sheet-lev-val">1x</div>
+            <div class="lev-btns">
+              <button onclick="adjustSheetLev(-1)">−</button>
+              <button onclick="adjustSheetLev(1)">+</button>
+            </div>
+          </div>
+          <div class="lev-track" onclick="handleSheetLevClick(event)">
+            <div class="lev-track-fill" id="sheet-lev-fill"></div>
+            <div class="lev-track-thumb" id="sheet-lev-thumb"></div>
+          </div>
+          <div class="lev-ticks">
+            <span>1x</span><span>30x</span><span>60x</span><span>90x</span><span>120x</span><span>150x</span>
+          </div>
+        </div>
+        <div class="helper-text">You can set leverage based on your position's margin and requirements.</div>
+        <div class="sheet-deeplink" onclick="openTradeSettings('sheet-leverage');">
+          <div class="dl-text-group">
+            <span class="dl-text">Default leverage & margin mode</span>
+            <span class="dl-sub" id="dl-default-lev">Currently set to: Isolated, 1x</span>
+          </div>
+          <span class="dl-arrow">›</span>
+        </div>
+        <button class="sheet-btn" onclick="confirmLeverageSheet()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TRADE SETTINGS PAGE ====== -->
+  <div class="ts-page" id="ts-page">
+    <div class="ts-header">
+      <button class="ts-back" onclick="closeTradeSettings()">‹</button>
+      <div class="ts-title">Default leverage & margin mode</div>
+    </div>
+    <div class="ts-body">
+      <!-- Leverage -->
+      <div class="ts-section">
+        <div class="ts-section-label">Default leverage</div>
+        <div class="ts-lev-card">
+          <div class="ts-lev-display">
+            <div class="ts-lev-val" id="ts-lev-val">1x</div>
+            <div class="ts-lev-btns">
+              <button onclick="adjustTsLev(-1)">−</button>
+              <button onclick="adjustTsLev(1)">+</button>
+            </div>
+          </div>
+          <div class="ts-lev-track" onclick="handleTsLevClick(event)">
+            <div class="ts-lev-fill" id="ts-lev-fill"></div>
+            <div class="ts-lev-thumb" id="ts-lev-thumb"></div>
+          </div>
+          <div class="ts-lev-ticks">
+            <span>1x</span><span>10x</span><span>20x</span><span>30x</span><span>40x</span><span>50x</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Margin type -->
+      <div class="ts-section">
+        <div class="ts-section-label">Default margin mode</div>
+        <div class="ts-seg">
+          <button class="ts-seg-item active" id="ts-margin-iso" onclick="selectTsMargin('Isolated')">Isolated</button>
+          <button class="ts-seg-item" id="ts-margin-cross" onclick="selectTsMargin('Cross')">Cross</button>
+        </div>
+      </div>
+
+      <!-- Cautions -->
+      <div class="ts-cautions">
+        <div class="ts-caution-item">
+          <div class="ts-caution-dot"></div>
+          <span>Applied per symbol on the next trade. Does not override symbols you have already configured manually.</span>
+        </div>
+        <div class="ts-caution-item">
+          <div class="ts-caution-dot"></div>
+          <span>Does not apply to symbols with open positions or pending orders.</span>
+        </div>
+        <div class="ts-caution-item">
+          <div class="ts-caution-dot"></div>
+          <span>If the default leverage exceeds a symbol's maximum, the symbol's maximum will be applied instead.</span>
+        </div>
+        <div class="ts-caution-item">
+          <div class="ts-caution-dot"></div>
+          <span>Does not apply to API trades.</span>
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <div class="ts-reset disabled" id="ts-reset" onclick="resetTradeSettings()">
+        <span class="ts-reset-text">Reset to default (Isolated, 1x)</span>
+      </div>
+    </div>
+    <div class="ts-footer">
+      <button class="ts-save-btn disabled" id="ts-save-btn" onclick="saveTradeSettings()">Confirm</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+</div><!-- /proto-col -->
+
+<div class="proto-info">
+  <div class="proto-info-type">Type 1 — Separate Settings</div>
+  <div class="proto-info-title">독립된 설정 공간, 명확성 우선</div>
+  <ul class="proto-info-list">
+    <li>심볼별 설정과 기본값 설정의 개념 분리가 명확</li>
+    <li>기능 발견성이 딥링크에 의존 (진입점을 인지해야 함)</li>
+    <li>기본값을 자주 변경한다면 번거로움</li>
+  </ul>
+  <div class="proto-nav">
+    <div class="proto-nav-label">Compare with</div>
+    <a class="proto-nav-link" href="/trade-settings-type2">
+      <div>
+        <div class="nav-type">Type 2 — Inline Toggle</div>
+        <div class="nav-desc">효율성 우선</div>
+      </div>
+      <span class="nav-arrow">›</span>
+    </a>
+  </div>
+</div>
+
+</div><!-- /page-layout -->
+
+<script>
+  const state = {
+    sheetLev: 1,
+    tsMargin: 'Isolated',
+    tsLev: 1,
+    dsDone: false,
+    returnSheet: null,
+    hasOpenPosition: true
+  };
+
+  // Sheet basics
+  function openSheet(id) {
+    // Position-open: disable margin radio + Confirm
+    if (id === 'sheet-margin') {
+      const radios = document.querySelectorAll('#sheet-margin .radio-opt');
+      const btn = document.querySelector('#sheet-margin .sheet-btn');
+      if (state.hasOpenPosition) {
+        radios.forEach(r => r.classList.add('disabled'));
+        btn.classList.add('disabled');
+      } else {
+        radios.forEach(r => r.classList.remove('disabled'));
+        btn.classList.remove('disabled');
+      }
+    }
+    document.getElementById('overlay').classList.add('visible');
+    document.getElementById(id).classList.add('open');
+    hide('flow-hint');
+  }
+  function closeSheet() {
+    document.getElementById('overlay').classList.remove('visible');
+    document.querySelectorAll('.bottom-sheet').forEach(s => s.classList.remove('open'));
+  }
+  function confirmLeverageSheet() {
+    const chip = document.querySelectorAll('.ctrl-btn')[1];
+    if (chip) chip.innerHTML = state.sheetLev + 'x <span style="font-size:8px;color:#666;">∨</span>';
+    closeSheet();
+  }
+  function confirmMarginSheet() {
+    if (!state.hasOpenPosition) {
+      const sel = document.querySelector('#sheet-margin .radio-opt.selected .r-label');
+      if (sel) {
+        const mode = sel.textContent.trim();
+        const chip = document.querySelector('.ctrl-btn');
+        if (chip) chip.innerHTML = mode + ' <span style="font-size:8px;color:#666;">∨</span>';
+      }
+    }
+    closeSheet();
+  }
+  function selectSheetRadio(el) {
+    el.closest('.sheet-scroll').querySelectorAll('.radio-opt').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function hide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+  // Symbol leverage (per-symbol, max 150x)
+  const SYMBOL_MAX_LEV = 150;
+  function setSheetLev(val) {
+    state.sheetLev = Math.max(1, Math.min(SYMBOL_MAX_LEV, val));
+    const pct = ((state.sheetLev - 1) / (SYMBOL_MAX_LEV - 1)) * 100;
+    document.getElementById('sheet-lev-val').textContent = state.sheetLev + 'x';
+    document.getElementById('sheet-lev-fill').style.width = pct + '%';
+    document.getElementById('sheet-lev-thumb').style.left = pct + '%';
+  }
+  function adjustSheetLev(d) { setSheetLev(state.sheetLev + d); }
+  function handleSheetLevClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setSheetLev(Math.round(pct * (SYMBOL_MAX_LEV - 1)) + 1);
+  }
+
+  // Trade Settings page
+  function openTradeSettings(fromSheet) {
+    hide('flow-hint');
+    state.returnSheet = fromSheet || null;
+    // Snapshot current saved values to detect changes
+    state.savedMargin = state.tsMargin;
+    state.savedLev = state.tsLev;
+    updateTsConfirmBtn();
+    document.getElementById('ts-page').classList.add('open');
+  }
+  function closeTradeSettings() {
+    document.getElementById('ts-page').classList.remove('open');
+    // returnSheet stays — the originating sheet is still open underneath
+  }
+
+  function selectTsMargin(val) {
+    state.tsMargin = val;
+    document.getElementById('ts-margin-iso').classList.toggle('active', val === 'Isolated');
+    document.getElementById('ts-margin-cross').classList.toggle('active', val === 'Cross');
+    updateTsConfirmBtn();
+  }
+
+  function updateTsConfirmBtn() {
+    const changed = state.tsMargin !== state.savedMargin || state.tsLev !== state.savedLev;
+    document.getElementById('ts-save-btn').classList.toggle('disabled', !changed);
+    // Reset button: disabled when current values already match system defaults
+    const isDefault = state.tsMargin === 'Isolated' && state.tsLev === 1;
+    document.getElementById('ts-reset').classList.toggle('disabled', isDefault);
+  }
+
+  // Trade Settings leverage (global default, max 50x)
+  function setTsLev(val) {
+    state.tsLev = Math.max(1, Math.min(50, val));
+    const pct = ((state.tsLev - 1) / 49) * 100;
+    document.getElementById('ts-lev-val').textContent = state.tsLev + 'x';
+    document.getElementById('ts-lev-fill').style.width = pct + '%';
+    document.getElementById('ts-lev-thumb').style.left = pct + '%';
+    updateTsConfirmBtn();
+  }
+  function adjustTsLev(d) { setTsLev(state.tsLev + d); }
+  function handleTsLevClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setTsLev(Math.round(pct * 49) + 1);
+  }
+
+  function resetTradeSettings() {
+    selectTsMargin('Isolated');
+    setTsLev(1);
+    updateTsConfirmBtn();
+  }
+
+  function updateDefaultLabels() {
+    const label = 'Currently set to: ' + state.tsMargin + ', ' + state.tsLev + 'x';
+    document.getElementById('dl-default-margin').textContent = label;
+    document.getElementById('dl-default-lev').textContent = label;
+  }
+
+  function saveTradeSettings() {
+    state.dsDone = true;
+    state.savedMargin = state.tsMargin;
+    state.savedLev = state.tsLev;
+    document.getElementById('ts-page').classList.remove('open');
+    // Close underlying bottom sheet — go straight back to order form
+    closeSheet();
+    // Update deeplink sub-texts
+    updateDefaultLabels();
+    // Leverage always updates to new default
+    setSheetLev(state.tsLev);
+    const levChip = document.querySelectorAll('.ctrl-btn')[1];
+    if (levChip) levChip.innerHTML = state.tsLev + 'x <span style="font-size:8px;color:#666;">∨</span>';
+    // Margin: position's margin mode takes priority when positions are open
+    if (!state.hasOpenPosition) {
+      const marginChip = document.querySelector('.ctrl-btn');
+      if (marginChip) marginChip.innerHTML = state.tsMargin + ' <span style="font-size:8px;color:#666;">∨</span>';
+    }
+    showToast('Default leverage & margin mode successfully applied (' + state.tsMargin + ', ' + state.tsLev + 'x)');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ---- Case switcher ----
+  function switchCase(mode) {
+    closeSheet();
+    document.getElementById('ts-page').classList.remove('open');
+
+    document.getElementById('case-pos-open').classList.toggle('active', mode === 'open');
+    document.getElementById('case-pos-none').classList.toggle('active', mode === 'none');
+
+    state.hasOpenPosition = (mode === 'open');
+
+    const posCards = document.querySelector('.position-list');
+    const posTab = document.querySelector('.order-bottom-tabs .active');
+    if (mode === 'open') {
+      posCards.style.display = '';
+      posTab.textContent = 'Positions (3)';
+    } else {
+      posCards.style.display = 'none';
+      posTab.textContent = 'Positions (0)';
+    }
+  }
+
+  setTsLev(1);
+</script>
+</body>
+</html>
