@@ -432,8 +432,8 @@
 
 <div class="case-bar">
   <span class="case-label">Case</span>
-  <button class="case-btn active" id="case-pos-open" onclick="switchCase('open')">Position Open</button>
-  <button class="case-btn" id="case-pos-none" onclick="switchCase('none')">No Position</button>
+  <button class="case-btn active" id="case-pos-none" onclick="switchCase('none')">No Position</button>
+  <button class="case-btn" id="case-pos-open" onclick="switchCase('open')">Position Open</button>
 </div>
 
 <div class="device">
@@ -559,7 +559,7 @@
 
       <!-- Bottom tabs -->
       <div class="order-bottom-tabs">
-        <span class="active">Positions (3)</span>
+        <span class="active">Positions (0)</span>
         <span>Orders (6)</span>
         <span>📜 History</span>
       </div>
@@ -569,7 +569,7 @@
       </div>
 
       <!-- Position cards -->
-      <div class="position-list">
+      <div class="position-list" style="display:none;">
         <div class="pos-card">
           <div class="pos-card-header">
             <span class="sym">BTC</span>
@@ -788,7 +788,7 @@
     tsLev: 1,
     dsDone: false,
     returnSheet: null,
-    hasOpenPosition: true
+    hasOpenPosition: false
   };
 
   // Sheet basics
