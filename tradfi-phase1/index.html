@@ -133,6 +133,16 @@ body {
 }
 .phone { width: 360px; height: 800px; background: var(--bg0); position: relative; border-radius: 34px; display: flex; flex-direction: column; overflow: hidden; }
 
+/* Mobile mode (?mobile) */
+body.mobile-mode { padding: 0; background: var(--bg0); }
+body.mobile-mode .proto-wrapper { gap: 0; }
+body.mobile-mode .hint-toggle,
+body.mobile-mode .phase-panel { display: none !important; }
+body.mobile-mode .phone-device { width: 100vw; max-width: 430px; background: transparent; border-radius: 0; box-shadow: none; }
+body.mobile-mode .phone { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; }
+body.mobile-mode .status-bar { border-radius: 0; }
+body.mobile-mode .hint-badge { display: none !important; }
+
 /* Status Bar */
 .status-bar { height: 28px; padding: 4px 16px 0; display: flex; justify-content: space-between; align-items: center; background: var(--bg0); flex-shrink: 0; border-radius: 34px 34px 0 0; }
 .status-bar .time { font-family: 'Roboto', sans-serif; font-size: 15px; font-weight: 600; color: #fff; }
@@ -2107,6 +2117,7 @@ body {
 </div><!-- /proto-wrapper -->
 
 <script>
+if (location.search.indexOf('mobile') !== -1) document.body.classList.add('mobile-mode');
 document.querySelectorAll('.chip, .seg-btn, .top-tab').forEach(el => {
   el.setAttribute('data-text', el.textContent.trim());
 });
