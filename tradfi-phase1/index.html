@@ -245,7 +245,7 @@ body {
 .sort-arrow { font-size: 8px; color: var(--text-m); }
 
 /* Divider */
-.divider-thick { height: 8px; background: rgba(255,255,255,0.02); margin: 16px 0; border-radius: 4px; }
+.divider-thick { height: 8px; background: #000000; margin: 16px 0 0; }
 
 /* Trending section */
 .trending-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); }
@@ -291,11 +291,12 @@ body {
 .search-input { flex: 1; height: 36px; background: var(--bg1); border: none; border-radius: 1000px; padding: 0 12px 0 40px; font-size: 16px; color: var(--text-p); font-family: inherit; outline: none; letter-spacing: -0.24px; }
 .search-input::placeholder { color: rgba(255,255,255,0.16); }
 .cancel-btn { font-size: 14px; color: var(--text-p); cursor: pointer; flex-shrink: 0; font-weight: 600; padding: 4px; letter-spacing: -0.21px; }
-.search-recent-chips { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
+.search-recent-wrap { position: relative; flex-shrink: 0; }
+.search-recent-chips { display: flex; gap: 8px; padding: 12px 16px; padding-right: 48px; overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
 .search-recent-chips::-webkit-scrollbar { display: none; }
 .search-recent-chip { padding: 6px 10px; background: transparent; border: 1px solid var(--border); border-radius: 100px; font-size: 12px; color: var(--text-s); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .search-recent-chip .chip-badge { font-size: 10px; color: var(--text-t); background: transparent; border: 1px solid var(--border); padding: 1px 5px; border-radius: 100px; }
-.search-clear-btn { flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.search-clear-fixed { position: absolute; right: 0; top: 0; height: 100%; width: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: linear-gradient(to right, transparent 0%, var(--bg0) 40%); z-index: 2; }
 .search-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .search-input-clear { position: absolute; right: 8px; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 50%; }
 .search-input-clear.visible { display: flex; }
@@ -578,7 +579,7 @@ body {
   <div class="hint-toggle" onclick="toggleHints()">
     <div class="hint-toggle-switch"></div>
     <span class="hint-toggle-label">Phase 1 변경사항</span>
-    <span class="hint-toggle-count">10</span>
+    <span class="hint-toggle-count">12</span>
   </div>
 <div class="phone-device">
 <div class="phone">
@@ -781,7 +782,7 @@ body {
       <div class="divider-thick"></div>
 
       <!-- ===== Trending List ===== -->
-      <div class="section-header" style="padding-bottom:16px"><div class="title-wrap"><h2>Trending list</h2></div><span class="see-all">See all</span></div>
+      <div class="section-header" style="margin-top:32px;padding-bottom:16px"><div class="title-wrap"><h2>Trending list</h2></div><span class="see-all">See all</span></div>
       <div class="chip-row" style="margin-bottom:8px" id="trending-chips">
         <div class="chip active" data-filter="all">All Perp</div>
         <div class="chip" data-filter="tradfi" style="position:relative">TradFi<div class="hint-badge" data-type="new" data-hint="trending-tradfi" style="top:-8px;right:-8px" onclick="event.stopPropagation();showHint(this,'trending-tradfi')"></div></div>
@@ -838,13 +839,16 @@ body {
       </div>
       <span class="cancel-btn" onclick="closeSearch()">Cancel</span>
     </div>
+    <div class="search-recent-wrap">
     <div class="search-recent-chips">
       <div class="search-recent-chip" onclick="closeSearch();showScreen('trade')">BTC <span class="chip-badge">Perp</span></div>
       <div class="search-recent-chip">XRP <span class="chip-badge">Perp</span></div>
       <div class="search-recent-chip" onclick="closeSearch();showScreen('order')">SPCX <span class="chip-badge">Perp</span></div>
       <div class="search-recent-chip">SOXL <span class="chip-badge">Perp</span></div>
       <div class="search-recent-chip">CL <span class="chip-badge">Perp</span></div>
-      <div class="search-clear-btn" onclick="clearSearchHistory()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 5h8M6.5 7v4M9.5 7v4" stroke="#7b7b7b" stroke-width="1.2" stroke-linecap="round"/><path d="M3 5h10l-.7 8.3a1 1 0 01-1 .7H4.7a1 1 0 01-1-.7L3 5z" stroke="#7b7b7b" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5V3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5" stroke="#7b7b7b" stroke-width="1.2"/></svg></div>
+    </div>
+    <div class="search-clear-fixed" onclick="clearSearchHistory()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 5h8M6.5 7v4M9.5 7v4" stroke="#7b7b7b" stroke-width="1.2" stroke-linecap="round"/><path d="M3 5h10l-.7 8.3a1 1 0 01-1 .7H4.7a1 1 0 01-1-.7L3 5z" stroke="#7b7b7b" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5V3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5" stroke="#7b7b7b" stroke-width="1.2"/></svg></div>
+    <div class="hint-badge" data-type="improved" data-hint="search-recent" style="top:6px;left:50px" onclick="event.stopPropagation();showHint(this,'search-recent')"></div>
     </div>
     <div class="top-tabs" id="search-tabs" style="flex-shrink:0">
       <div class="top-tab active" data-text="Perpetual">Perpetual</div>
@@ -2012,6 +2016,13 @@ body {
         <div class="phase-item-desc">Trending list에 TradFi 필터 탭 추가. 거래소 볼륨순 트렌드 확인.</div>
       </div>
     </div>
+    <div class="phase-item" data-target="tradfi-section">
+      <span class="phase-item-tag" data-tag="improved">improved</span>
+      <div class="phase-item-body">
+        <div class="phase-item-title">리스트 정렬 기준 변경</div>
+        <div class="phase-item-desc">기본 정렬을 마켓캡에서 거래소 볼륨순으로 변경. 전체 리스트에 적용.</div>
+      </div>
+    </div>
   </div>
 
   <div class="phase-section">
@@ -2046,6 +2057,13 @@ body {
       <div class="phase-item-body">
         <div class="phase-item-title">TradFi 카테고리 탭</div>
         <div class="phase-item-desc">TradFi 서치에서 Metal, Commodity, ETF, Stock 카테고리별 필터 탭 제공.</div>
+      </div>
+    </div>
+    <div class="phase-item" data-target="search-recent">
+      <span class="phase-item-tag" data-tag="improved">improved</span>
+      <div class="phase-item-body">
+        <div class="phase-item-title">최근 검색 UI 개선</div>
+        <div class="phase-item-desc">높이값 기준 1줄 고정, 초과 항목 횡스크롤. 삭제 아이콘 리스트 끝 배치.</div>
       </div>
     </div>
   </div>
@@ -2241,7 +2259,7 @@ function renderSearchResults(query) {
 }
 
 function setSearchTypingState(hasText) {
-  var recentChips = document.querySelector('.search-recent-chips');
+  var recentChips = document.querySelector('.search-recent-wrap');
   var tabsDefault = document.getElementById('search-tabs');
   var tabsTradfi = document.getElementById('search-tabs-tradfi');
   var scrollDefault = document.getElementById('search-scroll-default');
@@ -2310,7 +2328,7 @@ function openSearch() {
       t.classList.toggle('active', t.dataset.text === 'Perpetual');
     });
   }
-  var recentChips = document.querySelector('.search-recent-chips');
+  var recentChips = document.querySelector('.search-recent-wrap');
   if (recentChips) recentChips.style.display = '';
   var clearBtn = document.querySelector('.search-input-clear');
   if (clearBtn) clearBtn.classList.remove('visible');
@@ -2328,7 +2346,7 @@ function closeSearch() {
   setSearchTypingState(false);
 }
 function clearSearchHistory() {
-  var wrap = document.querySelector('.search-recent-chips');
+  var wrap = document.querySelector('.search-recent-wrap');
   if (wrap) wrap.remove();
 }
 
@@ -2772,7 +2790,8 @@ document.querySelectorAll('.ct-activity-chip').forEach(function(chip) {
 <script>
 var hintData = {
   'tradfi-section': [
-    { tag: 'new', title: 'TradFi 마켓 섹션', desc: 'Market 랜딩에 TradFi 전용 섹션 추가. 주식·원자재·ETF 등 45개 선물 종목을 카테고리 필터(Metal, Commodity, ETF, Stock)와 함께 노출. 거래소 볼륨순 정렬.' }
+    { tag: 'new', title: 'TradFi 마켓 섹션', desc: 'Market 랜딩에 TradFi 전용 섹션 추가. 주식·원자재·ETF 등 45개 선물 종목을 카테고리 필터(Metal, Commodity, ETF, Stock)와 함께 노출. 거래소 볼륨순 정렬.' },
+    { tag: 'improved', title: '리스트 정렬 기준 변경', desc: '전체 종목 리스트의 기본 정렬 기준을 마켓캡(Market Cap)에서 거래소 볼륨(Volume)순으로 변경. TradFi 섹션, Trending list, TradFi 탭 상세 리스트 모두 적용.' }
   ],
   search: [
     { tag: 'new', title: 'TradFi 검색 라우팅', desc: '검색 결과에서 TradFi 종목(회사명 표기) 선택 시 TradFi 탭으로, 크립토 종목은 Trade 탭으로 자동 이동.' }
@@ -2782,6 +2801,9 @@ var hintData = {
   ],
   'search-tradfi-tabs': [
     { tag: 'new', title: 'TradFi 카테고리 탭', desc: 'TradFi 탭 서치 화면에서 카테고리별(Metal, Commodity, ETF, Stock) 필터 탭 제공. TradFi 종목을 자산 유형별로 빠르게 탐색 가능.' }
+  ],
+  'search-recent': [
+    { tag: 'improved', title: '최근 검색 UI 개선', desc: '기존 갯수 기반 노출에서 높이값 기준 1줄 고정으로 변경. 초과 항목은 횡스크롤 처리. 삭제 아이콘은 리스트 끝에 배치.' }
   ],
   'trending-tradfi': [
     { tag: 'new', title: 'Trending TradFi 필터', desc: 'Trending list에 TradFi 필터 탭 추가. 거래소 볼륨순으로 TradFi 종목 트렌드 확인 가능.' }
