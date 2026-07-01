@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TradFi Phase 2 — Figma build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Figma TradFi Phase 2 design tokens */
+  --bg0:#111111; --bg1:#1c1c1c; --bg2:#2c2c2c; --bg3:#424242;
+  --text-p:#f7f7f7; --text-s:#b4b4b4; --text-t:#959595; --text-m:#7b7b7b;
+  --positive:#34c759; --negative:#ff493f; --blue:#2f98ff; --lime:#cfe600;
+  --border:#2c2c2c; --vip:#ffe6a8;
+  --chip-on:#f7f7f7; --chip-off:rgba(238,238,238,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#070708;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;-webkit-font-smoothing:antialiased;padding:24px 0;letter-spacing:-0.1px}
+.phone-device{width:360px;background:#000;border-radius:34px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 20px 60px rgba(0,0,0,.5)}
+.phone{width:360px;height:800px;background:var(--bg0);position:relative;border-radius:34px;display:flex;flex-direction:column;overflow:hidden;color:var(--text-p)}
+body.mobile-mode{padding:0;background:var(--bg0)}
+body.mobile-mode .phone-device{width:100vw;max-width:430px;background:transparent;border-radius:0;box-shadow:none}
+body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
+
+/* Status bar */
+.status-bar{height:32px;padding:8px 18px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.status-bar .time{font-family:'Roboto',sans-serif;font-size:14px;font-weight:600;color:#fff}
+.status-bar .sb-icons{display:flex;gap:6px;align-items:center}
+
+/* Top bar — height 42, search field 32 (hug width), text 14 */
+.topbar{height:42px;padding:0 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar .account{height:32px;display:inline-flex;align-items:center;gap:6px;background:var(--bg1);border-radius:100px;padding:0 12px 0 2px;flex-shrink:0;cursor:pointer}
+.topbar .acct-av{width:28px;height:28px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar .acct-av svg{width:18px;height:18px}
+.topbar .acct-name{font-size:14px;font-weight:600;color:var(--text-p)}
+.topbar .search-pill{flex:1;min-width:0;height:32px;background:var(--bg1);border-radius:100px;display:inline-flex;align-items:center;gap:8px;padding:0 12px;cursor:pointer}
+.topbar .search-pill .sp-fire{font-size:14px;flex-shrink:0}
+.topbar .search-pill span{font-size:14px;color:var(--text-m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .tb-ic{position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px}
+.topbar .search-pill + .tb-ic{margin-left:auto} /* 서치 숨김(assets) 시 아이콘을 우측 끝으로 */
+.topbar .tb-ic + .tb-ic{margin-left:-4px} /* gift↔bell gap 8px (12 - 4); 그 외 갭 12px */
+.topbar .tb-ic svg{width:24px;height:24px}
+.topbar .tb-ic .dot{position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--negative);border:1.5px solid var(--bg0)}
+
+/* Announcement */
+.announce{display:flex;align-items:center;gap:8px;min-height:24px;padding:0 12px 0 16px;margin:8px 0 0}
+.announce .an-txt{flex:1;font-size:12px;color:#f7f7f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.announce .an-x{cursor:pointer;flex-shrink:0}
+
+/* Feature nav */
+.feat-nav{display:flex;padding:16px 16px 0;margin-bottom:20px}
+.feat-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.feat-item:active{opacity:.6}
+.feat-ic{width:48px;height:48px;border-radius:50%;background:var(--bg1);display:flex;align-items:center;justify-content:center}
+.feat-lbl{font-size:11px;color:var(--text-s);font-weight:400;white-space:nowrap}
+
+/* Campaign banner (center peek + 1/3 counter) */
+.banner-wrap{padding:0;position:relative}
+.banner-view{overflow:hidden}
+.banner-track{display:flex;gap:8px;transition:transform .5s cubic-bezier(.4,0,.2,1);will-change:transform}
+.banner{flex:0 0 calc(100% - 32px);height:68px;background-color:#1c1c1c;background-image:linear-gradient(105deg,rgba(207,230,0,.10),rgba(207,230,0,.02) 58%);border:1px solid rgba(207,230,0,.16);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;position:relative}
+.banner .b-count{position:absolute;top:6px;right:10px;font-size:10px;color:#959595;font-variant-numeric:tabular-nums;pointer-events:none;letter-spacing:.3px}
+.banner .b-ic{width:32px;height:32px;border-radius:50%;background:#3a3a30;flex-shrink:0}
+.banner .b-main{flex:1;min-width:0}
+.banner .b-title{font-size:13px;font-weight:700;color:var(--lime);letter-spacing:-.01em;line-height:1.25}
+.banner .b-sub{font-size:11px;color:var(--text-s);margin-top:2px}
+.banner-dots{display:flex;justify-content:center;gap:5px;margin-top:10px}
+.banner-dots .d{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.22);transition:width .2s,background .2s}
+.banner-dots .d.active{width:16px;border-radius:3px;background:#fff}
+
+/* Section header */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 10px}
+.sec-hd h2{font-size:14px;font-weight:400;color:var(--text-p);letter-spacing:-.01em}
+.sec-hd .see-all{font-size:13px;color:var(--text-s);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.proto-control{position:fixed;top:24px;left:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;background:#16161a;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px}
+.proto-control .pc-label{font-size:11px;font-weight:600;color:#8a8a8a;letter-spacing:.02em}
+body.mobile-mode .proto-control{display:none}
+.proto-control{width:236px}
+.persona-toggle{display:flex;width:100%;background:var(--bg1);border-radius:100px;padding:3px}
+.persona-toggle .pt{flex:1;text-align:center;font-size:11px;font-weight:600;color:var(--text-m);padding:4px 0;border-radius:100px;cursor:pointer}
+.persona-toggle .pt.active{background:var(--bg3);color:#fff}
+.type-opts{display:flex;flex-direction:column;gap:6px}
+.type-opt{display:flex;flex-direction:column;gap:2px;background:var(--bg1);border:1px solid transparent;border-radius:8px;padding:8px 10px;cursor:pointer}
+.type-opt.active{border-color:var(--blue);background:rgba(47,152,255,.08)}
+.type-opt .to-title{font-size:12px;font-weight:600;color:var(--text-s)}
+.type-opt.active .to-title{color:#fff}
+.type-opt .to-desc{font-size:10px;font-weight:400;line-height:1.35;color:var(--text-m)}
+.type-opt.active .to-desc{color:var(--text-s)}
+.type-opt .to-pro,.type-opt .to-con{font-size:10px;line-height:1.4;margin-top:2px}
+.type-opt .to-pro{color:var(--positive)}
+.type-opt .to-con{color:var(--negative)}
+.type-opts.locked{opacity:.4;pointer-events:none}
+.pc-note{font-size:10px;line-height:1.35;color:var(--text-m)}
+.pc-note.hide{display:none}
+.type-opt .to-flow{display:flex;flex-direction:column;gap:2px;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.08)}
+.type-opt .tf-step{font-size:10px;line-height:1.3;color:var(--text-m)}
+.type-opt.active .tf-step{color:var(--blue)}
+.type-opt .tf-step b{color:var(--text-p);font-weight:600}
+
+/* Trend */
+.trend-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:76px 76px;gap:8px;padding:0 16px}
+.trend-card{background:var(--bg1);border-radius:12px;padding:10px 12px;cursor:pointer;min-width:0}
+.trend-hero{grid-row:span 2;display:flex;flex-direction:column;overflow:hidden}
+.tc-top{display:flex;align-items:center;gap:8px}
+.tc-ic{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#111;flex-shrink:0;overflow:hidden}
+.tc-tk{font-size:14px;font-weight:700;color:var(--text-p)}
+.tc-name{font-size:10px;color:var(--text-m);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trend-hero .spark{margin:14px 0;height:48px;flex-shrink:0;display:flex;align-items:center}
+.trend-hero .spark svg{display:block;width:100%;height:100%}
+.tc-price{font-size:13px;font-weight:400;color:var(--text-p);font-variant-numeric:tabular-nums}
+.tc-chg{font-size:14px;font-weight:700;margin-top:2px}
+.tc-chg.up{color:var(--positive)}.tc-chg.down{color:var(--negative)}
+.trend-side{display:flex;flex-direction:column;justify-content:space-between;height:76px}
+.trend-side .tc-right{text-align:right}
+/* Trending grid (Figma A/B 카드) — hero + 2행 가로 스크롤, 가격 없음 */
+.trend-scroll{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,72px);grid-auto-columns:128px;gap:8px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
+.trend-scroll::-webkit-scrollbar{display:none}
+.tg-card{background:var(--bg1);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;overflow:hidden}
+.tg-card.tg-hero{grid-row:span 2}
+.tg-head{display:flex;align-items:center;gap:8px}
+.tg-ic{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+.tg-meta{display:flex;flex-direction:column;min-width:0}
+.tg-label{font-size:10px;color:var(--text-t);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-tk{font-size:14px;font-weight:700;color:var(--text-p);line-height:1.25}
+.tg-chart{flex:1;min-height:0;margin:6px -12px 0}
+.tg-chart svg{display:block;width:100%;height:100%}
+.tg-chg{font-size:13px;font-weight:700;margin-top:auto}
+.tg-chg.up{color:var(--positive)}.tg-chg.down{color:var(--negative)}
+/* ② Rail layout */
+.trend-rail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px;scroll-snap-type:x mandatory}
+.trend-rail::-webkit-scrollbar{display:none}
+.tr-card{flex:0 0 150px;scroll-snap-align:start;background:var(--bg1);border-radius:12px;padding:12px;cursor:pointer}
+.tr-card .tr-top{display:flex;align-items:center;gap:8px}
+.tr-ic{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#111;flex-shrink:0}
+.tr-tk{font-size:14px;font-weight:700;color:var(--text-p)}
+.tr-tag{font-size:9px;font-weight:700;text-transform:uppercase;padding:1px 5px;border-radius:4px;margin-left:auto;color:#a8e04c;background:rgba(168,224,76,.14)}
+.tr-tag.crypto{color:#f7931a;background:rgba(247,147,26,.14)}
+.tr-spark{height:30px;margin:10px 0}
+.tr-price{font-size:13px;color:var(--text-p);font-variant-numeric:tabular-nums}
+.tr-chg{font-size:13px;font-weight:700;margin-top:2px}
+.tr-chg.up{color:var(--positive)}.tr-chg.down{color:var(--negative)}
+/* ③ List layout */
+.trend-tlist{padding:0 16px}
+.tl-row{display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer}
+.tl-rank{width:14px;font-size:12px;font-weight:700;color:var(--text-m);flex-shrink:0}
+.tl-ic{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#111;flex-shrink:0}
+.tl-info{flex:1;min-width:0}
+.tl-tk{font-size:14px;font-weight:600;color:var(--text-p)}
+.tl-name{font-size:11px;color:var(--text-m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-spark{width:52px;height:22px;flex-shrink:0}
+.tl-right{text-align:right;min-width:78px}
+.tl-price{font-size:13px;color:var(--text-p);font-variant-numeric:tabular-nums}
+.tl-chg{font-size:13px;font-weight:700;margin-top:2px}
+.tl-chg.up{color:var(--positive)}.tl-chg.down{color:var(--negative)}
+
+/* Open positions */
+.hcarousel{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 16px}
+.hcarousel::-webkit-scrollbar{display:none}
+.pos-card{flex:0 0 92%;scroll-snap-align:center;background:var(--bg0);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer}
+.pos-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pos-tk{font-size:15px;font-weight:700;display:flex;align-items:center;gap:5px}
+.pos-badge{font-size:11px;color:var(--text-t);background:var(--bg3);padding:2px 7px;border-radius:5px;font-weight:500}
+.pos-tools{margin-left:auto;display:flex;gap:12px;color:var(--text-t)}
+.pos-pnl{font-size:18px;font-weight:700;color:var(--positive);font-variant-numeric:tabular-nums;margin-bottom:12px}
+.pos-cols{display:flex;justify-content:space-between}
+.pos-col .l{font-size:11px;color:var(--text-m)}
+.pos-col .v{font-size:13px;color:var(--text-s);font-variant-numeric:tabular-nums;margin-top:2px}
+.pos-col:last-child{text-align:right}
+.pos-seeall{flex:0 0 84px;scroll-snap-align:end;background:var(--bg0);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-s);cursor:pointer}
+#pos-carousel{scroll-padding-right:16px} /* See all 카드가 화면 끝 16px 안쪽에 스냅 */
+#freq-carousel{scroll-snap-type:none} /* 자유 스크롤: 시작 좌16, 끝 우16, 중간 패딩 없음 */
+
+/* Frequent trades small cards */
+.freq-card{flex:0 0 96px;background:var(--bg1);border-radius:12px;padding:12px;cursor:pointer}
+.freq-tk{font-size:14px;font-weight:600;color:var(--text-p);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.freq-chg{font-size:13px;font-weight:500;margin-top:8px;display:flex;align-items:center;gap:3px}
+.freq-chg.up{color:var(--positive)}.freq-chg.down{color:var(--negative)}
+
+/* Tabs */
+.tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:12px 0;margin-right:24px;font-size:15px;font-weight:500;color:var(--text-m);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab.active{color:#fff;border-bottom-color:#fff}
+
+/* Chips */
+.chips{display:flex;gap:8px;padding:12px 16px 6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;height:30px;padding:0 14px;border-radius:100px;background:var(--chip-off);font-size:13px;font-weight:500;color:var(--text-s);cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+.chip.active{background:var(--chip-on);color:#000;font-weight:600}
+
+/* Sort bar */
+.sortbar{display:flex;align-items:center;padding:8px 16px;gap:16px;max-height:44px;overflow:hidden;flex-shrink:0;transition:max-height .12s ease-out,padding .12s ease-out,opacity .1s ease-out}
+.sortbar.hide{max-height:0;padding-top:0;padding-bottom:0;opacity:0}
+.sort-col{display:flex;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:var(--text-m);font-weight:500;flex:0 0 auto}
+.sort-col.sel{color:var(--text-p)}
+
+/* Market row */
+.mrow{display:flex;align-items:center;padding:11px 16px;gap:12px;cursor:pointer}
+.mrow:active{background:rgba(255,255,255,.03)}
+.mrow .mic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
+.mrow .minfo{flex:1;min-width:0}
+.mrow .mline{display:flex;align-items:center;gap:6px}
+.mrow .mtk{font-size:15px;font-weight:600;color:var(--text-p)}
+.mrow .mlev{font-size:11px;color:var(--text-t);border:1px solid var(--border);padding:1px 6px;border-radius:100px}
+.mrow .msub{font-size:12px;color:var(--lime);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .mright{text-align:right}
+.mrow .mprice{font-size:13px;font-weight:400;color:var(--text-p);font-variant-numeric:tabular-nums;margin-top:2px}
+.mrow .mchg{font-size:14px;font-weight:700;display:flex;align-items:center;gap:3px;justify-content:flex-end}
+.mchg.up{color:var(--positive)}.mchg.down{color:var(--negative)}
+.see-all-center{text-align:center;padding:14px;font-size:14px;font-weight:700;color:var(--text-p);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* Copy trading stacked */
+.copy-stack{position:relative;height:72px;margin:0 16px;overflow:visible}
+.ct-card{position:absolute;left:0;top:0;width:100%;height:72px;background:var(--bg0);border:1px solid var(--border);border-radius:12px;padding:0 14px;display:flex;align-items:center;gap:10px;cursor:grab;user-select:none;-webkit-user-select:none;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s cubic-bezier(.4,0,.2,1);will-change:transform,opacity}
+.ct-av{width:30px;height:30px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ct-name{font-size:14px;font-weight:600}
+.ct-badge{font-size:12px;color:#ffe6a8;display:flex;align-items:center;gap:4px;margin-top:2px}
+.ct-right{margin-left:auto;text-align:right}
+.ct-roi{font-size:16px;font-weight:700;color:var(--positive);font-variant-numeric:tabular-nums}
+.ct-roilbl{font-size:11px;color:var(--text-t)}
+
+/* Screens & scroll */
+.screen{display:none;flex:1;min-height:0;flex-direction:column}
+.screen.active{display:flex}
+/* 서치 오버레이: 아래→위 슬라이드업 */
+#s-search{transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+#s-search.active{transform:translateY(0)}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{display:none}
+.scroll{scrollbar-width:none}
+.pb{padding-bottom:20px}
+
+/* Bottom nav */
+.bnav{height:58px;background:var(--bg0);border-top:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
+.bnav .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.bnav .ni svg{color:var(--text-m)}
+.bnav .ni.active svg{color:#f7f7f7}
+.bnav .ni .nl{font-size:10px;color:var(--text-m);font-weight:500}
+.bnav .ni.active .nl{color:#f7f7f7}
+
+/* Assets */
+.as-bal{padding:14px 16px 0}
+.as-bal .lbl{font-size:14px;color:var(--text-s);display:flex;align-items:center;gap:5px}
+.as-bal .big{display:flex;align-items:center;gap:8px;margin-top:6px}
+.as-bal .amt{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.as-bal .unit{font-size:15px;color:var(--text-s);font-weight:600}
+.as-bal .chev{width:24px;height:24px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center}
+.as-bal .spark{margin-left:auto}
+.as-bal .approx{font-size:13px;color:var(--text-m);margin-top:4px}
+.as-pnl{display:flex;align-items:center;gap:8px;padding:14px 16px;font-size:14px}
+.as-pnl .v{color:var(--positive);font-weight:600}
+.as-toggle{display:inline-flex;background:var(--bg1);border-radius:100px;padding:4px;margin:4px 16px 14px}
+.as-toggle .t{font-size:14px;font-weight:600;color:var(--text-m);padding:6px 18px;border-radius:100px;cursor:pointer}
+.as-toggle .t.active{background:#fff;color:#111}
+.alloc-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:0 16px 16px;gap:2px}
+.alloc-bar i{display:block;height:100%}
+.alloc-row{display:flex;align-items:center;padding:13px 16px;gap:10px;cursor:pointer}
+.alloc-row .sw{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.alloc-row .an{font-size:14px;color:var(--text-p);flex:1}
+.alloc-row .av{text-align:right}
+.alloc-row .av .a1{font-size:14px;color:var(--text-p);font-variant-numeric:tabular-nums}
+.alloc-row .av .a2{font-size:12px;color:var(--text-m)}
+.lead-row{display:flex;align-items:center;gap:8px;padding:14px 16px;border-top:1px solid var(--border);font-size:14px;font-weight:600;cursor:pointer}
+.act-row{display:flex;justify-content:space-around;padding:18px 16px 14px}
+.act{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+.act .ab{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center}
+.act.fill .ab{background:var(--blue);border-color:var(--blue)}
+.act .al{font-size:13px;font-weight:600}
+.proc{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;font-size:13px;color:var(--text-s);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:4px}
+.earn-card{flex:0 0 80%;scroll-snap-align:start;background:var(--bg1);border-radius:12px;padding:16px;position:relative;overflow:hidden;cursor:pointer}
+.earn-card .ec-t{font-size:12px;color:var(--text-s)}
+.earn-card .ec-h{font-size:18px;font-weight:700;margin-top:4px;width:60%;line-height:1.25}
+.earn-card .ec-m{font-size:12px;color:var(--text-s);text-decoration:underline;margin-top:10px}
+.earn-card .ec-il{position:absolute;right:10px;bottom:8px;font-size:34px}
+
+/* Search */
+.srch-bar{display:flex;align-items:center;gap:14px;padding:6px 16px}
+.srch-input{flex:1;height:36px;background:var(--bg1);border-radius:100px;display:flex;align-items:center;gap:8px;padding:0 14px}
+.srch-input input{flex:1;background:transparent;border:none;outline:none;color:var(--text-p);font-size:15px;font-family:inherit}
+.srch-input input::placeholder{color:var(--text-m)}
+.srch-cancel{font-size:14px;font-weight:600;color:var(--text-p);cursor:pointer}
+.recent{display:flex;align-items:center;gap:8px;padding:10px 16px;position:relative}
+.recent-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1}
+.recent-scroll::-webkit-scrollbar{display:none}
+.rchip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:100px;padding:6px 12px;font-size:13px;color:var(--text-s);cursor:pointer}
+.rchip .rb{font-size:10px;color:var(--text-t);border:1px solid var(--border);border-radius:100px;padding:1px 5px}
+.recent .trash{flex-shrink:0;cursor:pointer;color:var(--text-t);padding-left:6px;background:linear-gradient(to right,transparent,var(--bg0) 30%)}
+/* keyboard */
+.kb{flex-shrink:0;background:#1b1b1e;padding:6px 3px 8px;border-top:1px solid rgba(255,255,255,.06);transition:transform .24s cubic-bezier(.4,0,1,1)}
+.kb.down{transform:translateY(100%)} /* 스크롤/탭/소팅 시 위→아래로 슬라이드 다운 */
+.kb-row{display:flex;justify-content:center;gap:5px;margin-bottom:6px;padding:0 3px}
+.kb-key{height:40px;border-radius:6px;background:#3a3a3e;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;flex:1;max-width:32px;font-family:'Roboto',sans-serif;user-select:none}
+.kb-key.sp{background:#2c2c30;max-width:44px}
+.kb-key.space{max-width:none;flex:5;font-size:12px;color:var(--text-t)}
+.kb-key.done{max-width:64px;background:var(--blue);font-size:13px;font-weight:600}
+.placeholder{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-m);font-size:14px}
+</style>
+</head>
+<body>
+<div class="proto-control">
+  <span class="pc-label">User state</span>
+  <div class="persona-toggle" id="persona-toggle">
+    <div class="pt active" data-p="new" onclick="setPersona('new')">New</div>
+    <div class="pt" data-p="recurring" onclick="setPersona('recurring')">Recurring</div>
+  </div>
+  <span class="pc-label" style="margin-top:6px">Home type</span>
+  <div class="type-opts" id="home-type-toggle">
+    <div class="type-opt active" data-type="A" onclick="setHomeType('A')">
+      <span class="to-title">A · 통합형 (PRD)</span>
+      <span class="to-desc">개인화 종목을 Trending 그리드에 배지로 통합</span>
+      <span class="to-pro">＋ PRD 요구사항 부합 · 세로 공간 절약 · 스캔 빠름</span>
+      <span class="to-con">－ 시장·개인화 종목 혼재로 맥락 약함 · 포지션/최근 종목 표현 취약</span>
+    </div>
+    <div class="type-opt" data-type="B" onclick="setHomeType('B')">
+      <span class="to-title">B · 맥락 분리형 (제안)</span>
+      <span class="to-desc">포지션·자주 거래를 별도 섹션으로 분리</span>
+      <span class="to-pro">＋ 포지션 정보 우선 · 최근 종목 다수 노출 · 맥락 명확</span>
+      <span class="to-con">－ 섹션 증가로 세로 길이·스크롤 부담 · 초기 시선 분산</span>
+      <div class="to-flow">
+        <div class="tf-step">① 지금 시장 상황은? · <b>Trending</b></div>
+        <div class="tf-step">② 내 포지션은? · <b>Open positions</b></div>
+        <div class="tf-step">③ 다음엔 뭘 트레이딩할까? · <b>탭 리스트</b></div>
+        <div class="tf-step">④ 자주 하던 거 하자 · <b>Frequent trades</b></div>
+        <div class="tf-step">⑤ 다른 사람 따라가볼까? · <b>Copy trading</b></div>
+      </div>
+    </div>
+  </div>
+  <span class="pc-note hide" id="type-note">New는 개인화 콘텐츠가 없어 A·B 화면이 동일합니다</span>
+</div>
+<div class="phone-device"><div class="phone">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="time">09:30 PM</span>
+    <div class="sb-icons">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l5 4-5 4V2zm0 12l5 4-5 4v-8zM7 8l4 4-4 4-2-2 2-2-2-2 2-2z" opacity=".9"/></svg>
+      <svg width="16" height="11" viewBox="0 0 18 12" fill="none"><path d="M9 2.5c2.2 0 4.2.9 5.7 2.3l1.4-1.4C14.2 1.5 11.7.5 9 .5S3.8 1.5 1.9 3.4l1.4 1.4C4.8 3.4 6.8 2.5 9 2.5z" fill="#fff"/><path d="M9 6c1.1 0 2.1.4 2.8 1.2l1.4-1.4C12.1 4.7 10.6 4 9 4s-3.1.7-4.2 1.8l1.4 1.4C6.9 6.4 7.9 6 9 6z" fill="#fff"/><circle cx="9" cy="9.5" r="1.6" fill="#fff"/></svg>
+      <svg width="18" height="11" viewBox="0 0 18 11" fill="none"><rect x="0" y="6" width="3" height="5" rx="1" fill="#fff" opacity=".5"/><rect x="4.5" y="4" width="3" height="7" rx="1" fill="#fff" opacity=".7"/><rect x="9" y="2" width="3" height="9" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg>
+      <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="0" y="0" width="20" height="12" rx="3" stroke="#fff" stroke-opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#fff"/><rect x="21" y="3.5" width="2" height="5" rx="1" fill="#fff" opacity=".5"/></svg>
+    </div>
+  </div>
+
+  <!-- TOP BAR (shared) -->
+  <div class="topbar" id="topbar">
+    <div class="account"><div class="acct-av"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="10" r="3.4" stroke="#fff" stroke-width="1.8"/><path d="M6.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><span class="acct-name">Basic</span></div>
+    <div class="search-pill" onclick="openSearch()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#6f6f72" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#6f6f72" stroke-width="1.5" stroke-linecap="round"/></svg><span class="sp-fire">🔥</span><span>SOXL</span></div>
+    <div class="tb-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" stroke="#eee" stroke-width="1.6"/><path d="M3 11h18M12 8v13" stroke="#eee" stroke-width="1.6"/><path d="M12 8s-1-4-3.5-4S6 7 12 8zM12 8s1-4 3.5-4S18 7 12 8z" stroke="#eee" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="dot"></span></div>
+    <div class="tb-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4c-2.8 0-5 2.2-5 5v3l-2 3h14l-2-3V9c0-2.8-2.2-5-5-5z" stroke="#eee" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 18a2 2 0 0 0 4 0" stroke="#eee" stroke-width="1.6" stroke-linecap="round"/></svg><span class="dot"></span></div>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <div class="screen active" id="s-home">
+    <div class="scroll pb">
+      <!-- Announcement -->
+      <div class="announce">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h3l6 4V5L7 9H4z" fill="#0a84ff"/><path d="M16 8a5 5 0 0 1 0 8" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="an-txt">Delisting multiple perpetual swaps July 02, 2026</span>
+        <svg class="an-x" width="16" height="16" viewBox="0 0 16 16" fill="none" onclick="this.closest('.announce').style.display='none'"><path d="M4 4l8 8M12 4l-8 8" stroke="#8a8a8a" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+
+      <!-- Feature nav -->
+      <div class="feat-nav">
+        <div class="feat-item"><div class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="6.5" rx="7" ry="3" stroke="#eee" stroke-width="1.6"/><path d="M5 6.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5M5 11.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5" stroke="#eee" stroke-width="1.6"/><circle cx="18" cy="6" r="4" fill="#0d0d0f"/><path d="M18 4v4M16 6h4" stroke="#eee" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="feat-lbl">Earn</span></div>
+        <div class="feat-item"><div class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#eee" stroke-width="1.6"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2 3-2s2.7.8 2.7 2-1.2 1.8-2.7 2.2-3 .9-3 2.3 1.3 2 3 2 3-.6 3-2" stroke="#eee" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="feat-lbl">Copy</span></div>
+        <div class="feat-item"><div class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="9" width="16" height="11" rx="1.5" stroke="#eee" stroke-width="1.6"/><path d="M3 9h18v3H3zM12 9v11" stroke="#eee" stroke-width="1.6"/><path d="M12 9s-1-4-3.2-4S6 8 12 9zM12 9s1-4 3.2-4S18 8 12 9z" stroke="#eee" stroke-width="1.6" stroke-linejoin="round"/></svg></div><span class="feat-lbl">Reward</span></div>
+        <div class="feat-item"><div class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#eee" stroke-width="1.6"/><path d="M3.5 19c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" stroke="#eee" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8a3 3 0 0 1 0 5.5M18.5 19c0-2-1-3.7-2.5-4.6" stroke="#eee" stroke-width="1.6" stroke-linecap="round"/></svg></div><span class="feat-lbl">Referral</span></div>
+      </div>
+
+      <!-- Campaign banner -->
+      <div class="banner-wrap">
+        <div class="banner-view"><div class="banner-track" id="banner-track">
+          <div class="banner"><span class="b-count">1/3</span><div class="b-ic"></div><div class="b-main"><div class="b-title">Trade Stock Futures, Earn Rewards</div><div class="b-sub">Share $50K prize pool</div></div><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="banner" style="background-color:#0e131c;background-image:linear-gradient(105deg,rgba(10,132,255,.16),rgba(10,132,255,.03) 60%);border-color:rgba(10,132,255,.2)"><span class="b-count">2/3</span><div class="b-ic" style="background:#26344a"></div><div class="b-main"><div class="b-title" style="color:#7fb6ff">Pre-IPO is live</div><div class="b-sub">SpaceX, Anthropic &amp; more</div></div><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="banner" style="background-color:#0d160f;background-image:linear-gradient(105deg,rgba(43,210,103,.14),rgba(43,210,103,.03) 60%);border-color:rgba(43,210,103,.2)"><span class="b-count">3/3</span><div class="b-ic" style="background:#27402e"></div><div class="b-main"><div class="b-title" style="color:#5fe08c">Invite friends, earn 25%</div><div class="b-sub">Share trading fee rebates</div></div><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div></div>
+      </div>
+
+      <!-- Trend -->
+      <div class="sec-hd">
+        <h2>Trending</h2>
+      </div>
+      <!-- Trending grid (Figma A/B 공통 카드 스타일; JS 렌더) -->
+      <div class="trend-scroll" id="trend-scroll"></div>
+
+      <!-- Open positions + Frequent (Type B · recurring 전용) -->
+      <div class="persona-only" style="display:none">
+        <div class="sec-hd"><h2>Open positions (5)</h2><span class="see-all">See all</span></div>
+        <div class="hcarousel" id="pos-carousel">
+          <div class="pos-card"><div class="pos-top"><div class="pos-tk">BTC <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.49691 3.90745C6.24632 3.90745 6.04318 3.70431 6.04318 3.45373C6.04318 3.20314 6.24632 3 6.49691 3H10.4514C10.702 3 10.9051 3.20314 10.9051 3.45373V7.40819C10.9051 7.65878 10.702 7.86192 10.4514 7.86192C10.2008 7.86192 9.99765 7.65878 9.99765 7.40819V4.54911L6.81774 7.72902C6.64055 7.90621 6.35326 7.90621 6.17607 7.72902L4.51967 6.07262L1.87465 8.71764C1.69746 8.89483 1.41018 8.89483 1.23299 8.71764C1.0558 8.54045 1.0558 8.25317 1.23299 8.07598L4.19884 5.11013C4.37603 4.93294 4.66331 4.93294 4.8405 5.11013L6.49691 6.76653L9.35598 3.90745H6.49691Z" fill="#34C759"/></svg></div><span class="pos-badge">Isolated 10x</span><div class="pos-tools"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5835 2.49996C14.5835 2.03972 14.2104 1.66663 13.7502 1.66663C13.2899 1.66663 12.9168 2.03972 12.9168 2.49996V4.58329H12.5002C11.5797 4.58329 10.8335 5.32948 10.8335 6.24996V12.0833C10.8335 13.0038 11.5797 13.75 12.5002 13.75H12.9168V15.9167C12.9168 16.3769 13.2899 16.75 13.7502 16.75C14.2104 16.75 14.5835 16.3769 14.5835 15.9167V13.75H15.0002C15.9206 13.75 16.6668 13.0038 16.6668 12.0833V6.24996C16.6668 5.32948 15.9206 4.58329 15.0002 4.58329H14.5835V2.49996ZM7.0835 4.16663C7.0835 3.70639 6.7104 3.33329 6.25016 3.33329C5.78993 3.33329 5.41683 3.70639 5.41683 4.16663V6.24996H5.00016C4.07969 6.24996 3.3335 6.99615 3.3335 7.91663V13.75C3.3335 14.6704 4.07969 15.4166 5.00016 15.4166H5.41683V17.5834C5.41683 18.0436 5.78993 18.4167 6.25016 18.4167C6.7104 18.4167 7.0835 18.0436 7.0835 17.5834V15.4166H7.50016C8.42064 15.4166 9.16683 14.6704 9.16683 13.75V7.91663C9.16683 6.99615 8.42064 6.24996 7.50016 6.24996H7.0835V4.16663Z" fill="#B4B4B4"/></svg><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M9.61244 2.46238C9.82798 2.25168 10.1723 2.25168 10.3879 2.46238L14.824 6.79869C15.1729 7.1398 15.1729 7.70123 14.824 8.04234C14.4861 8.37264 13.9462 8.37264 13.6083 8.04234L10.8798 5.37522V12.7379C10.8798 13.2237 10.486 13.6175 10.0002 13.6175C9.51436 13.6175 9.12053 13.2237 9.12053 12.7379V5.37522L6.39203 8.04233C6.05412 8.37264 5.51427 8.37265 5.17636 8.04234C4.82739 7.70123 4.82738 7.1398 5.17635 6.79868L9.61244 2.46238ZM2.0835 15.3372V12.7774C2.0835 12.2916 2.47732 11.8978 2.96313 11.8978C3.44893 11.8978 3.84276 12.2916 3.84276 12.7774V15.3372C3.84276 15.8121 4.23658 16.197 4.72238 16.197H15.2779C15.7638 16.197 16.1576 15.8121 16.1576 15.3372V12.7774C16.1576 12.2916 16.5514 11.8978 17.0372 11.8978C17.523 11.8978 17.9168 12.2916 17.9168 12.7774V15.3372C17.9168 16.7618 16.7354 17.9167 15.2779 17.9167H4.72238C3.26497 17.9167 2.0835 16.7618 2.0835 15.3372Z" fill="#B4B4B4"/></svg></div></div><div class="pos-pnl">+12.05 (+1.42%)</div><div class="pos-cols"><div class="pos-col"><div class="l">Entry price</div><div class="v">75,123.12</div></div><div class="pos-col"><div class="l">Mark price</div><div class="v">74,123.12</div></div><div class="pos-col"><div class="l">Liq. price</div><div class="v">60,123.12</div></div></div></div>
+          <div class="pos-card"><div class="pos-top"><div class="pos-tk">NVDA <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.49691 3.90745C6.24632 3.90745 6.04318 3.70431 6.04318 3.45373C6.04318 3.20314 6.24632 3 6.49691 3H10.4514C10.702 3 10.9051 3.20314 10.9051 3.45373V7.40819C10.9051 7.65878 10.702 7.86192 10.4514 7.86192C10.2008 7.86192 9.99765 7.65878 9.99765 7.40819V4.54911L6.81774 7.72902C6.64055 7.90621 6.35326 7.90621 6.17607 7.72902L4.51967 6.07262L1.87465 8.71764C1.69746 8.89483 1.41018 8.89483 1.23299 8.71764C1.0558 8.54045 1.0558 8.25317 1.23299 8.07598L4.19884 5.11013C4.37603 4.93294 4.66331 4.93294 4.8405 5.11013L6.49691 6.76653L9.35598 3.90745H6.49691Z" fill="#34C759"/></svg></div><span class="pos-badge">Isolated 50x</span><div class="pos-tools"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5835 2.49996C14.5835 2.03972 14.2104 1.66663 13.7502 1.66663C13.2899 1.66663 12.9168 2.03972 12.9168 2.49996V4.58329H12.5002C11.5797 4.58329 10.8335 5.32948 10.8335 6.24996V12.0833C10.8335 13.0038 11.5797 13.75 12.5002 13.75H12.9168V15.9167C12.9168 16.3769 13.2899 16.75 13.7502 16.75C14.2104 16.75 14.5835 16.3769 14.5835 15.9167V13.75H15.0002C15.9206 13.75 16.6668 13.0038 16.6668 12.0833V6.24996C16.6668 5.32948 15.9206 4.58329 15.0002 4.58329H14.5835V2.49996ZM7.0835 4.16663C7.0835 3.70639 6.7104 3.33329 6.25016 3.33329C5.78993 3.33329 5.41683 3.70639 5.41683 4.16663V6.24996H5.00016C4.07969 6.24996 3.3335 6.99615 3.3335 7.91663V13.75C3.3335 14.6704 4.07969 15.4166 5.00016 15.4166H5.41683V17.5834C5.41683 18.0436 5.78993 18.4167 6.25016 18.4167C6.7104 18.4167 7.0835 18.0436 7.0835 17.5834V15.4166H7.50016C8.42064 15.4166 9.16683 14.6704 9.16683 13.75V7.91663C9.16683 6.99615 8.42064 6.24996 7.50016 6.24996H7.0835V4.16663Z" fill="#B4B4B4"/></svg><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M9.61244 2.46238C9.82798 2.25168 10.1723 2.25168 10.3879 2.46238L14.824 6.79869C15.1729 7.1398 15.1729 7.70123 14.824 8.04234C14.4861 8.37264 13.9462 8.37264 13.6083 8.04234L10.8798 5.37522V12.7379C10.8798 13.2237 10.486 13.6175 10.0002 13.6175C9.51436 13.6175 9.12053 13.2237 9.12053 12.7379V5.37522L6.39203 8.04233C6.05412 8.37264 5.51427 8.37265 5.17636 8.04234C4.82739 7.70123 4.82738 7.1398 5.17635 6.79868L9.61244 2.46238ZM2.0835 15.3372V12.7774C2.0835 12.2916 2.47732 11.8978 2.96313 11.8978C3.44893 11.8978 3.84276 12.2916 3.84276 12.7774V15.3372C3.84276 15.8121 4.23658 16.197 4.72238 16.197H15.2779C15.7638 16.197 16.1576 15.8121 16.1576 15.3372V12.7774C16.1576 12.2916 16.5514 11.8978 17.0372 11.8978C17.523 11.8978 17.9168 12.2916 17.9168 12.7774V15.3372C17.9168 16.7618 16.7354 17.9167 15.2779 17.9167H4.72238C3.26497 17.9167 2.0835 16.7618 2.0835 15.3372Z" fill="#B4B4B4"/></svg></div></div><div class="pos-pnl">+1,204.00 (+5.20%)</div><div class="pos-cols"><div class="pos-col"><div class="l">Entry price</div><div class="v">198.20</div></div><div class="pos-col"><div class="l">Mark price</div><div class="v">208.54</div></div><div class="pos-col"><div class="l">Liq. price</div><div class="v">120.10</div></div></div></div>
+          <div class="pos-card"><div class="pos-top"><div class="pos-tk">TSLA <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.49691 3.90745C6.24632 3.90745 6.04318 3.70431 6.04318 3.45373C6.04318 3.20314 6.24632 3 6.49691 3H10.4514C10.702 3 10.9051 3.20314 10.9051 3.45373V7.40819C10.9051 7.65878 10.702 7.86192 10.4514 7.86192C10.2008 7.86192 9.99765 7.65878 9.99765 7.40819V4.54911L6.81774 7.72902C6.64055 7.90621 6.35326 7.90621 6.17607 7.72902L4.51967 6.07262L1.87465 8.71764C1.69746 8.89483 1.41018 8.89483 1.23299 8.71764C1.0558 8.54045 1.0558 8.25317 1.23299 8.07598L4.19884 5.11013C4.37603 4.93294 4.66331 4.93294 4.8405 5.11013L6.49691 6.76653L9.35598 3.90745H6.49691Z" fill="#34C759"/></svg></div><span class="pos-badge">Isolated 25x</span><div class="pos-tools"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5835 2.49996C14.5835 2.03972 14.2104 1.66663 13.7502 1.66663C13.2899 1.66663 12.9168 2.03972 12.9168 2.49996V4.58329H12.5002C11.5797 4.58329 10.8335 5.32948 10.8335 6.24996V12.0833C10.8335 13.0038 11.5797 13.75 12.5002 13.75H12.9168V15.9167C12.9168 16.3769 13.2899 16.75 13.7502 16.75C14.2104 16.75 14.5835 16.3769 14.5835 15.9167V13.75H15.0002C15.9206 13.75 16.6668 13.0038 16.6668 12.0833V6.24996C16.6668 5.32948 15.9206 4.58329 15.0002 4.58329H14.5835V2.49996ZM7.0835 4.16663C7.0835 3.70639 6.7104 3.33329 6.25016 3.33329C5.78993 3.33329 5.41683 3.70639 5.41683 4.16663V6.24996H5.00016C4.07969 6.24996 3.3335 6.99615 3.3335 7.91663V13.75C3.3335 14.6704 4.07969 15.4166 5.00016 15.4166H5.41683V17.5834C5.41683 18.0436 5.78993 18.4167 6.25016 18.4167C6.7104 18.4167 7.0835 18.0436 7.0835 17.5834V15.4166H7.50016C8.42064 15.4166 9.16683 14.6704 9.16683 13.75V7.91663C9.16683 6.99615 8.42064 6.24996 7.50016 6.24996H7.0835V4.16663Z" fill="#B4B4B4"/></svg><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M9.61244 2.46238C9.82798 2.25168 10.1723 2.25168 10.3879 2.46238L14.824 6.79869C15.1729 7.1398 15.1729 7.70123 14.824 8.04234C14.4861 8.37264 13.9462 8.37264 13.6083 8.04234L10.8798 5.37522V12.7379C10.8798 13.2237 10.486 13.6175 10.0002 13.6175C9.51436 13.6175 9.12053 13.2237 9.12053 12.7379V5.37522L6.39203 8.04233C6.05412 8.37264 5.51427 8.37265 5.17636 8.04234C4.82739 7.70123 4.82738 7.1398 5.17635 6.79868L9.61244 2.46238ZM2.0835 15.3372V12.7774C2.0835 12.2916 2.47732 11.8978 2.96313 11.8978C3.44893 11.8978 3.84276 12.2916 3.84276 12.7774V15.3372C3.84276 15.8121 4.23658 16.197 4.72238 16.197H15.2779C15.7638 16.197 16.1576 15.8121 16.1576 15.3372V12.7774C16.1576 12.2916 16.5514 11.8978 17.0372 11.8978C17.523 11.8978 17.9168 12.2916 17.9168 12.7774V15.3372C17.9168 16.7618 16.7354 17.9167 15.2779 17.9167H4.72238C3.26497 17.9167 2.0835 16.7618 2.0835 15.3372Z" fill="#B4B4B4"/></svg></div></div><div class="pos-pnl">+320.00 (+2.80%)</div><div class="pos-cols"><div class="pos-col"><div class="l">Entry price</div><div class="v">392.40</div></div><div class="pos-col"><div class="l">Mark price</div><div class="v">403.81</div></div><div class="pos-col"><div class="l">Liq. price</div><div class="v">280.00</div></div></div></div>
+          <div class="pos-seeall"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#8a8a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>See all</span></div>
+        </div>
+      </div>
+
+      <!-- Tabs + chips + list -->
+      <div class="tabs" id="home-tabs" style="margin-top:20px">
+        <div class="tab" data-tab="favorite">Favorite</div>
+        <div class="tab active" data-tab="tradfi">TradFi</div>
+        <div class="tab" data-tab="perpetual">Perpetual</div>
+        <div class="tab" data-tab="spot">Spot</div>
+      </div>
+      <div class="chips" id="home-chips"></div>
+      <div id="home-list"></div>
+      <div class="see-all-center" id="home-see-all">See all</div>
+
+      <!-- Frequent trades (Type B · recurring 전용, Copy trading 위) -->
+      <div class="persona-only" style="display:none">
+        <div class="sec-hd"><h2>Frequent trades</h2></div>
+        <div class="hcarousel" id="freq-carousel">
+          <div class="freq-card"><div class="freq-tk">EWY</div><div class="freq-chg down">↘ 2.26%</div></div>
+          <div class="freq-card"><div class="freq-tk">1000PEPE</div><div class="freq-chg down">↘ 5.42%</div></div>
+          <div class="freq-card"><div class="freq-tk">SOXL</div><div class="freq-chg up">↗ 0.42%</div></div>
+          <div class="freq-card"><div class="freq-tk">NVDA</div><div class="freq-chg up">↗ 1.24%</div></div>
+          <div class="freq-card"><div class="freq-tk">BTC</div><div class="freq-chg down">↘ 0.25%</div></div>
+        </div>
+      </div>
+
+      <!-- Copy trading -->
+      <div class="sec-hd"><h2>Copy trading</h2><span class="see-all">See all</span></div>
+      <div class="copy-stack" id="copy-stack">
+        <div class="ct-card"><div class="ct-av">🐄</div><div><div class="ct-name">t_me_c0wfarm</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+190.00%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🦈</div><div><div class="ct-name">shark_alpha_01</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+147.32%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🐺</div><div><div class="ct-name">wolftrader_pro</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+128.91%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🦅</div><div><div class="ct-name">eagle_sniper</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+112.45%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🐉</div><div><div class="ct-name">dragon_leverage</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+98.76%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🦊</div><div><div class="ct-name">fox_momentum</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+87.54%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+        <div class="ct-card"><div class="ct-av">🐋</div><div><div class="ct-name">whale_degen_99</div><div class="ct-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 2.5L10.5 4 8.2 6.2l.6 3L6 7.8 3.2 9.2l.6-3L1.5 4l3-.5L6 1z" fill="#ffe6a8"/></svg> Master trader</div></div><div class="ct-right"><div class="ct-roi">+76.20%</div><div class="ct-roilbl">ROI (30D)</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MARKET ============ -->
+  <div class="screen" id="s-market">
+    <div class="tabs" id="market-tabs">
+      <div class="tab" data-tab="favorite">Favorite</div>
+      <div class="tab active" data-tab="tradfi">TradFi</div>
+      <div class="tab" data-tab="perpetual">Perpetual</div>
+      <div class="tab" data-tab="spot">Spot</div>
+    </div>
+    <div class="chips" id="market-chips">
+      <div class="chip active">All</div><div class="chip">Pre-IPO</div><div class="chip">ETF</div><div class="chip">Stock</div><div class="chip">Commodity</div>
+    </div>
+    <div class="sortbar" id="market-sort">
+      <div class="sort-col">Volume <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div>
+      <div class="sort-col">Leverage <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div>
+      <div class="sort-col">Price <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div>
+      <div class="sort-col">% Change <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div>
+    </div>
+    <div class="scroll pb" id="market-list"></div>
+  </div>
+
+  <!-- ============ ASSETS ============ -->
+  <div class="screen" id="s-assets">
+    <div class="scroll pb">
+      <div class="as-bal">
+        <div class="lbl">Total balance <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#8a8a8a"/><path d="M8 7v4M8 5h.01" stroke="#8a8a8a" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        <div class="big"><span class="amt">0,000,000.00</span><span class="unit">USDT</span><span class="chev"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#b4b4b4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="spark"><svg width="64" height="30" viewBox="0 0 64 30" fill="none"><polyline points="0,24 12,20 22,22 32,12 42,16 52,6 64,3" fill="none" stroke="#b4b4b4" stroke-width="1.6"/></svg></span></div>
+        <div class="approx">≈ $932,392.26</div>
+      </div>
+      <div class="as-pnl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="7" rx="6.5" ry="2.8" stroke="#8a8a8a" stroke-width="1.5"/><path d="M5.5 7v5c0 1.5 2.9 2.8 6.5 2.8s6.5-1.3 6.5-2.8V7M5.5 12v5c0 1.5 2.9 2.8 6.5 2.8s6.5-1.3 6.5-2.8v-5" stroke="#8a8a8a" stroke-width="1.5"/></svg> Today's P&amp;L <span class="v">+81.55 (+34.53%)</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:auto"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="as-toggle"><div class="t active" onclick="asTab(this,'alloc')">Allocation</div><div class="t" onclick="asTab(this,'trend')">Trend</div></div>
+      <div class="alloc-bar"><i style="background:#8f9bf0;width:45.43%"></i><i style="background:#3b82f6;width:40.57%"></i><i style="background:#2bd267;width:15%"></i></div>
+      <div class="alloc-row"><span class="sw" style="background:#8f9bf0"></span><span class="an">Positions</span><div class="av"><div class="a1">551,474.77 USDT</div><div class="a2">45.43%</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#6f6f72" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="alloc-row"><span class="sw" style="background:#3b82f6"></span><span class="an">Orders</span><div class="av"><div class="a1">358,950.23 USDT</div><div class="a2">40.57%</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#6f6f72" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="alloc-row"><span class="sw" style="background:#2bd267"></span><span class="an">Available</span><div class="av"><div class="a1">133,529.00 USDT</div><div class="a2">15.00%</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#6f6f72" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="lead-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 19h14M6 8l3 3 3-5 3 5 3-3-1.5 8H7.5L6 8z" stroke="#eee" stroke-width="1.5" stroke-linejoin="round"/></svg> P&amp;L leaderboard <span style="color:var(--lime)">🚀 100th</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:auto"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="act-row">
+        <div class="act fill"><div class="ab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 4v12M7 11l5 5 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="al">Deposit</div></div>
+        <div class="act"><div class="ab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20V8M7 13l5-5 5 5" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="al">Withdraw</div></div>
+        <div class="act"><div class="ab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 9a7 7 0 0 1 12-3M19 6v3h-3M19 15a7 7 0 0 1-12 3M5 18v-3h3" stroke="#0a84ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="al">Convert</div></div>
+      </div>
+      <div class="proc"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#8a8a8a"/><path d="M8 5v3l2 1.5" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round"/></svg> 1 Deposit(s) Processing <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#8a8a8a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="hcarousel" style="padding-top:14px">
+        <div class="earn-card"><div class="ec-t">Flipster Earn</div><div class="ec-h">Earn up to 23% APR</div><div class="ec-m">Learn more</div><div class="ec-il">🐷</div></div>
+        <div class="earn-card"><div class="ec-t">Flipster Earn</div><div class="ec-h">Earn up to 23% APR</div><div class="ec-m">Learn more</div><div class="ec-il">💰</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TRADE / TRADFI placeholder ============ -->
+  <div class="screen" id="s-placeholder"><div class="placeholder" id="ph-text">Trade</div></div>
+
+  <!-- ============ SEARCH (overlay) ============ -->
+  <div class="screen" id="s-search" style="position:absolute;top:32px;left:0;right:0;bottom:0;background:var(--bg0);z-index:50;flex-direction:column">
+    <div class="srch-bar"><div class="srch-input"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#6f6f72" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#6f6f72" stroke-width="1.5" stroke-linecap="round"/></svg><input type="text" placeholder="🔥 SOXL" id="srch-field"></div><span class="srch-cancel" onclick="closeSearch()">Cancel</span></div>
+    <div class="scroll" id="srch-scroll" style="flex:1">
+    <div class="recent" id="srch-recent"><div class="recent-scroll"><div class="rchip">BTC <span class="rb">Perp</span></div><div class="rchip">XRP <span class="rb">Perp</span></div><div class="rchip">SPCX <span class="rb">Perp</span></div><div class="rchip">SOL <span class="rb">Perp</span></div></div><span class="trash"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M8 6V4h4v2M6 6l1 11h6l1-11" stroke="#8a8a8a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    <!-- default state tabs (recent/browse) -->
+    <div class="tabs" id="srch-tabs-default"><div class="tab" data-tab="favorite">Favorite</div><div class="tab active" data-tab="tradfi">TradFi</div><div class="tab" data-tab="perpetual">Perpetual</div><div class="tab" data-tab="spot">Spot</div></div>
+    <!-- typing state tabs (Favorite 제거, Perpetual 활성) -->
+    <div class="tabs" id="srch-tabs-typing" style="display:none"><div class="tab active">Perpetual</div><div class="tab">TradFi</div><div class="tab">Spot</div></div>
+    <div class="chips" id="srch-chips"><div class="chip active">All</div><div class="chip">Pre-IPO</div><div class="chip">ETF</div><div class="chip">Stock</div><div class="chip">Commodity</div></div>
+    <div class="sortbar" id="srch-sort"><div class="sort-col">Volume <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">Leverage <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">Price <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">% Change <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div></div>
+    <div id="search-list"></div>
+    </div>
+    <div class="kb" id="srch-kb">
+      <div class="kb-row"><div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div></div>
+      <div class="kb-row"><div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div></div>
+      <div class="kb-row"><div class="kb-key sp">⇧</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key sp">⌫</div></div>
+      <div class="kb-row"><div class="kb-key sp">?123</div><div class="kb-key sp">🎤</div><div class="kb-key space">English (US)</div><div class="kb-key done search" onclick="doSearch()">Search</div></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav" id="bnav">
+    <div class="ni active" data-nav="home" onclick="go('home')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9.48907C3 9.18048 3.14247 8.88917 3.38606 8.69972L11.3861 2.47749C11.7472 2.19663 12.2528 2.19663 12.6139 2.47749L20.6139 8.69972C20.8575 8.88917 21 9.18048 21 9.48907V20ZM11 13V19H13V13H11Z" fill="currentColor"/></svg><span class="nl">Home</span></div>
+    <div class="ni" data-nav="market" onclick="go('market')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0213 7.69818H21.7002C21.9628 7.69818 22.0987 7.3847 21.9192 7.19307L18.0797 3.09489C17.9611 2.96837 17.7604 2.96837 17.6418 3.09489L13.8023 7.19307C13.6228 7.3847 13.7587 7.69818 14.0213 7.69818ZM2.5 14.9537C2.22386 14.9537 2 15.1775 2 15.4537V20.4999C2 20.776 2.22386 20.9999 2.5 20.9999H6.03165C6.30779 20.9999 6.53165 20.776 6.53165 20.4999V15.4537C6.53165 15.1775 6.30779 14.9537 6.03165 14.9537H2.5ZM8.79749 11.8259C8.79749 11.5498 9.02134 11.3259 9.29749 11.3259H12.8291C13.1053 11.3259 13.3291 11.5498 13.3291 11.8259V20.4999C13.3291 20.776 13.1053 20.9999 12.8291 20.9999H9.29749C9.02134 20.9999 8.79749 20.776 8.79749 20.4999V11.8259ZM20.1265 7.6982H15.5948V20.9999H20.1265V7.6982Z" fill="currentColor"/></svg><span class="nl">Market</span></div>
+    <div class="ni" data-nav="trade" onclick="go('trade')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM7.98201 6.90342C7.98201 6.44778 8.35137 6.07842 8.80701 6.07842H12.614C13.0697 6.07842 13.439 6.44778 13.439 6.90342V10.7104C13.439 11.1661 13.0697 11.5354 12.614 11.5354C12.1584 11.5354 11.789 11.1661 11.789 10.7104V8.89515L7.48686 13.1973C7.16467 13.5195 6.64231 13.5195 6.32013 13.1973C5.99795 12.8751 5.99795 12.3528 6.32013 12.0306L10.6223 7.72842H8.80701C8.35137 7.72842 7.98201 7.35905 7.98201 6.90342ZM11.3835 12.4644C11.8391 12.4644 12.2085 12.8337 12.2085 13.2894V15.1047L16.5107 10.8025C16.8328 10.4803 17.3552 10.4803 17.6774 10.8025C17.9996 11.1247 17.9996 11.647 17.6774 11.9692L13.3752 16.2714H15.1905C15.6461 16.2714 16.0155 16.6408 16.0155 17.0964C16.0155 17.552 15.6461 17.9214 15.1905 17.9214L11.3835 17.9214C10.9278 17.9214 10.5585 17.552 10.5585 17.0964V13.2894C10.5585 12.8337 10.9278 12.4644 11.3835 12.4644Z" fill="currentColor"/></svg><span class="nl">Trade</span></div>
+    <div class="ni" data-nav="tradfi" onclick="go('tradfi')"><img src="navigationBar/tradFi.png" width="24" height="24" alt="TradFi" style="display:block"><span class="nl">TradFi</span></div>
+    <div class="ni" data-nav="assets" onclick="go('assets')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2.02359 5.625C2.866 4.89854 3.95228 4.4983 5.07692 4.5H18.9231C20.0933 4.5 21.1621 4.925 21.9764 5.625C21.8827 4.89994 21.5208 4.23315 20.9586 3.74982C20.3964 3.2665 19.6726 2.99987 18.9231 3H5.07692C4.32739 2.99987 3.60358 3.2665 3.04139 3.74982C2.4792 4.23315 2.11728 4.89994 2.02359 5.625ZM2.02359 8.625C2.866 7.89854 3.95228 7.4983 5.07692 7.5H18.9231C20.0933 7.5 21.1621 7.925 21.9764 8.625C21.8827 7.89994 21.5208 7.23315 20.9586 6.74983C20.3964 6.2665 19.6726 5.99987 18.9231 6H5.07692C4.32739 5.99987 3.60358 6.2665 3.04139 6.74983C2.4792 7.23315 2.11728 7.89994 2.02359 8.625ZM5.07692 9C4.26087 9 3.47825 9.31607 2.90121 9.87868C2.32418 10.4413 2 11.2044 2 12V18C2 18.7956 2.32418 19.5587 2.90121 20.1213C3.47825 20.6839 4.26087 21 5.07692 21H18.9231C19.7391 21 20.5218 20.6839 21.0988 20.1213C21.6758 19.5587 22 18.7956 22 18V12C22 11.2044 21.6758 10.4413 21.0988 9.87868C20.5218 9.31607 19.7391 9 18.9231 9H15.0769C14.8729 9 14.6773 9.07902 14.533 9.21967C14.3887 9.36032 14.3077 9.55109 14.3077 9.75C14.3077 10.3467 14.0646 10.919 13.6318 11.341C13.199 11.7629 12.612 12 12 12C11.388 12 10.801 11.7629 10.3682 11.341C9.93544 10.919 9.69231 10.3467 9.69231 9.75C9.69231 9.55109 9.61126 9.36032 9.46701 9.21967C9.32275 9.07902 9.12709 9 8.92308 9H5.07692Z" fill="currentColor"/></svg><span class="nl">Assets</span></div>
+  </nav>
+
+</div></div>
+
+<script>
+if(location.search.indexOf('mobile')!==-1) document.body.classList.add('mobile-mode');
+
+/* ---- TradFi list data ---- */
+var TF=[
+  {ic:'T',bg:'#e8392f',tk:'SPCX',lev:'50x',name:'Space Exploration Technologies Corp',px:'204.04',chg:'2.26%',dir:'down'},
+  {ic:'CR',bg:'#d4a843',tk:'CRCL',lev:'50x',name:'Circle Internet Group',px:'80.15',chg:'5.38%',dir:'down'},
+  {ic:'NV',bg:'#76b900',tk:'NVDA',lev:'50x',name:'NVIDIA',px:'208.54',chg:'1.52%',dir:'down'},
+  {ic:'TS',bg:'#e8392f',tk:'TSLA',lev:'50x',name:'Tesla',px:'403.81',chg:'0.22%',dir:'down'},
+  {ic:'SX',bg:'#2bd267',tk:'SOXL',lev:'50x',name:'Direxion Daily Semiconductor Bull 3x',px:'243.25',chg:'12.56%',dir:'down'},
+  {ic:'XA',bg:'#d4a843',tk:'XAU',lev:'200x',name:'Gold',px:'4,325.24',chg:'0.53%',dir:'down'},
+  {ic:'QQ',bg:'#0a84ff',tk:'QQQ',lev:'50x',name:'Invesco QQQ Trust',px:'735.15',chg:'1.40%',dir:'down'},
+  {ic:'CL',bg:'#3a3a3a',tk:'CL',lev:'200x',name:'WTI Crude Oil',px:'75.52',chg:'2.79%',dir:'down'},
+  {ic:'AN',bg:'#444',tk:'ANTHROPIC',lev:'50x',name:'Anthropic',px:'1,732.06',chg:'1.35%',dir:'down'},
+  {ic:'NG',bg:'#2bd267',tk:'NATGAS',lev:'200x',name:'Natural Gas',px:'3.264',chg:'2.51%',dir:'up'}
+];
+var PERP=[
+  {ic:'B',bg:'#f7931a',tk:'BTC',lev:'150x',name:'',px:'66,378.8',chg:'1.24%',dir:'up'},
+  {ic:'E',bg:'#627eea',tk:'ETH',lev:'150x',name:'',px:'1,790.80',chg:'1.51%',dir:'up'},
+  {ic:'S',bg:'#14b8a6',tk:'SOL',lev:'75x',name:'',px:'208.08',chg:'4.22%',dir:'up'},
+  {ic:'HY',bg:'#0aa18f',tk:'HYPE',lev:'75x',name:'',px:'39.04',chg:'6.30%',dir:'up'},
+  {ic:'XR',bg:'#23292f',tk:'XRP',lev:'75x',name:'',px:'2.34',chg:'2.10%',dir:'down'}
+];
+var SPOT=[
+  {ic:'B',bg:'#f7931a',tk:'BTC',lev:'Spot',name:'',px:'66,378.8',chg:'1.24%',dir:'up'},
+  {ic:'E',bg:'#627eea',tk:'ETH',lev:'Spot',name:'',px:'1,790.80',chg:'1.51%',dir:'up'},
+  {ic:'S',bg:'#14b8a6',tk:'SOL',lev:'Spot',name:'',px:'208.08',chg:'4.22%',dir:'up'},
+  {ic:'U',bg:'#26a17b',tk:'USDT',lev:'Spot',name:'',px:'1.0001',chg:'0.01%',dir:'up'},
+  {ic:'W',bg:'#c8a52b',tk:'WLFI',lev:'Spot',name:'',px:'0.2184',chg:'3.10%',dir:'up'}
+];
+var FAV=[
+  {ic:'NV',bg:'#76b900',tk:'NVDA',lev:'50x',name:'NVIDIA',px:'208.54',chg:'1.52%',dir:'down'},
+  {ic:'B',bg:'#f7931a',tk:'BTC',lev:'150x',name:'',px:'66,378.8',chg:'1.24%',dir:'up'},
+  {ic:'T',bg:'#e8392f',tk:'SPCX',lev:'50x',name:'Space Exploration Technologies Corp',px:'204.04',chg:'2.26%',dir:'down'},
+  {ic:'E',bg:'#627eea',tk:'ETH',lev:'150x',name:'',px:'1,790.80',chg:'1.51%',dir:'up'},
+  {ic:'SX',bg:'#2bd267',tk:'SOXL',lev:'50x',name:'Direxion Daily Semiconductor Bull 3x',px:'243.25',chg:'12.56%',dir:'down'}
+];
+function rowHTML(s,star){
+  var arrow = s.dir==='up' ? '↗' : '↘';
+  var sub = s.name ? '<div class="msub">'+s.name+'</div>' : '';
+  var icon = star
+    ? '<div class="mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="#f5c542"><path d="M12 2.5l2.95 5.98 6.6.96-4.77 4.65 1.13 6.57L12 18.56l-5.9 3.1 1.13-6.57L2.45 9.44l6.6-.96L12 2.5z"/></svg></div>'
+    : '<div class="mic" style="background:'+s.bg+'">'+s.ic+'</div>';
+  return '<div class="mrow">'+icon+'<div class="minfo"><div class="mline"><span class="mtk">'+s.tk+'</span><span class="mlev">'+s.lev+'</span></div>'+sub+'</div><div class="mright"><div class="mchg '+s.dir+'">'+arrow+' '+s.chg+'</div><div class="mprice">'+s.px+'</div></div></div>';
+}
+function fill(id,n){ var h=''; for(var i=0;i<(n||TF.length);i++){ h+=rowHTML(TF[i%TF.length]); } document.getElementById(id).innerHTML=h; }
+fill('market-list',12); fill('search-list',8);
+
+// Home tab list content per tab
+var HOME_DATA={tradfi:TF,favorite:FAV,perpetual:PERP,spot:SPOT};
+// 탭별 하위 칩 (A·B 공통)
+var HOME_CHIPS={
+  tradfi:['All','Pre-IPO','ETF','Stock','Commodity'],
+  perpetual:['All','New','Hot','Funding rates','Categories','USD1']
+};
+// 공유: 탭별 리스트 rows 렌더 / 탭별 칩 렌더 (home·market·search 공통)
+function renderListRows(elId,tab,count){
+  var data=HOME_DATA[tab]||TF, h='', star=(tab==='favorite');
+  for(var i=0;i<count;i++){ h+=rowHTML(data[i%data.length], star); }
+  document.getElementById(elId).innerHTML=h;
+}
+function renderChips(elId,tab,activeChip){
+  var el=document.getElementById(elId), chips=HOME_CHIPS[tab];
+  if(chips){
+    el.innerHTML=chips.map(function(c){return '<div class="chip'+(c===(activeChip||chips[0])?' active':'')+'">'+c+'</div>';}).join('');
+    el.style.display='';
+    // 재렌더 시 스크롤 위치 초기화 후 active 칩이 보이도록 정렬 (마지막 위치 기억 방지)
+    el.scrollLeft=0;
+    var act=el.querySelector('.chip.active');
+    if(act){ var target=act.offsetLeft-(el.clientWidth-act.offsetWidth)/2; var max=el.scrollWidth-el.clientWidth; el.scrollLeft=Math.max(0,Math.min(target,max)); }
+  } else { el.innerHTML=''; el.style.display='none'; }
+}
+function renderHomeList(tab){ renderListRows('home-list',tab,5); renderChips('home-chips',tab); }
+renderHomeList('tradfi');
+document.querySelectorAll('#home-tabs .tab').forEach(function(t){ t.addEventListener('click',function(){ renderHomeList(t.dataset.tab); }); });
+
+// 소팅 선택 상태: TradFi에서만 Volume(첫 컬럼) 선택, 그 외 탭은 선택 없음
+function applySort(sortbarId,tab){
+  document.querySelectorAll('#'+sortbarId+' .sort-col').forEach(function(c,i){ c.classList.toggle('sel', tab==='tradfi'&&i===0); });
+}
+// Market: 탭 클릭 시 리스트+칩 재렌더 (home과 동일 구조)
+function renderMarket(tab,activeChip){
+  document.querySelectorAll('#market-tabs .tab').forEach(function(t){ t.classList.toggle('active', t.dataset.tab===tab); });
+  renderListRows('market-list',tab,12);
+  renderChips('market-chips',tab,activeChip);
+  applySort('market-sort',tab);
+  document.getElementById('market-sort').classList.remove('hide');
+  document.getElementById('market-list').scrollTop=0;
+}
+// 소팅 행: 스크롤 다운 → 숨김, 스크롤 업 → 노출 (탭·칩은 고정)
+function bindSortHide(scrollId,sortId){
+  var sc=document.getElementById(scrollId), sort=document.getElementById(sortId), last=0;
+  sc.addEventListener('scroll',function(){
+    var y=sc.scrollTop;
+    if(y<=4){ sort.classList.remove('hide'); }
+    else if(y>last+2){ sort.classList.add('hide'); }   // 아래로: 즉시 숨김
+    else if(y<last){ sort.classList.remove('hide'); }  // 위로: 즉시 노출
+    last=y;
+  });
+}
+bindSortHide('market-list','market-sort');
+
+// 서치 키패드: 스크롤/탭/소팅 시 위→아래 슬라이드다운, 검색 입력 탭 시 재노출
+function hideKeyboard(){
+  var kb=document.getElementById('srch-kb');
+  if(kb.classList.contains('down')||kb.style.display==='none') return;
+  kb.classList.add('down'); // 위→아래 슬라이드 다운
+  setTimeout(function(){ if(kb.classList.contains('down')) kb.style.display='none'; }, 240); // 슬라이드 종료 후 접어 리스트 확장
+}
+function showKeyboard(){
+  var kb=document.getElementById('srch-kb');
+  kb.style.display=''; void kb.offsetHeight; /* reflow */ kb.classList.remove('down'); // 아래→위 슬라이드업
+}
+document.getElementById('srch-scroll').addEventListener('scroll', hideKeyboard, {passive:true});
+document.querySelectorAll('#srch-tabs-default .tab, #srch-tabs-typing .tab, #srch-sort .sort-col').forEach(function(el){ el.addEventListener('click', hideKeyboard); });
+document.querySelector('#s-search .srch-input').addEventListener('click', showKeyboard);
+document.querySelectorAll('#market-tabs .tab').forEach(function(t){ t.addEventListener('click',function(){ renderMarket(t.dataset.tab); }); });
+renderMarket('tradfi');
+
+// 홈 리스트 See all → 마켓의 동일 탭 + 필터로 이동
+document.getElementById('home-see-all').addEventListener('click',function(){
+  var tab=document.querySelector('#home-tabs .tab.active').dataset.tab;
+  var chip=document.querySelector('#home-chips .chip.active');
+  go('market');
+  renderMarket(tab, chip?chip.textContent.trim():null);
+});
+
+// Search default: 탭 클릭 시 홈과 동일한 칩 노출 (Perpetual → 홈 Perpetual 칩)
+document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){
+  t.addEventListener('click',function(){ renderChips('srch-chips', t.dataset.tab); applySort('srch-sort', t.dataset.tab); });
+});
+
+// Trending grid data (Figma A/B)
+var TG_HERO={ic:'T',bg:'#e8392f',tk:'TSLA',label:'Hot',chg:'4.42%',dir:'down'};
+var TG_MARKET=[
+  {ic:'SX',bg:'#2bd267',tk:'SOXL',label:'Top',chg:'4.42%',dir:'down'},
+  {ic:'B',bg:'#f7931a',tk:'BTC',label:'Top',chg:'0.25%',dir:'down'},
+  {ic:'KO',bg:'#2b7fc4',tk:'KORU',label:'Top',chg:'4.42%',dir:'down'},
+  {ic:'E',bg:'#627eea',tk:'ETH',label:'Top',chg:'0.77%',dir:'up'}
+];
+var TG_PERSONAL=[
+  {ic:'T',bg:'#e8392f',tk:'SPCX',label:'Open position',chg:'4.42%',dir:'down'},
+  {ic:'EW',bg:'#e8392f',tk:'EWY',label:'Frequent trade',chg:'4.42%',dir:'down'}
+];
+// Catmull-Rom 스플라인 → cubic bezier (라인 corner를 둥글게 = radius)
+function smoothPath(pts,tension){
+  var t=tension||0.18, d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
+  for(var i=0;i<pts.length-1;i++){
+    var p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||p2;
+    var c1x=p1[0]+(p2[0]-p0[0])*t, c1y=p1[1]+(p2[1]-p0[1])*t;
+    var c2x=p2[0]-(p3[0]-p1[0])*t, c2y=p2[1]-(p3[1]-p1[1])*t;
+    d+=' C'+c1x.toFixed(1)+','+c1y.toFixed(1)+' '+c2x.toFixed(1)+','+c2y.toFixed(1)+' '+p2[0].toFixed(1)+','+p2[1].toFixed(1);
+  }
+  return d;
+}
+function buildAreaChart(vals,color){
+  var W=300,H=120,pad=10,n=vals.length;
+  var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals), rng=(mx-mn)||1;
+  var pts=vals.map(function(v,i){ return [ i/(n-1)*W, H-pad-((v-mn)/rng)*(H-pad*2) ]; });
+  var line=smoothPath(pts);
+  var area=line+' L'+W+','+H+' L0,'+H+' Z';
+  return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'
+    +'<defs><linearGradient id="tgg" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="'+color+'" stop-opacity=".26"/>'
+    +'<stop offset="1" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs>'
+    +'<path d="'+area+'" fill="url(#tgg)"/>'
+    +'<path d="'+line+'" fill="none" stroke="'+color+'" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
+}
+// 이미지 형태: 저점(V) → 상승 → 고점 → 소폭 조정 → 평탄
+var TG_HERO_SERIES=[52,46,38,30,34,48,62,74,83,88,84,78,80,82,79,81];
+var TG_HERO_CHART=buildAreaChart(TG_HERO_SERIES,'#ff493f');
+function tgCard(s,hero){
+  var arrow=s.dir==='up'?'↗':'↘';
+  var chart=hero?'<div class="tg-chart">'+TG_HERO_CHART+'</div>':'';
+  return '<div class="tg-card'+(hero?' tg-hero':'')+'"><div class="tg-head"><div class="tg-ic" style="background:'+s.bg+'">'+s.ic+'</div><div class="tg-meta"><span class="tg-label">'+s.label+'</span><span class="tg-tk">'+s.tk+'</span></div></div>'+chart+'<div class="tg-chg '+s.dir+'">'+arrow+' '+s.chg+'</div></div>';
+}
+var homeType='A', persona='new';
+function renderTrend(){
+  var mid=(homeType==='A'&&persona==='recurring')?TG_PERSONAL.concat(TG_MARKET):TG_MARKET;
+  var html=tgCard(TG_HERO,true);
+  mid.forEach(function(s){html+=tgCard(s,false);});
+  document.getElementById('trend-scroll').innerHTML=html;
+}
+function updateHome(){
+  renderTrend();
+  var showPersona=(homeType==='B'&&persona==='recurring');
+  document.querySelectorAll('.persona-only').forEach(function(el){ el.style.display=showPersona?'':'none'; });
+  // New는 A/B 화면이 동일 → Home type 토글 잠금 + 안내
+  var isNew=(persona==='new');
+  document.getElementById('home-type-toggle').classList.toggle('locked',isNew);
+  document.getElementById('type-note').classList.toggle('hide',!isNew);
+}
+function setHomeType(t){
+  homeType=t;
+  document.querySelectorAll('#home-type-toggle .type-opt').forEach(function(b){b.classList.toggle('active',b.dataset.type===t);});
+  updateHome();
+}
+
+/* ---- Bottom nav ---- */
+var screens={home:'s-home',market:'s-market',assets:'s-assets',trade:'s-placeholder',tradfi:'s-placeholder'};
+function go(nav){
+  document.querySelectorAll('.bnav .ni').forEach(function(n){n.classList.toggle('active',n.dataset.nav===nav);});
+  document.querySelectorAll('#s-home,#s-market,#s-assets,#s-placeholder').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(screens[nav]).classList.add('active');
+  // top bar visible only on home/market/assets, 구성은 화면별로 다름
+  var showTop = nav==='home'||nav==='market'||nav==='assets';
+  document.getElementById('topbar').style.display = showTop ? '' : 'none';
+  if(showTop){
+    // Home: 어카운트+서치+아이콘 / Market: 서치만 / Assets: 어카운트+아이콘(서치 없음)
+    document.querySelector('#topbar .account').style.display = (nav==='market') ? 'none' : '';
+    document.querySelector('#topbar .search-pill').style.display = (nav==='assets') ? 'none' : '';
+    document.querySelectorAll('#topbar .tb-ic').forEach(function(i){ i.style.display = (nav==='market') ? 'none' : ''; });
+  }
+  if(nav==='trade'){document.getElementById('ph-text').textContent='Trade';}
+  if(nav==='tradfi'){document.getElementById('ph-text').textContent='TradFi';}
+  if(nav==='home' && window.resetBanner){ window.resetBanner(); }
+  document.querySelector('.scroll')&&window.scrollTo(0,0);
+}
+
+/* ---- Persona toggle (New / Recurring) ---- */
+function setPersona(p){
+  persona=p;
+  document.querySelectorAll('#persona-toggle .pt').forEach(function(b){b.classList.toggle('active',b.dataset.p===p);});
+  updateHome();
+}
+updateHome();
+
+/* ---- Tabs + chips ---- */
+document.querySelectorAll('.tabs').forEach(function(tabs){
+  tabs.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){ tabs.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');}); t.classList.add('active'); });
+  });
+});
+// 칩 클릭 (delegation → 동적으로 재렌더된 칩도 동작)
+document.querySelectorAll('.chips').forEach(function(chips){
+  chips.addEventListener('click',function(e){
+    var c=e.target.closest('.chip'); if(!c) return;
+    chips.querySelectorAll('.chip').forEach(function(x){x.classList.remove('active');});
+    c.classList.add('active');
+    // 클릭한 칩을 화면에 보이도록 가로 스크롤 (가운데 정렬, 양끝 클램프)
+    var target=c.offsetLeft - (chips.clientWidth - c.offsetWidth)/2;
+    var max=chips.scrollWidth - chips.clientWidth;
+    chips.scrollTo({left:Math.max(0,Math.min(target,max)),behavior:'smooth'});
+  });
+});
+
+/* Banner: center-peek infinite carousel (both sides peek) + N/total counter + swipe */
+(function(){
+  var track=document.getElementById('banner-track');
+  var view=track.parentElement;
+  var reals=Array.from(track.querySelectorAll('.banner'));
+  var n=reals.length;
+  // clone last → front, first → end, for seamless both-direction loop
+  track.insertBefore(reals[n-1].cloneNode(true), reals[0]);
+  track.appendChild(reals[0].cloneNode(true));
+  var EASE='transform .5s cubic-bezier(.4,0,.2,1)';
+  var p=1; // track position of first real banner (0 = clone-last, n+1 = clone-first)
+  function step(){ return track.querySelectorAll('.banner')[0].offsetWidth + 8; }
+  function offset(){ return (view.offsetWidth - track.querySelectorAll('.banner')[0].offsetWidth)/2; } // center
+  function render(anim){
+    track.style.transition = anim ? EASE : 'none';
+    track.style.transform='translateX('+(offset()-p*step())+'px)';
+  }
+  function goNext(){
+    p++; render(true);
+    if(p===n+1){ setTimeout(function(){ p=1; render(false); },520); } // clone-first → real first
+  }
+  function goPrev(){
+    p--; render(true);
+    if(p===0){ setTimeout(function(){ p=n; render(false); },520); } // clone-last → real last
+  }
+  render(false);
+  var timer=setInterval(goNext,3500);
+  function pause(){ clearInterval(timer); }
+  function resume(){ clearInterval(timer); timer=setInterval(goNext,3500); }
+  // 홈 탭 재진입 시 1번 배너부터 다시 롤링
+  window.resetBanner=function(){ p=1; render(false); resume(); };
+
+  /* manual swipe / drag */
+  var dragging=false,startX=0,startY=0,baseTX=0,decided=false,horiz=false;
+  function curTX(){ return offset()-p*step(); }
+  track.addEventListener('pointerdown',function(e){ dragging=true;decided=false;horiz=false;startX=e.clientX;startY=e.clientY;baseTX=curTX();pause();track.style.transition='none'; });
+  window.addEventListener('pointermove',function(e){
+    if(!dragging) return;
+    var dx=e.clientX-startX, dy=e.clientY-startY;
+    if(!decided && (Math.abs(dx)>6||Math.abs(dy)>6)){ decided=true; horiz=Math.abs(dx)>Math.abs(dy); }
+    if(decided && horiz){ if(e.cancelable&&e.preventDefault)e.preventDefault(); track.style.transform='translateX('+(baseTX+dx)+'px)'; }
+  });
+  window.addEventListener('pointerup',function(e){
+    if(!dragging) return; dragging=false;
+    var dx=e.clientX-startX;
+    if(horiz && dx<-40) goNext();
+    else if(horiz && dx>40) goPrev();
+    else render(true);
+    resume();
+  });
+  window.addEventListener('resize',function(){ render(false); });
+})();
+
+/* ---- Assets allocation/trend toggle ---- */
+function asTab(el,t){ el.parentElement.querySelectorAll('.t').forEach(function(x){x.classList.remove('active');}); el.classList.add('active'); }
+
+/* ---- Search ---- */
+function searchUpdate(){
+  var typing = document.getElementById('srch-field').value.trim().length>0;
+  document.getElementById('srch-recent').style.display = typing ? 'none' : '';
+  document.getElementById('srch-tabs-default').style.display = typing ? 'none' : '';
+  document.getElementById('srch-tabs-typing').style.display = typing ? '' : 'none';
+  if(typing){ document.getElementById('srch-chips').style.display='none'; }
+  else { var at=document.querySelector('#srch-tabs-default .tab.active'); var atab=at?at.dataset.tab:'tradfi'; renderChips('srch-chips', atab); applySort('srch-sort', atab); }
+  document.getElementById('srch-sort').style.display = typing ? 'none' : '';
+}
+function resetSearchTabs(){
+  // default 탭은 항상 TradFi로 시작
+  document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='TradFi'); });
+  document.querySelectorAll('#srch-tabs-typing .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='Perpetual'); });
+}
+function openSearch(){ var s=document.getElementById('s-search'); s.style.display='flex'; void s.offsetHeight; /* reflow → 슬라이드업 트랜지션 */ s.classList.add('active'); var kb=document.getElementById('srch-kb'); kb.style.display=''; kb.classList.remove('down'); document.getElementById('srch-scroll').scrollTop=0; var f=document.getElementById('srch-field'); f.value=''; resetSearchTabs(); searchUpdate(); setTimeout(function(){f.focus();},80); }
+function closeSearch(){ var s=document.getElementById('s-search'); s.classList.remove('active'); var f=document.getElementById('srch-field'); if(f) f.value=''; searchUpdate(); setTimeout(function(){ if(!s.classList.contains('active')) s.style.display='none'; },300); }
+// 키패드 Search: 서치를 닫고 바텀 내비게이션의 TradFi 탭으로 이동
+function doSearch(){
+  closeSearch();
+  go('tradfi');
+}
+// physical keyboard input
+document.getElementById('srch-field').addEventListener('input', searchUpdate);
+// on-screen keyboard
+document.querySelectorAll('#s-search .kb-key').forEach(function(k){
+  k.addEventListener('click', function(){
+    if(k.classList.contains('done')||k.classList.contains('search')) return;
+    var f=document.getElementById('srch-field'); var t=k.textContent.trim();
+    if(t==='⌫'){ f.value=f.value.slice(0,-1); }
+    else if(t.length===1 && /[A-Z]/.test(t)){ f.value+=t; }
+    searchUpdate();
+  });
+});
+closeSearch();
+
+// Copy trading stacked cards: auto-swipe + drag (ported from Phase 1)
+(function() {
+  var wrap = document.getElementById('copy-stack');
+  if (!wrap) return;
+  var cards = Array.from(wrap.querySelectorAll('.ct-card'));
+  var total = cards.length;
+  var current = 0, autoTimer = null, isDragging = false, isAnimating = false, animRaf = null, startX = 0, dragX = 0;
+  var SWIPE_THRESHOLD = 40, EASE = 'cubic-bezier(0.4, 0, 0.2, 1)', GAP = 4;
+  function layoutCards(skipIndex) {
+    cards.forEach(function(card, i) {
+      if (i === skipIndex) return;
+      var offset = (i - current + total) % total;
+      card.style.transition = 'transform 0.55s ' + EASE + ', opacity 0.55s ' + EASE;
+      if (offset <= 3) {
+        card.style.transform = 'translateX(' + (offset * GAP) + 'px)';
+        card.style.opacity = '1'; card.style.zIndex = total - offset;
+        card.style.pointerEvents = offset === 0 ? 'auto' : 'none';
+      } else {
+        card.style.transform = 'translateX(' + (3 * GAP) + 'px)';
+        card.style.opacity = '0'; card.style.zIndex = 0; card.style.pointerEvents = 'none';
+      }
+    });
+  }
+  function stopAnim() { if (animRaf) { cancelAnimationFrame(animRaf); animRaf = null; } isAnimating = false; }
+  function advance() {
+    if (isDragging || isAnimating) return;
+    isAnimating = true;
+    var leavingIdx = current, leaving = cards[leavingIdx];
+    var next1 = cards[(leavingIdx + 1) % total], next2 = cards[(leavingIdx + 2) % total], next3 = cards[(leavingIdx + 3) % total];
+    var wrapW = wrap.offsetWidth, duration = 600, start = null;
+    leaving.style.transition = next1.style.transition = next2.style.transition = next3.style.transition = 'none';
+    leaving.style.pointerEvents = 'none';
+    function tick(ts) {
+      if (!isAnimating) return;
+      if (!start) start = ts;
+      var t = Math.min((ts - start) / duration, 1);
+      var ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      leaving.style.transform = 'translateX(' + (-wrapW * ease) + 'px)';
+      leaving.style.opacity = ease < 0.7 ? '1' : String(1 - (ease - 0.7) / 0.3);
+      next1.style.transform = 'translateX(' + (GAP - GAP * ease) + 'px)';
+      next2.style.transform = 'translateX(' + (2 * GAP - GAP * ease) + 'px)';
+      next3.style.transform = 'translateX(' + (3 * GAP - GAP * ease) + 'px)';
+      if (t < 1) { animRaf = requestAnimationFrame(tick); }
+      else {
+        isAnimating = false; animRaf = null;
+        leaving.style.transform = 'translateX(' + (3 * GAP) + 'px)'; leaving.style.opacity = '0'; leaving.style.zIndex = 0;
+        current = (current + 1) % total; layoutCards(leavingIdx);
+      }
+    }
+    animRaf = requestAnimationFrame(tick);
+  }
+  function resetAuto() { if (autoTimer) clearInterval(autoTimer); autoTimer = setInterval(function() { advance(); }, 4000); }
+  function onStart(x) { if (isAnimating) { stopAnim(); layoutCards(undefined); } isDragging = true; startX = x; dragX = 0; cards[current].style.transition = 'none'; if (autoTimer) clearInterval(autoTimer); }
+  function onMove(x) {
+    if (!isDragging) return;
+    dragX = x - startX; if (dragX > 0) dragX = 0;
+    var progress = Math.min(Math.abs(dragX) / 250, 1);
+    cards[current].style.transform = 'translateX(' + dragX + 'px)';
+    var next1 = cards[(current + 1) % total], next2 = cards[(current + 2) % total], next3 = cards[(current + 3) % total];
+    next1.style.transition = next2.style.transition = next3.style.transition = 'none';
+    next1.style.transform = 'translateX(' + (GAP - GAP * progress) + 'px)';
+    next2.style.transform = 'translateX(' + (2 * GAP - GAP * progress) + 'px)';
+    next3.style.transform = 'translateX(' + (3 * GAP - GAP * progress) + 'px)';
+  }
+  function onEnd() {
+    if (!isDragging) return; isDragging = false;
+    if (dragX < -SWIPE_THRESHOLD) {
+      var leavingIdx = current, leaving = cards[leavingIdx], wrapW = wrap.offsetWidth;
+      leaving.style.transition = 'transform 0.35s ' + EASE + ', opacity 0.2s ' + EASE + ' 0.15s';
+      leaving.style.transform = 'translateX(' + (-wrapW) + 'px)'; leaving.style.opacity = '0'; leaving.style.pointerEvents = 'none';
+      current = (current + 1) % total; layoutCards(leavingIdx);
+      setTimeout(function() { leaving.style.transition = 'none'; leaving.style.transform = 'translateX(' + (3 * GAP) + 'px)'; leaving.style.zIndex = 0; }, 400);
+    } else { layoutCards(undefined); }
+    resetAuto();
+  }
+  cards.forEach(function(card) {
+    card.addEventListener('mousedown', function(e) { e.preventDefault(); onStart(e.clientX); });
+    card.addEventListener('touchstart', function(e) { onStart(e.touches[0].clientX); }, {passive: true});
+  });
+  window.addEventListener('mousemove', function(e) { onMove(e.clientX); });
+  window.addEventListener('touchmove', function(e) { onMove(e.touches[0].clientX); }, {passive: true});
+  window.addEventListener('mouseup', onEnd);
+  window.addEventListener('touchend', onEnd);
+  layoutCards(undefined);
+  resetAuto();
+})();
+</script>
+</body>
+</html>
