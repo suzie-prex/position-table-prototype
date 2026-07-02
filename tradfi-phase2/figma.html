@@ -193,7 +193,7 @@ body.mobile-mode .proto-control{display:none}
 /* Sort bar */
 .sortbar{display:flex;align-items:center;padding:8px 16px;gap:16px;max-height:44px;overflow:hidden;flex-shrink:0;transition:max-height .12s ease-out,padding .12s ease-out,opacity .1s ease-out}
 .sortbar.hide{max-height:0;padding-top:0;padding-bottom:0;opacity:0}
-.sort-col{display:flex;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:var(--text-m);font-weight:500;flex:0 0 auto}
+.sort-col{display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--text-m);font-weight:500;flex:0 0 auto}
 .sort-col.sel{color:var(--text-p)}
 
 /* Market row */
@@ -204,7 +204,7 @@ body.mobile-mode .proto-control{display:none}
 .mrow .mline{display:flex;align-items:center;gap:6px}
 .mrow .mtk{font-size:15px;font-weight:600;color:var(--text-p)}
 .mrow .mlev{font-size:11px;color:var(--text-t);border:1px solid var(--border);padding:1px 6px;border-radius:100px}
-.mrow .msub{font-size:12px;color:var(--lime);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .msub{font-size:10px;color:var(--lime);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mrow .mright{text-align:right}
 .mrow .mprice{font-size:13px;font-weight:400;color:var(--text-p);font-variant-numeric:tabular-nums;margin-top:2px}
 .mrow .mchg{font-size:14px;font-weight:700;display:flex;align-items:center;gap:3px;justify-content:flex-end}
@@ -521,16 +521,51 @@ if(location.search.indexOf('mobile')!==-1) document.body.classList.add('mobile-m
 
 /* ---- TradFi list data ---- */
 var TF=[
-  {ic:'T',bg:'#e8392f',tk:'SPCX',lev:'50x',name:'Space Exploration Technologies Corp',px:'204.04',chg:'2.26%',dir:'down'},
-  {ic:'CR',bg:'#d4a843',tk:'CRCL',lev:'50x',name:'Circle Internet Group',px:'80.15',chg:'5.38%',dir:'down'},
-  {ic:'NV',bg:'#76b900',tk:'NVDA',lev:'50x',name:'NVIDIA',px:'208.54',chg:'1.52%',dir:'down'},
-  {ic:'TS',bg:'#e8392f',tk:'TSLA',lev:'50x',name:'Tesla',px:'403.81',chg:'0.22%',dir:'down'},
-  {ic:'SX',bg:'#2bd267',tk:'SOXL',lev:'50x',name:'Direxion Daily Semiconductor Bull 3x',px:'243.25',chg:'12.56%',dir:'down'},
-  {ic:'XA',bg:'#d4a843',tk:'XAU',lev:'200x',name:'Gold',px:'4,325.24',chg:'0.53%',dir:'down'},
-  {ic:'QQ',bg:'#0a84ff',tk:'QQQ',lev:'50x',name:'Invesco QQQ Trust',px:'735.15',chg:'1.40%',dir:'down'},
-  {ic:'CL',bg:'#3a3a3a',tk:'CL',lev:'200x',name:'WTI Crude Oil',px:'75.52',chg:'2.79%',dir:'down'},
-  {ic:'AN',bg:'#444',tk:'ANTHROPIC',lev:'50x',name:'Anthropic',px:'1,732.06',chg:'1.35%',dir:'down'},
-  {ic:'NG',bg:'#2bd267',tk:'NATGAS',lev:'200x',name:'Natural Gas',px:'3.264',chg:'2.51%',dir:'up'}
+  {ic:'SX',bg:'#2a7de1',tk:'SOXL',lev:'50x',cat:'etf',name:'Direxion Daily Semiconductor Bull 3X ETF',px:'206.50',chg:'19.84%',dir:'down'},
+  {ic:'KO',bg:'#2b7fc4',tk:'KORU',lev:'50x',cat:'etf',name:'Direxion Daily South Korea Bull 3X ETF',px:'548.63',chg:'19.84%',dir:'down'},
+  {ic:'MU',bg:'#1a4b8c',tk:'MU',lev:'50x',cat:'stock',name:'Micron Technology',px:'999.56',chg:'11.04%',dir:'down'},
+  {ic:'EW',bg:'#0aa1dd',tk:'EWY',lev:'50x',cat:'etf',name:'iShares MSCI South Korea ETF',px:'181.38',chg:'6.26%',dir:'down'},
+  {ic:'CR',bg:'#6b7bd6',tk:'CRCL',lev:'50x',cat:'stock',name:'Circle Internet Group',px:'62.34',chg:'0.27%',dir:'up'},
+  {ic:'SP',bg:'#111111',tk:'SPCX',lev:'50x',cat:'preipo',name:'Space Exploration Technologies Corp',px:'156.40',chg:'8.40%',dir:'down'},
+  {ic:'MS',bg:'#f7931a',tk:'MSTR',lev:'50x',cat:'stock',name:'Strategy',px:'94.48',chg:'8.71%',dir:'up'},
+  {ic:'AG',bg:'#9ea3a8',tk:'XAG',lev:'200x',cat:'commodity',name:'Silver',px:'59.75',chg:'3.89%',dir:'up'},
+  {ic:'NB',bg:'#c6f24e',tk:'NBIS',lev:'50x',cat:'stock',name:'Nebius Group NV',px:'224.95',chg:'18.24%',dir:'down'},
+  {ic:'HD',bg:'#ccff00',tk:'HOOD',lev:'50x',cat:'stock',name:'Robinhood',px:'107.48',chg:'7.64%',dir:'up'},
+  {ic:'KX',bg:'#1aa3e0',tk:'KIOXIA',lev:'50x',cat:'stock',name:'Kioxia Holdings Corp',px:'466.55',chg:'14.66%',dir:'down'},
+  {ic:'QQ',bg:'#0033a0',tk:'QQQ',lev:'50x',cat:'etf',name:'Invesco QQQ Trust',px:'721.04',chg:'1.51%',dir:'down'},
+  {ic:'CL',bg:'#23292f',tk:'CL',lev:'200x',cat:'commodity',name:'WTI Crude Oil',px:'68.09',chg:'2.05%',dir:'down'},
+  {ic:'SN',bg:'#e8392f',tk:'SNDK',lev:'50x',cat:'stock',name:'Sandisk',px:'1,954.21',chg:'10.94%',dir:'down'},
+  {ic:'MM',bg:'#e0457b',tk:'MINIMAX',lev:'50x',cat:'preipo',name:'MiniMax Group',px:'45.697',chg:'15.94%',dir:'down'},
+  {ic:'ZM',bg:'#2d8cff',tk:'ZM',lev:'50x',cat:'stock',name:'Zoom',px:'90.17',chg:'4.73%',dir:'up'},
+  {ic:'AU',bg:'#d4a843',tk:'XAU',lev:'200x',cat:'commodity',name:'Gold',px:'4,071.59',chg:'2.54%',dir:'up'},
+  {ic:'PL',bg:'#101418',tk:'PLTR',lev:'50x',cat:'stock',name:'Palantir Technologies',px:'125.26',chg:'6.18%',dir:'up'},
+  {ic:'EB',bg:'#e53238',tk:'EBAY',lev:'50x',cat:'stock',name:'eBay',px:'110.62',chg:'1.46%',dir:'down'},
+  {ic:'DR',bg:'#5a4bd6',tk:'DRAM',lev:'50x',cat:'etf',name:'Roundhill Memory ETF',px:'62.46',chg:'10.57%',dir:'down'},
+  {ic:'MV',bg:'#23292f',tk:'MVLL',lev:'50x',cat:'etf',name:'GraniteShares 2x Long MRVL Daily ETF',px:'44.13',chg:'19.57%',dir:'down'},
+  {ic:'TS',bg:'#e8392f',tk:'TSLA',lev:'50x',cat:'stock',name:'Tesla',px:'423.58',chg:'1.23%',dir:'up'},
+  {ic:'SK',bg:'#d0021b',tk:'SKHYNIX',lev:'50x',cat:'stock',name:'SK Hynix',px:'1,439.15',chg:'12.54%',dir:'down'},
+  {ic:'OR',bg:'#c74634',tk:'ORCL',lev:'50x',cat:'stock',name:'Oracle Corporation',px:'143.43',chg:'2.45%',dir:'down'},
+  {ic:'AV',bg:'#cc092f',tk:'AVGO',lev:'50x',cat:'stock',name:'Broadcom',px:'366.54',chg:'2.39%',dir:'down'},
+  {ic:'MR',bg:'#23292f',tk:'MRVL',lev:'50x',cat:'stock',name:'Marvell Technology',px:'262.93',chg:'9.73%',dir:'down'},
+  {ic:'MF',bg:'#2f2f2f',tk:'MSFT',lev:'50x',cat:'stock',name:'Microsoft',px:'385.95',chg:'2.79%',dir:'up'},
+  {ic:'ME',bg:'#0866ff',tk:'META',lev:'50x',cat:'stock',name:'Meta Platforms',px:'608.70',chg:'8.37%',dir:'up'},
+  {ic:'IN',bg:'#0068b5',tk:'INTC',lev:'50x',cat:'stock',name:'Intel',px:'123.78',chg:'10.89%',dir:'down'},
+  {ic:'AL',bg:'#2b6cb0',tk:'ALAB',lev:'50x',cat:'stock',name:'Astera Labs',px:'421.02',chg:'11.88%',dir:'down'},
+  {ic:'CB',bg:'#23292f',tk:'CBRS',lev:'50x',cat:'preipo',name:'Cerebras Systems',px:'214.51',chg:'1.14%',dir:'down'},
+  {ic:'GL',bg:'#1f4fa0',tk:'GLW',lev:'50x',cat:'stock',name:'Corning',px:'211.30',chg:'15.28%',dir:'down'},
+  {ic:'NV',bg:'#76b900',tk:'NVDA',lev:'50x',cat:'stock',name:'NVIDIA',px:'195.87',chg:'1.09%',dir:'down'},
+  {ic:'BZ',bg:'#23292f',tk:'BZ',lev:'200x',cat:'commodity',name:'Brent Oil',px:'71.11',chg:'2.58%',dir:'down'},
+  {ic:'SS',bg:'#23292f',tk:'SAMSUNG',lev:'50x',cat:'stock',name:'Samsung Electronics',px:'184.96',chg:'9.07%',dir:'down'},
+  {ic:'AM',bg:'#23292f',tk:'AMD',lev:'50x',cat:'stock',name:'Advanced Micro Devices',px:'530.87',chg:'7.76%',dir:'down'},
+  {ic:'GO',bg:'#4285f4',tk:'GOOGL',lev:'50x',cat:'stock',name:'Alphabet',px:'357.96',chg:'0.84%',dir:'up'},
+  {ic:'CO',bg:'#0052ff',tk:'COIN',lev:'50x',cat:'stock',name:'Coinbase Global',px:'159.06',chg:'9.48%',dir:'up'},
+  {ic:'AO',bg:'#5b2d8e',tk:'AAOI',lev:'50x',cat:'stock',name:'Applied Optoelectronics',px:'132.88',chg:'8.81%',dir:'down'},
+  {ic:'HY',bg:'#002c5f',tk:'HYUNDAI',lev:'50x',cat:'stock',name:'Hyundai Motor Company',px:'310.48',chg:'1.08%',dir:'down'},
+  {ic:'WD',bg:'#23292f',tk:'WDC',lev:'50x',cat:'stock',name:'Western Digital Corporation',px:'578.74',chg:'8.41%',dir:'down'},
+  {ic:'CW',bg:'#23292f',tk:'CRWV',lev:'50x',cat:'stock',name:'CoreWeave',px:'84.70',chg:'14.60%',dir:'down'},
+  {ic:'RD',bg:'#ff4500',tk:'RDDT',lev:'50x',cat:'stock',name:'Reddit',px:'195.45',chg:'12.61%',dir:'up'},
+  {ic:'BE',bg:'#0f3d2e',tk:'BE',lev:'50x',cat:'stock',name:'Bloom Energy Corporation',px:'281.04',chg:'14.02%',dir:'down'},
+  {ic:'QC',bg:'#3253dc',tk:'QCOM',lev:'50x',cat:'stock',name:'QUALCOMM',px:'179.25',chg:'2.93%',dir:'down'}
 ];
 var PERP=[
   {ic:'B',bg:'#f7931a',tk:'BTC',lev:'150x',name:'',px:'60,160.1',chg:'2.46%',dir:'up'},
@@ -603,10 +638,21 @@ var HOME_CHIPS={
   perpetual:['All','New','Hot','Funding rates','Categories','USD1']
 };
 // 공유: 탭별 리스트 rows 렌더 / 탭별 칩 렌더 (home·market·search 공통)
-function renderListRows(elId,tab,count){
-  var data=HOME_DATA[tab]||TF, h='', star=(tab==='favorite');
-  for(var i=0;i<count;i++){ h+=rowHTML(data[i%data.length], star); }
+function renderListRows(elId,tab,count,cat){
+  var data=HOME_DATA[tab]||TF, star=(tab==='favorite');
+  if(cat && cat!=='all') data=data.filter(function(d){return d.cat===cat;}); // 카테고리 필터
+  var h='', n=count?Math.min(count,data.length):data.length; // count 미지정 시 전체 렌더
+  for(var i=0;i<n;i++){ h+=rowHTML(data[i], star); }
   document.getElementById(elId).innerHTML=h;
+}
+// 칩 텍스트 → 카테고리 (TradFi 카테고리 칩만 매핑, 그 외는 all)
+function chipCategory(text){ return {'Pre-IPO':'preipo','ETF':'etf','Stock':'stock','Commodity':'commodity'}[text.trim()] || 'all'; }
+// chips 컨테이너 → 연결된 리스트/탭/개수
+function chipTarget(chipsId){
+  if(chipsId==='home-chips') return {listId:'home-list', tab:document.querySelector('#home-tabs .tab.active').dataset.tab, count:5};
+  if(chipsId==='market-chips') return {listId:'market-list', tab:document.querySelector('#market-tabs .tab.active').dataset.tab, count:0};
+  if(chipsId==='srch-chips') return {listId:'search-list', tab:document.querySelector('#srch-tabs-default .tab.active').dataset.tab, count:0};
+  return null;
 }
 function renderChips(elId,tab,activeChip){
   var el=document.getElementById(elId), chips=HOME_CHIPS[tab];
@@ -630,7 +676,7 @@ function applySort(sortbarId,tab){
 // Market: 탭 클릭 시 리스트+칩 재렌더 (home과 동일 구조)
 function renderMarket(tab,activeChip){
   document.querySelectorAll('#market-tabs .tab').forEach(function(t){ t.classList.toggle('active', t.dataset.tab===tab); });
-  renderListRows('market-list',tab,12);
+  renderListRows('market-list',tab);
   renderChips('market-chips',tab,activeChip);
   applySort('market-sort',tab);
   document.getElementById('market-sort').classList.remove('hide');
@@ -676,10 +722,10 @@ document.getElementById('home-see-all').addEventListener('click',function(){
 
 // Search default: 탭 클릭 시 홈과 동일한 칩 노출 (Perpetual → 홈 Perpetual 칩)
 document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){
-  t.addEventListener('click',function(){ renderChips('srch-chips', t.dataset.tab); applySort('srch-sort', t.dataset.tab); renderListRows('search-list', t.dataset.tab, 8); });
+  t.addEventListener('click',function(){ renderChips('srch-chips', t.dataset.tab); applySort('srch-sort', t.dataset.tab); renderListRows('search-list', t.dataset.tab); });
 });
 document.querySelectorAll('#srch-tabs-typing .tab').forEach(function(t){
-  t.addEventListener('click',function(){ renderListRows('search-list', t.dataset.tab, 8); });
+  t.addEventListener('click',function(){ renderListRows('search-list', t.dataset.tab); });
 });
 
 // Trending grid data (Figma A/B)
@@ -793,6 +839,9 @@ document.querySelectorAll('.chips').forEach(function(chips){
     var target=c.offsetLeft - (chips.clientWidth - c.offsetWidth)/2;
     var max=chips.scrollWidth - chips.clientWidth;
     chips.scrollTo({left:Math.max(0,Math.min(target,max)),behavior:'smooth'});
+    // 카테고리 칩 → 연결된 리스트를 해당 카테고리로 필터링
+    var t=chipTarget(chips.id);
+    if(t) renderListRows(t.listId, t.tab, t.count, chipCategory(c.textContent));
   });
 });
 
@@ -867,7 +916,7 @@ function resetSearchTabs(){
   document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='TradFi'); });
   document.querySelectorAll('#srch-tabs-typing .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='Perpetual'); });
 }
-function openSearch(){ var s=document.getElementById('s-search'); s.style.display='flex'; void s.offsetHeight; /* reflow → 슬라이드업 트랜지션 */ s.classList.add('active'); var kb=document.getElementById('srch-kb'); kb.style.display=''; kb.classList.remove('down'); document.getElementById('srch-scroll').scrollTop=0; var f=document.getElementById('srch-field'); f.value=''; resetSearchTabs(); renderListRows('search-list','tradfi',8); searchUpdate(); setTimeout(function(){f.focus();},80); }
+function openSearch(){ var s=document.getElementById('s-search'); s.style.display='flex'; void s.offsetHeight; /* reflow → 슬라이드업 트랜지션 */ s.classList.add('active'); var kb=document.getElementById('srch-kb'); kb.style.display=''; kb.classList.remove('down'); document.getElementById('srch-scroll').scrollTop=0; var f=document.getElementById('srch-field'); f.value=''; resetSearchTabs(); renderListRows('search-list','tradfi'); searchUpdate(); setTimeout(function(){f.focus();},80); }
 function closeSearch(){ var s=document.getElementById('s-search'); s.classList.remove('active'); var f=document.getElementById('srch-field'); if(f) f.value=''; searchUpdate(); setTimeout(function(){ if(!s.classList.contains('active')) s.style.display='none'; },300); }
 // 키패드 Search: 서치를 닫고 바텀 내비게이션의 TradFi 탭으로 이동
 function doSearch(){
