@@ -492,7 +492,7 @@ body.mobile-mode .proto-control{display:none}
     <!-- default state tabs (recent/browse) -->
     <div class="tabs" id="srch-tabs-default"><div class="tab" data-tab="favorite">Favorite</div><div class="tab active" data-tab="tradfi">TradFi</div><div class="tab" data-tab="perpetual">Perpetual</div><div class="tab" data-tab="spot">Spot</div></div>
     <!-- typing state tabs (Favorite 제거, Perpetual 활성) -->
-    <div class="tabs" id="srch-tabs-typing" style="display:none"><div class="tab active">Perpetual</div><div class="tab">TradFi</div><div class="tab">Spot</div></div>
+    <div class="tabs" id="srch-tabs-typing" style="display:none"><div class="tab active" data-tab="perpetual">Perpetual</div><div class="tab" data-tab="tradfi">TradFi</div><div class="tab" data-tab="spot">Spot</div></div>
     <div class="chips" id="srch-chips"><div class="chip active">All</div><div class="chip">Pre-IPO</div><div class="chip">ETF</div><div class="chip">Stock</div><div class="chip">Commodity</div></div>
     <div class="sortbar" id="srch-sort"><div class="sort-col">Volume <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">Leverage <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">Price <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div><div class="sort-col">% Change <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="display:block"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 7H10.5445C10.7961 7 11 6.76392 11 6.4727C11 6.33285 10.952 6.19873 10.8666 6.09984L8.32211 3.15444C8.14421 2.94852 7.85579 2.94852 7.67789 3.15444L5.13342 6.09984C4.95553 6.30576 4.95553 6.63963 5.13342 6.84556C5.21885 6.94445 5.33471 7 5.45553 7Z" fill="#959595"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.45553 9H10.5445C10.7961 9 11 9.23608 11 9.5273C11 9.66715 10.952 9.80127 10.8666 9.90016L8.32211 12.8456C8.14421 13.0515 7.85579 13.0515 7.67789 12.8456L5.13342 9.90016C4.95553 9.69424 4.95553 9.36037 5.13342 9.15444C5.21885 9.05555 5.33471 9 5.45553 9Z" fill="#959595"/></svg></div></div>
     <div id="search-list"></div>
@@ -533,11 +533,42 @@ var TF=[
   {ic:'NG',bg:'#2bd267',tk:'NATGAS',lev:'200x',name:'Natural Gas',px:'3.264',chg:'2.51%',dir:'up'}
 ];
 var PERP=[
-  {ic:'B',bg:'#f7931a',tk:'BTC',lev:'150x',name:'',px:'66,378.8',chg:'1.24%',dir:'up'},
-  {ic:'E',bg:'#627eea',tk:'ETH',lev:'150x',name:'',px:'1,790.80',chg:'1.51%',dir:'up'},
-  {ic:'S',bg:'#14b8a6',tk:'SOL',lev:'75x',name:'',px:'208.08',chg:'4.22%',dir:'up'},
-  {ic:'HY',bg:'#0aa18f',tk:'HYPE',lev:'75x',name:'',px:'39.04',chg:'6.30%',dir:'up'},
-  {ic:'XR',bg:'#23292f',tk:'XRP',lev:'75x',name:'',px:'2.34',chg:'2.10%',dir:'down'}
+  {ic:'B',bg:'#f7931a',tk:'BTC',lev:'150x',name:'',px:'60,160.1',chg:'2.46%',dir:'up'},
+  {ic:'B',bg:'#f7931a',tk:'BTC-USD1',lev:'150x',name:'',px:'60,191.3',chg:'2.54%',dir:'up'},
+  {ic:'E',bg:'#627eea',tk:'ETH',lev:'150x',name:'',px:'1,614.94',chg:'2.48%',dir:'up'},
+  {ic:'E',bg:'#627eea',tk:'ETH-USD1',lev:'150x',name:'',px:'1,615.79',chg:'2.55%',dir:'up'},
+  {ic:'BN',bg:'#f0b90b',tk:'BNB',lev:'75x',name:'',px:'549.42',chg:'0.45%',dir:'up'},
+  {ic:'XR',bg:'#23292f',tk:'XRP',lev:'75x',name:'',px:'1.0562',chg:'1.36%',dir:'up'},
+  {ic:'XR',bg:'#23292f',tk:'XRP-USD1',lev:'75x',name:'',px:'1.0569',chg:'1.43%',dir:'up'},
+  {ic:'S',bg:'#14b8a6',tk:'SOL',lev:'100x',name:'',px:'77.68',chg:'4.33%',dir:'up'},
+  {ic:'S',bg:'#14b8a6',tk:'SOL-USD1',lev:'100x',name:'',px:'77.73',chg:'4.40%',dir:'up'},
+  {ic:'TR',bg:'#e8392f',tk:'TRX',lev:'75x',name:'',px:'0.31536',chg:'0.34%',dir:'down'},
+  {ic:'HY',bg:'#0aa18f',tk:'HYPE',lev:'75x',name:'',px:'62.974',chg:'2.49%',dir:'down'},
+  {ic:'DO',bg:'#c2a633',tk:'DOGE',lev:'75x',name:'',px:'0.07233',chg:'1.25%',dir:'up'},
+  {ic:'DO',bg:'#c2a633',tk:'DOGE-USD1',lev:'75x',name:'',px:'0.07238',chg:'1.34%',dir:'up'},
+  {ic:'ZE',bg:'#f4b728',tk:'ZEC',lev:'75x',name:'',px:'419.02',chg:'4.76%',dir:'up'},
+  {ic:'XL',bg:'#23292f',tk:'XLM',lev:'75x',name:'',px:'0.19550',chg:'2.19%',dir:'down'},
+  {ic:'A',bg:'#0033ad',tk:'ADA',lev:'75x',name:'',px:'0.1545',chg:'2.86%',dir:'up'},
+  {ic:'CC',bg:'#b0c92e',tk:'CC',lev:'25x',name:'',px:'0.13914',chg:'4.93%',dir:'down'},
+  {ic:'LI',bg:'#2a5ada',tk:'LINK',lev:'75x',name:'',px:'7.431',chg:'3.33%',dir:'up'},
+  {ic:'BC',bg:'#0ac18e',tk:'BCH',lev:'75x',name:'',px:'213.77',chg:'5.76%',dir:'up'},
+  {ic:'LT',bg:'#345d9d',tk:'LTC',lev:'75x',name:'',px:'42.59',chg:'0.78%',dir:'up'},
+  {ic:'HB',bg:'#23292f',tk:'HBAR',lev:'40x',name:'',px:'0.07269',chg:'5.76%',dir:'up'},
+  {ic:'SU',bg:'#4da2ff',tk:'SUI',lev:'75x',name:'',px:'0.7252',chg:'4.15%',dir:'up'},
+  {ic:'AV',bg:'#e84142',tk:'AVAX',lev:'75x',name:'',px:'6.669',chg:'0.39%',dir:'up'},
+  {ic:'CR',bg:'#1a2b4a',tk:'CRO',lev:'25x',name:'',px:'0.05535',chg:'3.14%',dir:'up'},
+  {ic:'SH',bg:'#e33b1e',tk:'1000SHIB',lev:'75x',name:'',px:'0.004281',chg:'1.73%',dir:'up'},
+  {ic:'NE',bg:'#00c08b',tk:'NEAR',lev:'75x',name:'',px:'1.909',chg:'6.17%',dir:'up'},
+  {ic:'TA',bg:'#23292f',tk:'TAO',lev:'75x',name:'',px:'203.05',chg:'2.24%',dir:'up'},
+  {ic:'DE',bg:'#23292f',tk:'DEXE',lev:'20x',name:'',px:'22.88',chg:'0.97%',dir:'up'},
+  {ic:'W',bg:'#c8a52b',tk:'WLFI',lev:'25x',name:'',px:'0.05780',chg:'1.41%',dir:'down'},
+  {ic:'PA',bg:'#d4af37',tk:'PAXG',lev:'75x',name:'',px:'4,061.56',chg:'2.39%',dir:'up'},
+  {ic:'UN',bg:'#ff007a',tk:'UNI',lev:'40x',name:'',px:'2.822',chg:'1.29%',dir:'up'},
+  {ic:'AS',bg:'#d8a373',tk:'ASTER',lev:'40x',name:'',px:'0.6294',chg:'0.52%',dir:'up'},
+  {ic:'OK',bg:'#23292f',tk:'OKB',lev:'20x',name:'',px:'78.62',chg:'1.92%',dir:'down'},
+  {ic:'ON',bg:'#23292f',tk:'ONDO',lev:'75x',name:'',px:'0.3292',chg:'5.98%',dir:'up'},
+  {ic:'M',bg:'#6f4cff',tk:'M',lev:'20x',name:'',px:'1.1755',chg:'56.90%',dir:'up'},
+  {ic:'DT',bg:'#e6007a',tk:'DOT',lev:'75x',name:'',px:'0.835',chg:'0.11%',dir:'up'}
 ];
 var SPOT=[
   {ic:'B',bg:'#f7931a',tk:'BTC',lev:'Spot',name:'',px:'66,378.8',chg:'1.24%',dir:'up'},
@@ -645,7 +676,10 @@ document.getElementById('home-see-all').addEventListener('click',function(){
 
 // Search default: 탭 클릭 시 홈과 동일한 칩 노출 (Perpetual → 홈 Perpetual 칩)
 document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){
-  t.addEventListener('click',function(){ renderChips('srch-chips', t.dataset.tab); applySort('srch-sort', t.dataset.tab); });
+  t.addEventListener('click',function(){ renderChips('srch-chips', t.dataset.tab); applySort('srch-sort', t.dataset.tab); renderListRows('search-list', t.dataset.tab, 8); });
+});
+document.querySelectorAll('#srch-tabs-typing .tab').forEach(function(t){
+  t.addEventListener('click',function(){ renderListRows('search-list', t.dataset.tab, 8); });
 });
 
 // Trending grid data (Figma A/B)
@@ -833,7 +867,7 @@ function resetSearchTabs(){
   document.querySelectorAll('#srch-tabs-default .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='TradFi'); });
   document.querySelectorAll('#srch-tabs-typing .tab').forEach(function(t){ t.classList.toggle('active', t.textContent.trim()==='Perpetual'); });
 }
-function openSearch(){ var s=document.getElementById('s-search'); s.style.display='flex'; void s.offsetHeight; /* reflow → 슬라이드업 트랜지션 */ s.classList.add('active'); var kb=document.getElementById('srch-kb'); kb.style.display=''; kb.classList.remove('down'); document.getElementById('srch-scroll').scrollTop=0; var f=document.getElementById('srch-field'); f.value=''; resetSearchTabs(); searchUpdate(); setTimeout(function(){f.focus();},80); }
+function openSearch(){ var s=document.getElementById('s-search'); s.style.display='flex'; void s.offsetHeight; /* reflow → 슬라이드업 트랜지션 */ s.classList.add('active'); var kb=document.getElementById('srch-kb'); kb.style.display=''; kb.classList.remove('down'); document.getElementById('srch-scroll').scrollTop=0; var f=document.getElementById('srch-field'); f.value=''; resetSearchTabs(); renderListRows('search-list','tradfi',8); searchUpdate(); setTimeout(function(){f.focus();},80); }
 function closeSearch(){ var s=document.getElementById('s-search'); s.classList.remove('active'); var f=document.getElementById('srch-field'); if(f) f.value=''; searchUpdate(); setTimeout(function(){ if(!s.classList.contains('active')) s.style.display='none'; },300); }
 // 키패드 Search: 서치를 닫고 바텀 내비게이션의 TradFi 탭으로 이동
 function doSearch(){
