@@ -129,7 +129,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
             <span class="change-badge new">New</span>
             <div class="change-body">
               <div class="change-title">KOL Insight 섹션 추가</div>
-              <div class="change-desc">홈 피드에 KOL 이슈 캐러셀 영역을 신규 배치. Trending 아래, Market Tabs 위에 위치하여 시장 맥락 파악 후 자연스럽게 인사이트로 진입하도록 설계.</div>
+              <div class="change-desc">홈 피드에 KOL 이슈 캐러셀 영역을 신규 배치. Trending 아래, Market Tabs 위에 위치하여 시장 맥락 파악 후 자연스럽게 인사이트로 진입하도록 설계.
+                <ul>
+                  <li><span class="desc-label">데이터 소스:</span> 텔레그램 KOL 채널을 24시간(또는 6시간) 주기로 스크래핑하여 이슈 수집</li>
+                  <li><span class="desc-label">노출 조건:</span> 수집 후 24시간 이내의 이슈만 표시. 24시간 경과 시 자동 제거</li>
+                  <li><span class="desc-label">정렬 기준:</span> 멘션 수 내림차순. 가장 많이 언급된 이슈가 상위 노출</li>
+                  <li><span class="desc-label">Empty state:</span> 표시할 이슈가 없을 때(수집 직후, 만료 등) 캐러셀 영역에 "이슈 수집중..." 메시지를 표시하여 시스템이 동작 중임을 전달</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="change-item">
@@ -148,7 +155,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
                   <li><span class="desc-label">2행 — 타이틀:</span> 이슈의 핵심 내용을 1줄로 요약 (1줄 제한)</li>
                   <li><span class="desc-label">3행 — 메타 정보:</span> 관련 심볼 아이콘(최대 2개) + 멘션 수로 이슈의 영향 범위를 표시</li>
                 </ul>
-                이슈 정렬 기준은 멘션 수 내림차순. 수집 주기(24h/6h) 내 가장 많이 언급된 이슈가 상위에 노출.
+                이슈 정렬 기준은 멘션 수 내림차순. 수집 주기(24h/6h) 내 가장 많이 언급된 이슈가 상위에 노출. 24시간이 지난 이슈는 자동으로 제거되어 항상 최신 시그널만 표시.
                 캐러셀은 최대 3장의 카드만 노출. 마지막 슬라이드에는 잔여 이슈 수를 표시하는 CTA 카드를 배치하여 리스트 전체 보기로의 전환을 유도.
               </div>
             </div>
@@ -180,7 +187,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
         <div class="section-desc">
           모든 KOL 이슈를 세로 리스트로 나열. 각 카드는 엔트리포인트 캐러셀과 동일한 정보 구조를 유지하되,
           타이틀을 말줄임 없이 전체 표시하여 더 많은 컨텍스트를 전달합니다.
-          정렬 기준은 캐러셀과 동일하게 멘션 수 내림차순.
+          정렬 기준은 캐러셀과 동일하게 멘션 수 내림차순. 24시간 경과 이슈는 자동 제거.
         </div>
 
         <div class="change-list">
