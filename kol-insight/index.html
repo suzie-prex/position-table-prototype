@@ -436,6 +436,37 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .empty-toggle.on .empty-toggle-switch{background:var(--blue)}
 .empty-toggle.on .empty-toggle-switch::after{transform:translateX(12px);background:#fff}
 
+/* Skeleton UI */
+@keyframes skel-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{border-radius:4px;background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);background-size:200% 100%;animation:skel-shimmer 1.8s ease-in-out infinite}
+.skel-row{display:flex;align-items:center;gap:10px;cursor:default}
+.skel-card{background:var(--bg0);border:1px solid var(--border);border-radius:12px;padding:12px 12px 12px 16px;display:flex;flex-direction:column;gap:8px}
+.skel-badge-row{display:flex;align-items:center;gap:6px}
+.skel-badge{width:56px;height:20px;border-radius:4px}
+.skel-badge-sm{width:28px;height:20px;border-radius:4px}
+.skel-title{height:14px;border-radius:4px;width:100%}
+.skel-title-short{height:14px;border-radius:4px;width:65%}
+.skel-meta{display:flex;align-items:center;gap:4px}
+.skel-circle{border-radius:50%;flex-shrink:0}
+.skel-text-sm{height:12px;border-radius:4px}
+.skel-detail-h1{height:20px;border-radius:4px;width:90%}
+.skel-detail-h1-2{height:20px;border-radius:4px;width:60%;margin-top:6px}
+.skel-edi{border-left:3px solid var(--bg3);padding:0 0 0 16px;margin:16px 0 0}
+.skel-edi-line{height:13px;border-radius:4px;margin-bottom:8px}
+.skel-chip{height:20px;border-radius:4px;display:inline-block}
+.skel-rel-row{display:flex;align-items:center;gap:10px;min-height:54px;padding:8px 0}
+.skel-rel-icon{width:24px;height:24px;border-radius:50%;flex-shrink:0}
+.skel-rel-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.skel-rel-vals{display:flex;gap:12px;flex-shrink:0}
+.skel-rel-val-col{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+
+/* Skeleton toggle */
+.skel-toggle{position:fixed;bottom:68px;right:12px;z-index:999;display:none;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:100px;padding:4px 10px 4px 8px;cursor:pointer;font-size:11px;color:var(--text-s);font-family:inherit}
+.skel-toggle .empty-toggle-switch{width:28px;height:16px;border-radius:8px;background:var(--bg3);position:relative;transition:background .2s}
+.skel-toggle .empty-toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--text-m);transition:transform .2s}
+.skel-toggle.on .empty-toggle-switch{background:var(--blue)}
+.skel-toggle.on .empty-toggle-switch::after{transform:translateX(12px);background:#fff}
+
 /* KOL Info sheet */
 .kol-scrim{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,0.5);animation:kolScrimIn .25s ease-out}
 .kol-sheet{position:absolute;left:0;right:0;bottom:0;z-index:101;background:var(--bg1);border-radius:16px 16px 0 0;padding:10px 16px 28px;animation:kolSheetUp .3s cubic-bezier(.4,0,.2,1)}
@@ -983,7 +1014,10 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 
   <div id="kol-sheet-root"></div>
 </div></div>
-
+<div class="skel-toggle" id="skel-toggle" onclick="toggleSkeleton()">
+  <div class="empty-toggle-switch"></div>
+  <span>Skeleton</span>
+</div>
 
 <script>
 if(location.search.indexOf('mobile')!==-1) document.body.classList.add('mobile-mode');
@@ -1286,6 +1320,13 @@ function go(nav){
   if(nav==='home' && window.resetBanner){ window.resetBanner(); }
   var scr=document.querySelector('.screen.active .scroll, .screen.active .order-scroll'); if(scr) scr.scrollTop=0;
   var et=document.getElementById('empty-toggle'); if(et) et.style.display=nav==='home'?'':'none';
+  var st=document.getElementById('skel-toggle');
+  if(st){
+    var showSkel=nav==='kol-list'||nav==='kol-detail';
+    st.style.display=showSkel?'flex':'none';
+    if(!showSkel && isSkeletonState){ isSkeletonState=false; st.classList.remove('on'); }
+    skelCurrentScreen=nav;
+  }
   if(window.parent!==window) window.parent.postMessage({type:'kol-screen',screen:nav},'*');
 }
 
@@ -1879,6 +1920,7 @@ function toggleKolInfo(ev){
 
 function goKol(screen,i,from){
   if(typeof from==='string') kolFrom=from;
+  if(isSkeletonState){ isSkeletonState=false; var st=document.getElementById('skel-toggle'); if(st) st.classList.remove('on'); skelSavedListHTML=''; skelSavedDetailHTML=''; }
   if(screen==='list'){
     go('kol-list');
     renderKolList();
@@ -1903,6 +1945,66 @@ function toggleEmptyState(){
   empty.style.display=isEmptyState?'':'none';
   var seeAll=document.querySelector('.pulse-section .see-all');
   if(seeAll) seeAll.style.display=isEmptyState?'none':'';
+}
+
+/* Skeleton loading toggle */
+var isSkeletonState=false;
+var skelSavedListHTML='';
+var skelSavedDetailHTML='';
+var skelCurrentScreen='';
+
+function skelListHTML(){
+  var cards='';
+  for(var i=0;i<3;i++){
+    cards+='<div class="skel-card">'
+      +'<div class="skel-badge-row"><div class="skel skel-badge"></div></div>'
+      +'<div class="skel skel-title"></div>'
+      +'<div class="skel skel-title-short"></div>'
+      +'</div>';
+  }
+  return '<div class="kol-list-hero"><div class="skel" style="width:120px;height:20px;border-radius:4px"></div></div>'
+    +'<div class="kol-list">'+cards+'</div>';
+}
+
+function skelDetailHTML(){
+  return '<div class="kol-detail">'
+    +'<div class="skel skel-detail-h1"></div>'
+    +'<div class="skel skel-detail-h1-2"></div>'
+    +'<div class="skel-edi">'
+    +'<div class="skel skel-edi-line" style="width:100%"></div>'
+    +'<div class="skel skel-edi-line" style="width:95%"></div>'
+    +'<div class="skel skel-edi-line" style="width:85%"></div>'
+    +'<div class="skel skel-edi-line" style="width:40%"></div>'
+    +'</div>'
+    +'<div class="skel skel-text-sm" style="width:60px;margin-top:12px"></div>'
+    +'</div>';
+}
+
+function toggleSkeleton(){
+  isSkeletonState=!isSkeletonState;
+  var toggle=document.getElementById('skel-toggle');
+  toggle.classList.toggle('on',isSkeletonState);
+
+  var listEl=document.getElementById('kol-list-scroll');
+  var detailEl=document.getElementById('kol-detail-scroll');
+
+  if(isSkeletonState){
+    if(skelCurrentScreen==='kol-list'){
+      skelSavedListHTML=listEl.innerHTML;
+      listEl.innerHTML=skelListHTML();
+    } else if(skelCurrentScreen==='kol-detail'){
+      skelSavedDetailHTML=detailEl.innerHTML;
+      detailEl.innerHTML=skelDetailHTML();
+    }
+  } else {
+    if(skelCurrentScreen==='kol-list' && skelSavedListHTML){
+      listEl.innerHTML=skelSavedListHTML;
+      skelSavedListHTML='';
+    } else if(skelCurrentScreen==='kol-detail' && skelSavedDetailHTML){
+      detailEl.innerHTML=skelSavedDetailHTML;
+      skelSavedDetailHTML='';
+    }
+  }
 }
 
 /* Init: pre-build order screen with default TradFi symbol (XAU) */
