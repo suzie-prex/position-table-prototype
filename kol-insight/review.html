@@ -148,7 +148,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
                   <li><span class="desc-label">1행 — 뱃지 클러스터:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지를 나란히 배치
                     <ul>
                       <li><span class="desc-label">Issue 번호 뱃지</span> — 이슈의 순번을 표시 (Issue 1, 2, 3)</li>
-                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달</li>
+                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달. Mixed일 때는 뱃지를 표시하지 않음</li>
                       <li><span class="desc-label">Hot 뱃지</span> — 급등하는 이슈에 🔥 아이콘을 표시하여 긴급도를 시각화</li>
                     </ul>
                   </li>
@@ -195,12 +195,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
             <span class="change-badge ux">UI</span>
             <div class="change-body">
               <div class="change-title">리스트 카드 구성</div>
-              <div class="change-desc">엔트리포인트 캐러셀과 동일한 정보 구조를 세로 리스트 형태로 표시.
+              <div class="change-desc">엔트리포인트 캐러셀과 동일한 정보 구조를 세로 리스트 형태로 표시. 카드 정렬 기준은 멘션 수 내림차순. 수집 주기(24h/6h) 내 가장 많이 언급된 이슈가 상위에 노출. 24시간이 지난 이슈는 자동으로 제거되어 항상 최신 시그널만 표시.
                 <ul>
                   <li><span class="desc-label">1행 — 뱃지 클러스터:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지를 나란히 배치
                     <ul>
                       <li><span class="desc-label">Issue 번호 뱃지</span> — 이슈의 순번을 표시 (Issue 1, 2, 3…)</li>
-                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달</li>
+                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달. Mixed일 때는 뱃지를 표시하지 않음</li>
                       <li><span class="desc-label">Hot 뱃지</span> — 급등하는 이슈에 🔥 아이콘을 표시하여 긴급도를 시각화</li>
                     </ul>
                   </li>
@@ -244,7 +244,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-
               <div class="change-title">디테일 화면 구성</div>
               <div class="change-desc">유저가 위에서 아래로 읽으며 점진적으로 깊은 정보를 소비하는 구조.
                 <ul>
-                  <li><span class="desc-label">1행 — 뱃지 + 타임스탬프:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지(🔥)를 좌측에, 발행 시간(14m ago)을 우측에 배치</li>
+                  <li><span class="desc-label">1행 — 뱃지 + 타임스탬프:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지(🔥)를 좌측에, 발행 시간(15m ago)을 우측에 배치. 센티먼트가 Mixed일 때는 뱃지를 표시하지 않음</li>
                   <li><span class="desc-label">2행 — 타이틀:</span> 이슈의 핵심 주장을 전체 텍스트로 표시</li>
                   <li><span class="desc-label">3행 — 에디토리얼:</span> KOL들의 의견을 중립적으로 요약한 읽기 전용 블록. 좌측 보더라인으로 인용문 스타일을 적용하여 본문과 구분. 하단에 출처 갯수(N sources)를 표시하여 정보의 신뢰도를 전달</li>
                   <li><span class="desc-label">4행 — 시그널 뱃지 클러스터:</span> 센티먼트, 멘션 수, Buzz 상태를 뱃지 형태로 나란히 배치하여 이슈의 정량적 요약을 한눈에 전달
