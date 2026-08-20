@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1400">
+<title>KOL Insight — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#2a2a2a;
+  --text1:#f0f0f0;
+  --text2:#a0a0a0;
+  --text3:#666;
+  --accent:#2f98ff;
+  --green:#34c759;
+  --red:#ff493f;
+  --tag-bg:rgba(47,152,255,0.1);
+  --tag-border:rgba(47,152,255,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text1);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* Top header */
+.top-header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;gap:16px}
+.top-header h1{font-size:16px;font-weight:600;letter-spacing:-0.02em}
+.top-header .tag{font-size:11px;font-weight:500;color:var(--accent);background:var(--tag-bg);border:1px solid var(--tag-border);padding:3px 10px;border-radius:100px}
+.top-header .date{margin-left:auto;font-size:12px;color:var(--text3)}
+
+/* Layout */
+.layout{display:flex;min-height:calc(100vh - 53px)}
+
+/* Left — prototype */
+.col-left{width:376px;flex-shrink:0;position:sticky;top:53px;height:calc(100vh - 53px);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);background:#070708;overflow:hidden;box-sizing:border-box}
+.col-left iframe{width:360px;height:800px;flex-shrink:0;border:none;transform-origin:center center}
+
+/* Right — notes */
+.col-right{flex:1;min-width:0;padding:32px 40px 80px}
+
+/* Screen selector tabs */
+.screen-tabs-wrap{position:sticky;top:53px;z-index:50;background:var(--bg);padding:32px 0 0;margin:-32px 0 0}
+.screen-tabs{display:flex;gap:4px;margin-bottom:32px;background:var(--surface);border-radius:10px;padding:4px;width:fit-content}
+.screen-tab{font-size:13px;font-weight:500;color:var(--text3);padding:7px 16px;border-radius:8px;cursor:pointer;transition:all .2s;border:none;background:none;font-family:inherit}
+.screen-tab:hover{color:var(--text2)}
+.screen-tab.active{color:var(--text1);background:var(--surface2)}
+
+/* Section */
+.review-section{margin-bottom:40px}
+.review-section:last-child{margin-bottom:0}
+.section-label{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:18px;font-weight:600;color:var(--text1);letter-spacing:-0.02em;margin-bottom:6px}
+.section-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+
+/* Change item */
+.change-list{display:flex;flex-direction:column;gap:12px}
+.change-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;gap:16px;align-items:flex-start}
+.change-badge{flex-shrink:0;font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;margin-top:2px}
+.change-badge.new{background:rgba(52,199,89,0.12);color:var(--green);border:1px solid rgba(52,199,89,0.2)}
+.change-badge.update{background:rgba(47,152,255,0.1);color:var(--accent);border:1px solid rgba(47,152,255,0.2)}
+.change-badge.fix{background:rgba(255,73,63,0.1);color:var(--red);border:1px solid rgba(255,73,63,0.2)}
+.change-badge.ux{background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border)}
+.change-body{min-width:0}
+.change-title{font-size:14px;font-weight:600;color:var(--text1);margin-bottom:4px}
+.change-desc{font-size:13px;color:var(--text2);line-height:1.65}
+.change-desc ul{margin:6px 0 0;padding-left:16px;list-style:disc}
+.change-desc li{margin-bottom:4px}
+.change-desc li:last-child{margin-bottom:0}
+.change-desc .desc-label{color:var(--text1);font-weight:500}
+.change-spec{font-size:12px;color:var(--text3);margin-top:6px;font-variant-numeric:tabular-nums}
+.change-spec code{font-family:'SF Mono',Menlo,monospace;font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:4px;color:var(--text2)}
+
+/* UX policy */
+.ux-policy{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:16px}
+.ux-policy-title{font-size:13px;font-weight:600;color:var(--text1);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.ux-policy-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;flex-shrink:0}
+.ux-policy-body{font-size:13px;color:var(--text2);line-height:1.7}
+.ux-policy-body ul{margin:6px 0 0 16px}
+.ux-policy-body li{margin-bottom:4px}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:40px 0}
+
+/* Screen content panels */
+.screen-panel{display:none}
+.screen-panel.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <h1>KOL Insight</h1>
+  <span class="tag">Feature Review</span>
+  <span class="date">2026.08.19</span>
+</div>
+
+<div class="layout">
+  <!-- Left: Prototype -->
+  <div class="col-left">
+    <iframe id="proto-frame" src="index.html"></iframe>
+  </div>
+
+  <!-- Right: Notes -->
+  <div class="col-right">
+    <div class="screen-tabs-wrap">
+      <div class="screen-tabs">
+        <button class="screen-tab active" data-screen="entry" onclick="switchScreen(this)">Entry Point</button>
+        <button class="screen-tab" data-screen="list" onclick="switchScreen(this)">List View</button>
+        <button class="screen-tab" data-screen="detail" onclick="switchScreen(this)">Detail View</button>
+      </div>
+    </div>
+
+    <!-- ===================== ENTRY POINT ===================== -->
+    <div class="screen-panel active" id="panel-entry">
+
+      <div class="review-section">
+        <div class="section-label">Information Architecture</div>
+        <div class="section-title">Home Entry Point — Carousel</div>
+        <div class="section-desc">
+          홈 화면의 KOL Insight 섹션은 캐러셀 형태로 최신 이슈를 노출합니다.
+          유저가 스크롤하다 자연스럽게 마주치는 위치에 배치되어 탐색 흐름을 유도합니다.
+        </div>
+
+        <div class="change-list">
+          <div class="change-item">
+            <span class="change-badge new">New</span>
+            <div class="change-body">
+              <div class="change-title">KOL Insight 섹션 추가</div>
+              <div class="change-desc">홈 피드에 KOL 이슈 캐러셀 영역을 신규 배치. Trending 아래, Market Tabs 위에 위치하여 시장 맥락 파악 후 자연스럽게 인사이트로 진입하도록 설계.</div>
+            </div>
+          </div>
+          <div class="change-item">
+            <span class="change-badge ux">UI</span>
+            <div class="change-body">
+              <div class="change-title">캐러셀 카드 구성</div>
+              <div class="change-desc">유저가 카드만 보고도 이슈의 성격과 규모를 즉시 판단할 수 있도록 구성.
+                <ul>
+                  <li><span class="desc-label">1행 — 뱃지 클러스터:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지를 나란히 배치
+                    <ul>
+                      <li><span class="desc-label">Issue 번호 뱃지</span> — 이슈의 순번을 표시 (Issue 1, 2, 3)</li>
+                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달</li>
+                      <li><span class="desc-label">Hot 뱃지</span> — 급등하는 이슈에 🔥 아이콘을 표시하여 긴급도를 시각화</li>
+                    </ul>
+                  </li>
+                  <li><span class="desc-label">2행 — 타이틀:</span> 이슈의 핵심 내용을 1줄로 요약 (1줄 제한)</li>
+                  <li><span class="desc-label">3행 — 메타 정보:</span> 관련 심볼 아이콘(최대 2개) + 멘션 수로 이슈의 영향 범위를 표시</li>
+                </ul>
+                캐러셀은 최대 3장의 카드만 노출. 마지막 슬라이드에는 잔여 이슈 수를 표시하는 CTA 카드를 배치하여 리스트 전체 보기로의 전환을 유도.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ux-policy">
+          <div class="ux-policy-title">UX Policy — 정보 인지 흐름</div>
+          <div class="ux-policy-body">
+            <ul>
+              <li>유저는 홈에서 스크롤하며 Trending → KOL Insight 순서로 시장 컨텍스트를 파악함</li>
+              <li>캐러셀은 프로모션 배너와 동일한 패턴(풀 너비 카드, 도트 인디케이터, 스냅) 적용 — 플랫폼이 유저에게 전달하는 콘텐츠라는 일관된 흐름 유지</li>
+              <li>단, 자동 롤링은 적용하지 않음 — KOL Insight는 유저가 직접 골라 읽는 콘텐츠이므로 자동 전환이 읽기를 방해함. 수동 스와이프만 지원</li>
+              <li>각 카드의 센티먼트 뱃지(색상)가 가장 먼저 시선을 끌어 긍정/부정을 즉시 판단 가능</li>
+              <li>"See all" 텍스트 버튼은 전체 리스트로의 진입점 역할</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===================== LIST VIEW ===================== -->
+    <div class="screen-panel" id="panel-list">
+
+      <div class="review-section">
+        <div class="section-label">Information Architecture</div>
+        <div class="section-title">List View — 전체 이슈 목록</div>
+        <div class="section-desc">
+          모든 KOL 이슈를 세로 리스트로 나열. 각 카드는 엔트리포인트 캐러셀과 동일한 정보 구조를 유지하되,
+          타이틀을 말줄임 없이 전체 표시하여 더 많은 컨텍스트를 전달합니다.
+        </div>
+
+        <div class="change-list">
+          <div class="change-item">
+            <span class="change-badge ux">UI</span>
+            <div class="change-body">
+              <div class="change-title">리스트 카드 구성</div>
+              <div class="change-desc">엔트리포인트 캐러셀과 동일한 정보 구조를 세로 리스트 형태로 표시.
+                <ul>
+                  <li><span class="desc-label">1행 — 뱃지 클러스터:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지를 나란히 배치
+                    <ul>
+                      <li><span class="desc-label">Issue 번호 뱃지</span> — 이슈의 순번을 표시 (Issue 1, 2, 3…)</li>
+                      <li><span class="desc-label">센티먼트 뱃지</span> — Positive(👍) 또는 Negative(👎)로 이슈의 방향성을 색상과 아이콘으로 즉시 전달</li>
+                      <li><span class="desc-label">Hot 뱃지</span> — 급등하는 이슈에 🔥 아이콘을 표시하여 긴급도를 시각화</li>
+                    </ul>
+                  </li>
+                  <li><span class="desc-label">2행 — 타이틀:</span> 이슈의 핵심 내용을 말줄임 없이 전체 표시 (엔트리포인트는 1줄 제한, 리스트에서는 전체 노출)</li>
+                  <li><span class="desc-label">3행 — 메타 정보:</span> 관련 심볼 아이콘(최대 2개) + 멘션 수로 이슈의 영향 범위를 표시</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ux-policy">
+          <div class="ux-policy-title">UX Policy — 스캔 패턴</div>
+          <div class="ux-policy-body">
+            <ul>
+              <li>유저는 리스트를 위에서 아래로 빠르게 스캔하며, Issue 번호 → 센티먼트 뱃지 → 제목 순서로 정보를 처리</li>
+              <li>카드 좌측의 뱃지 클러스터가 앵커 역할을 하여 시선의 시작점을 고정</li>
+              <li>타임스탬프("15m ago")는 데이터의 신선도를 즉각 전달하여 신뢰를 형성</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===================== DETAIL VIEW ===================== -->
+    <div class="screen-panel" id="panel-detail">
+
+      <div class="review-section">
+        <div class="section-label">Information Architecture</div>
+        <div class="section-title">Detail View — 이슈 상세</div>
+        <div class="section-desc">
+          개별 이슈의 전체 맥락을 전달하는 화면. 제목 → 에디토리얼 요약 → 시그널 뱃지 → 관련 자산 순서로
+          점진적으로 깊은 정보를 제공합니다.
+        </div>
+
+        <div class="change-list">
+          <div class="change-item">
+            <span class="change-badge ux">UI</span>
+            <div class="change-body">
+              <div class="change-title">디테일 화면 구성</div>
+              <div class="change-desc">유저가 위에서 아래로 읽으며 점진적으로 깊은 정보를 소비하는 구조.
+                <ul>
+                  <li><span class="desc-label">1행 — 뱃지 + 타임스탬프:</span> Issue 번호 뱃지, 센티먼트 뱃지, Hot 뱃지(🔥)를 좌측에, 발행 시간(14m ago)을 우측에 배치</li>
+                  <li><span class="desc-label">2행 — 타이틀:</span> 이슈의 핵심 주장을 전체 텍스트로 표시</li>
+                  <li><span class="desc-label">3행 — 에디토리얼:</span> KOL들의 의견을 중립적으로 요약한 읽기 전용 블록. 좌측 보더라인으로 인용문 스타일을 적용하여 본문과 구분. 하단에 출처 갯수(N sources)를 표시하여 정보의 신뢰도를 전달</li>
+                  <li><span class="desc-label">4행 — 시그널 뱃지 클러스터:</span> 센티먼트, 멘션 수, Buzz 상태를 뱃지 형태로 나란히 배치하여 이슈의 정량적 요약을 한눈에 전달
+                    <ul>
+                      <li><span class="desc-label">Positive 👍</span> — 긍정적 여론 · <span class="desc-label">Negative 👎</span> — 부정적 여론 · <span class="desc-label">Mixed tone</span> — 섞임 · <span class="desc-label">Neutral tone</span> — 섞임</li>
+                      <li><span class="desc-label">Buzz growing</span> — 화제성이 커지고 있음 · <span class="desc-label">Buzz steady</span> — 꾸준히 얘기되고 있음</li>
+                    </ul>
+                  </li>
+                  <li><span class="desc-label">5행 — Mentions and Movement:</span> 관련 자산의 멘션 수와 7일 가격 변동을 표시. 이슈가 실제 시장에 미치는 영향을 수치로 연결</li>
+                </ul>
+                하단에 "See other issues" CTA로 리스트 복귀를 유도하여 탐색 루프를 완성. 면책조항("Not investment advice")을 통해 정보의 성격을 명확히 고지.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ux-policy">
+          <div class="ux-policy-title">UX Policy — 행동 유도</div>
+          <div class="ux-policy-body">
+            <ul>
+              <li>에디토리얼은 읽기 전용 콘텐츠로, 유저가 판단의 근거로 활용할 수 있는 중립적 요약을 제공</li>
+              <li>"Sources" 링크로 원문 접근 가능성을 보장하여 정보의 신뢰도를 높임</li>
+              <li>관련 자산 row의 화살표(chevron)가 해당 심볼 트레이딩 화면으로의 전환을 암시</li>
+              <li>"See other issues" CTA로 리스트 복귀를 유도하여 탐색 루프를 완성</li>
+              <li>하단 면책조항("Not investment advice")을 통해 정보의 성격을 명확히 고지</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchScreen(el){
+  document.querySelectorAll('.screen-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  var screen = el.dataset.screen;
+  document.querySelectorAll('.screen-panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('panel-'+screen).classList.add('active');
+
+  // Scroll right panel to top
+  document.querySelector('.col-right').scrollTo(0, 0);
+  window.scrollTo(0, 0);
+
+  // Navigate prototype iframe
+  var frame = document.getElementById('proto-frame');
+  if(frame && frame.contentWindow && typeof frame.contentWindow.goKol === 'function'){
+    if(screen === 'entry'){
+      frame.contentWindow.go('home');
+    } else if(screen === 'list'){
+      frame.contentWindow.goKol('list', 0, 'home');
+    } else if(screen === 'detail'){
+      frame.contentWindow.goKol('detail', 0, 'list');
+    }
+  }
+}
+
+// Listen for screen changes from prototype iframe
+document.querySelector('.col-left').addEventListener('wheel', function(e){
+  e.preventDefault();
+}, {passive:false});
+
+function scaleProto(){
+  var col=document.querySelector('.col-left');
+  var frame=document.getElementById('proto-frame');
+  if(!col||!frame) return;
+  var availH=col.clientHeight;
+  var availW=col.clientWidth;
+  var sh=availH/800;
+  var sw=availW/360;
+  var s=Math.min(1,sh,sw);
+  frame.style.transform='scale('+s+')';
+}
+scaleProto();
+window.addEventListener('resize',scaleProto);
+
+window.addEventListener('message', function(e){
+  if(!e.data || e.data.type !== 'kol-screen') return;
+  var map = {'home':'entry','kol-list':'list','kol-detail':'detail'};
+  var tab = map[e.data.screen];
+  if(!tab) return;
+  // Update right panel to match prototype screen
+  document.querySelectorAll('.screen-tab').forEach(function(t){t.classList.toggle('active', t.dataset.screen===tab);});
+  document.querySelectorAll('.screen-panel').forEach(function(p){p.classList.toggle('active', p.id==='panel-'+tab);});
+  // Scroll to top
+  document.querySelector('.col-right').scrollTo(0, 0);
+  window.scrollTo(0, 0);
+});
+</script>
+</body>
+</html>

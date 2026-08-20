@@ -18,7 +18,7 @@
   --chip-on:#f7f7f7; --chip-off:rgba(238,238,238,0.1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#070708;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;-webkit-font-smoothing:antialiased;padding:24px 0;letter-spacing:-0.1px;gap:24px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#070708;display:flex;justify-content:center;align-items:flex-start;height:800px;min-height:800px;-webkit-font-smoothing:antialiased;padding:0;margin:0;letter-spacing:-0.1px;gap:24px;overflow:hidden}
 .phone-device{width:360px;background:#000;border-radius:34px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 20px 60px rgba(0,0,0,.5)}
 .phone{width:360px;height:800px;background:var(--bg0);position:relative;border-radius:34px;display:flex;flex-direction:column;overflow:hidden;color:var(--text-p)}
 body.mobile-mode{padding:0;background:var(--bg0)}
@@ -155,7 +155,7 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .pb{padding-bottom:20px}
 
 /* Bottom nav */
-.bnav{height:58px;background:var(--bg0);border-top:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
+.bnav{height:58px;background:var(--bg0);display:flex;align-items:center;flex-shrink:0}
 .bnav .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
 .bnav .ni svg,.bnav .ni img{color:var(--text-m)}
 .bnav .ni.active svg{color:#f7f7f7}
@@ -382,11 +382,14 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .tier-tbl .cross-val{color:var(--blue);font-weight:500}
 
 /* KOL Insight — contextual banner */
+.pulse-section{position:relative;margin-top:24px;padding:16px 0 0;overflow:hidden}
+.pulse-section-bg{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,132,255,0.08),rgba(17,17,17,0.08));pointer-events:none}
+.pulse-section .sec-hd{position:relative;padding-top:0}
 .pulse-carousel{margin:0;position:relative}
-.pulse-view{overflow:hidden}
-.pulse-track{display:flex;gap:0;will-change:transform;transition:transform .5s cubic-bezier(.4,0,.2,1)}
-.pulse-slide{flex:0 0 100%;cursor:pointer;box-sizing:border-box;padding:0 16px;margin-right:-16px}
-.pulse-card{background:var(--bg1);border-radius:12px;padding:12px 12px 12px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;height:100%;box-sizing:border-box}
+.pulse-view{overflow:hidden;width:100%}
+.pulse-track{display:flex;gap:8px;will-change:transform;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.pulse-slide{flex:0 0 328px;min-width:0;width:328px;cursor:pointer;box-sizing:border-box}
+.pulse-card{background:var(--bg0);border:1px solid rgba(31,102,168,0.5);border-radius:12px;padding:12px 12px 12px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;height:100%;box-sizing:border-box}
 .pulse-card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;justify-content:center}
 .pulse-card-head{display:flex;align-items:center;gap:6px}
 .pulse-badge{display:inline-flex;align-items:center;gap:2px;height:20px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:400;letter-spacing:0.11px;line-height:14px;white-space:nowrap;border:1px solid #424242;color:var(--text-s)}
@@ -402,14 +405,14 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .card-sym-icons{display:flex;align-items:center;flex-shrink:0}
 .card-sym-icons .card-sym-ic{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;border:2px solid var(--bg1)}
 .card-sym-icons .card-sym-ic+.card-sym-ic{margin-left:-8px}
-.pulse-card-meta{font-size:12px;color:var(--text-m);line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pulse-card-meta .meta-dot{display:inline-block;width:2px;height:2px;border-radius:50%;background:var(--text-m);vertical-align:middle;margin:0 4px}
+.pulse-card-meta{font-size:12px;color:var(--text-s);line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+.pulse-card-meta .meta-dot{display:inline-block;width:2px;height:2px;border-radius:50%;background:var(--text-s);vertical-align:middle;margin:0 2px}
+.meta-sym-ic{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;flex-shrink:0;border:1.5px solid var(--bg1)}
+.meta-sym-ic+.meta-sym-ic{margin-left:-8px}
 .pulse-card-chev{color:var(--text-m);flex-shrink:0;display:flex;align-items:center}
-.pulse-dots{display:flex;justify-content:center;gap:6px;margin-top:8px}
-.pulse-dot{width:6px;height:6px;border-radius:1000px;background:rgba(238,238,238,0.1);transition:all .2s}
-.pulse-dot.active{width:24px;background:var(--text-p)}
-.pulse-seeall{flex:0 0 100%;display:flex;align-items:stretch;box-sizing:border-box;padding:0 16px;margin-right:-16px}
-.pulse-seeall-btn{flex:1;background:var(--bg1);border:none;border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.pulse-dots{display:none}
+.pulse-seeall{flex:0 0 328px;display:flex;align-items:stretch;box-sizing:border-box}
+.pulse-seeall-btn{flex:1;background:var(--bg0);border:1px solid rgba(31,102,168,0.5);border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .pulse-seeall-btn svg{flex-shrink:0}
 .kol-card-arrow{font-size:11px;font-weight:700;flex-shrink:0}
 .kol-card-arrow.up{color:var(--positive)}
@@ -419,46 +422,48 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .kol-card-sp:active{background:rgba(238,238,238,0.12)}
 
 /* KOL Info sheet */
-.kol-scrim{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.6)}
-.kol-sheet{position:fixed;left:50%;bottom:0;z-index:101;width:360px;transform:translateX(-50%);background:var(--bg2);border-radius:16px 16px 0 0;padding:10px 16px 28px}
-.kol-sheet-grab{width:36px;height:4px;border-radius:4px;background:var(--bg3);margin:0 auto 16px}
-.kol-sheet h3{font-size:16px;font-weight:600;color:var(--text-p);margin-bottom:10px}
-.kol-sheet p{font-size:13px;color:var(--text-s);line-height:1.6}
-.kol-sheet .kol-sheet-fine{font-size:11px;color:var(--text-m);line-height:1.5;margin-top:10px}
+.kol-scrim{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,0.5);animation:kolScrimIn .25s ease-out}
+.kol-sheet{position:absolute;left:0;right:0;bottom:0;z-index:101;background:var(--bg1);border-radius:16px 16px 0 0;padding:10px 16px 28px;animation:kolSheetUp .3s cubic-bezier(.4,0,.2,1)}
+.kol-sheet-grab{width:36px;height:4px;border-radius:2px;background:var(--bg3);margin:0 auto 16px}
+.kol-sheet h3{font-size:20px;font-weight:700;color:var(--text-p);margin-bottom:12px}
+.kol-sheet p{font-size:14px;color:var(--text-s);line-height:1.6}
+.kol-sheet .kol-sheet-fine{font-size:13px;color:var(--text-s);line-height:1.6;margin-top:10px}
 .kol-sheet .kol-sheet-btn{margin-top:16px;background:var(--bg3);border:none;border-radius:8px;padding:12px;text-align:center;font-size:14px;font-weight:600;color:var(--text-p);cursor:pointer;width:100%}
+@keyframes kolScrimIn{from{opacity:0}to{opacity:1}}
+@keyframes kolSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
 /* KOL List screen */
 .kol-list-hero{padding:12px 20px 16px;display:flex;align-items:baseline;justify-content:space-between}
 .kol-list-hero h1{font-size:20px;font-weight:600;color:var(--text-p);letter-spacing:-0.015em}
 .kol-list-hero .kol-upd{font-size:12px;color:var(--text-m)}
-.kol-list{padding:0 16px 24px;display:flex;flex-direction:column;gap:8px}
-.kol-row{background:var(--bg1);border-radius:12px;padding:12px 12px 12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.kol-list{padding:0 16px 24px;display:flex;flex-direction:column;gap:10px}
+.kol-row{background:var(--bg0);border:1px solid rgba(31,102,168,0.5);border-radius:12px;padding:12px 12px 12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .kol-row-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
 .kol-row-badge{display:flex;align-items:center;gap:6px}
-.kol-row-title{font-size:15px;font-weight:400;color:var(--text-p);line-height:1.4}
-.kol-row-mentions{font-size:12px;color:var(--text-m);line-height:16px}
-.kol-row-mentions .meta-dot{display:inline-block;width:2px;height:2px;border-radius:50%;background:var(--text-m);vertical-align:middle;margin:0 4px}
+.kol-row-title{font-size:15px;font-weight:400;color:var(--text-p);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kol-row-mentions{font-size:12px;color:var(--text-s);line-height:16px;display:flex;align-items:center;gap:4px}
+.kol-row-mentions .meta-dot{display:inline-block;width:2px;height:2px;border-radius:50%;background:var(--text-s);vertical-align:middle;margin:0 2px}
 .kol-row-chev{color:var(--text-m);flex-shrink:0;display:flex;align-items:center}
 
 /* KOL Detail screen */
-.kol-detail{padding:4px 20px 24px}
+.kol-detail{padding:4px 16px 16px}
 .kol-detail-toprow{display:flex;align-items:center;gap:4px;margin-bottom:8px}
 .kol-detail-ago{margin-left:auto}
 .kol-detail-toprow .pulse-badge{font-size:11px}
 .kol-detail-ago{font-size:12px;color:var(--text-m)}
 .kol-detail-h1{font-size:20px;font-weight:600;color:var(--text-p);letter-spacing:-0.015em;line-height:1.3}
 .kol-detail-sect{font-size:15px;font-weight:600;color:var(--text-p);margin:32px 0 6px}
-.kol-detail-edi{border-left:3px solid var(--border);padding:0 0 0 20px;margin:16px 0 0}
-.kol-detail-edi p{font-size:14px;color:var(--text-p);line-height:1.6}
-.kol-detail-sources{font-size:12px;color:var(--text-m);margin-top:12px}
+.kol-detail-edi{border-left:3px solid var(--bg3);padding:0 0 0 16px;margin:16px 0 0}
+.kol-detail-edi p{font-size:14px;color:var(--text-s);line-height:1.6}
+.kol-detail-sources{font-size:12px;color:var(--text-t);text-decoration:none;margin-top:12px;cursor:pointer;display:inline-block}
 .kol-detail-sigs{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
-.kol-detail-chip{font-size:11px;font-weight:500;border-radius:4px;padding:4px 10px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.kol-detail-chip{height:20px;box-sizing:border-box;font-size:11px;font-weight:500;border-radius:4px;padding:3px 8px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
 .kol-detail-chip svg{width:12px;height:12px;flex-shrink:0}
 .kol-detail-chip.chip-green{background:rgba(52,199,89,0.12);color:var(--positive)}
 .kol-detail-chip.chip-red{background:rgba(255,59,48,0.12);color:#ff493f}
 .kol-detail-chip.chip-neutral{background:rgba(238,238,238,0.08);color:var(--text-s)}
 .kol-detail-rel{display:flex;flex-direction:column;gap:0}
-.kol-detail-rel-row{display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer}
+.kol-detail-rel-row{display:flex;align-items:center;gap:10px;min-height:54px;box-sizing:border-box;padding:8px 0;cursor:pointer}
 .kol-detail-rel-namewrap{flex:1;min-width:0;display:flex;align-items:center;gap:10px}
 .kol-detail-rel-ic{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff}
 .kol-detail-rel-info{min-width:0;display:flex;flex-direction:column}
@@ -482,7 +487,9 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
 .kol-tone-chip.tc-nu{color:var(--text-s);background:rgba(238,238,238,0.06);border:1px solid rgba(238,238,238,0.1)}
 .kol-detail-tags{display:flex;gap:6px;flex-wrap:wrap}
 .kol-detail-tag{background:rgba(238,238,238,0.06);border:1px solid var(--border);font-size:12px;padding:5px 10px;border-radius:8px;color:var(--text-p)}
-.kol-detail-foot{font-size:12px;color:var(--text-m);text-align:left;line-height:1.5;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.kol-detail-cta{margin:24px 0 0;text-align:center}
+.kol-detail-cta button{background:none;border:none;font-size:14px;font-weight:600;color:var(--text-s);cursor:pointer;font-family:inherit;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+.kol-detail-foot{font-size:11px;color:var(--text-m);text-align:left;line-height:1.5;margin:0;padding:16px 16px 32px;background:linear-gradient(to bottom,rgba(255,255,255,0.04),var(--bg0))}
 
 </style>
 </head>
@@ -542,8 +549,11 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
       <div class="trend-scroll" id="trend-scroll"></div>
 
       <!-- Market Pulse -->
-      <div class="sec-hd" style="margin-top:20px"><h2>Social signal</h2><span class="see-all" onclick="goKol('list',0,'home')">See all</span></div>
-      <div id="home-pulse-banner"></div>
+      <div class="pulse-section">
+        <div class="pulse-section-bg"></div>
+        <div class="sec-hd" style="margin-top:0"><h2>KOL Insight</h2><span class="see-all" onclick="goKol('list',0,'home')">See all</span></div>
+        <div id="home-pulse-banner"></div>
+      </div>
 
       <!-- Tabs + chips + list -->
       <div class="tabs" id="home-tabs" style="margin-top:20px">
@@ -553,7 +563,6 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
         <div class="tab" data-tab="perpetual">Perpetual</div>
         <div class="tab" data-tab="spot">Spot</div>
       </div>
-      <div id="kol-sheet-root"></div>
       <div class="chips" id="home-chips"></div>
       <div id="home-list"></div>
       <div class="see-all-center" id="home-see-all">See all</div>
@@ -573,20 +582,22 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
   </div>
 
   <!-- ============ KOL LIST ============ -->
-  <div class="screen" id="s-kol-list">
-    <div class="order-header" style="padding:0 12px;height:42px;display:flex;align-items:center;justify-content:space-between">
+  <div class="screen" id="s-kol-list" style="position:relative;background:linear-gradient(180deg,rgba(17,17,17,0.12) 9.25%,rgba(10,132,255,0.12) 27.792%,rgba(17,17,17,0.12) 100%),#111111">
+    <div class="order-header" id="kol-list-header" style="position:relative;padding:0 12px;height:42px;display:flex;align-items:center;justify-content:space-between">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" onclick="go('home')" style="cursor:pointer"><path d="M15 19l-7-7 7-7" stroke="var(--text-p)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="kol-info-btn" onclick="toggleKolInfo(event)" style="margin-right:4px">i</span>
+      <span id="kol-list-bar-title" style="font-size:16px;font-weight:600;color:var(--text-p);opacity:0;transition:opacity .2s;position:absolute;left:50%;transform:translateX(-50%)">KOL Insight</span>
+      <span class="kol-info-btn" onclick="toggleKolInfo(event)" style="margin-right:4px;cursor:pointer;padding:8px;display:flex;align-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 21.75C17.3848 21.75 21.75 17.3848 21.75 12C21.75 6.61522 17.3848 2.25 12 2.25C6.61522 2.25 2.25 6.61522 2.25 12C2.25 17.3848 6.61522 21.75 12 21.75ZM13.35 7.875C13.35 8.63439 12.7344 9.25 11.975 9.25C11.2156 9.25 10.6 8.63439 10.6 7.875C10.6 7.11561 11.2156 6.5 11.975 6.5C12.7344 6.5 13.35 7.11561 13.35 7.875ZM10.72 11.2502C10.72 10.836 11.0558 10.5002 11.47 10.5002H12.47C12.8842 10.5002 13.22 10.836 13.22 11.2502V16.7502C13.22 17.1644 12.8842 17.5002 12.47 17.5002H11.47C11.0558 17.5002 10.72 17.1644 10.72 16.7502V11.2502Z" fill="var(--text-t)"/></svg></span>
     </div>
     <div class="scroll pb" id="kol-list-scroll"></div>
   </div>
 
   <!-- ============ KOL DETAIL ============ -->
   <div class="screen" id="s-kol-detail">
-    <div class="order-header" style="padding:0 12px;height:42px;display:flex;align-items:center">
+    <div class="order-header" style="padding:0 12px;height:42px;display:flex;align-items:center;justify-content:space-between">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" onclick="goKol('back')" style="cursor:pointer"><path d="M15 19l-7-7 7-7" stroke="var(--text-p)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="kol-info-btn" onclick="toggleKolInfo(event)" style="margin-right:4px;cursor:pointer;padding:8px;display:flex;align-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 21.75C17.3848 21.75 21.75 17.3848 21.75 12C21.75 6.61522 17.3848 2.25 12 2.25C6.61522 2.25 2.25 6.61522 2.25 12C2.25 17.3848 6.61522 21.75 12 21.75ZM13.35 7.875C13.35 8.63439 12.7344 9.25 11.975 9.25C11.2156 9.25 10.6 8.63439 10.6 7.875C10.6 7.11561 11.2156 6.5 11.975 6.5C12.7344 6.5 13.35 7.11561 13.35 7.875ZM10.72 11.2502C10.72 10.836 11.0558 10.5002 11.47 10.5002H12.47C12.8842 10.5002 13.22 10.836 13.22 11.2502V16.7502C13.22 17.1644 12.8842 17.5002 12.47 17.5002H11.47C11.0558 17.5002 10.72 17.1644 10.72 16.7502V11.2502Z" fill="var(--text-t)"/></svg></span>
     </div>
-    <div class="scroll pb" id="kol-detail-scroll"></div>
+    <div class="scroll pb" id="kol-detail-scroll" style="display:flex;flex-direction:column"></div>
   </div>
 
   <!-- ============ MARKET ============ -->
@@ -943,6 +954,7 @@ body.mobile-mode .phone{width:100%;height:100vh;height:100dvh;border-radius:0}
     </div>
   </div>
 
+  <div id="kol-sheet-root"></div>
 </div></div>
 
 
@@ -1113,12 +1125,12 @@ function renderChips(elId,tab,activeChip){
 }
 /* ---- KOL Insight — topic-centric data ---- */
 var KOL_ISSUES=[
-  {title:'Oil up as Iran talks stall',dtitle:'Oil slides as US–Iran Strait of Hormuz talks advance',hot:false,arrow:'up',desc:'Brent back above $83 as talks stall',sources:3,mentions:300,tone:'Bullish-leaning',tclass:'bl',momentum:'Rising',vol:'Expanding',spark:[120,135,128,145,160,155,178,195,210,240,265,280,300],editorial:'The dominant thread was progress in US–Iran talks over reopening the Strait of Hormuz, with an Iran–Oman corridor reportedly taking shape. Commentary leaned cautious, noting geopolitical risk premiums adjusting higher.',tags:['Strait of Hormuz','US–Iran talks','Crude oil'],related:[{sym:'BZ',m:180,tone:'bl',tl:'Bullish-leaning',w1:'+3.80%'},{sym:'XAU',m:120,tone:'nu',tl:'Mixed',w1:'+6.50%'}]},
-  {title:'Bitcoin stalls under $66K',dtitle:'Bitcoin stalls under $66K as Fear index sits at 30',hot:false,arrow:'down',desc:'BTC capped while Fear index sits at 30',sources:5,mentions:51,tone:'Bearish-leaning',tclass:'br',momentum:'Falling',vol:'Stable',spark:[88,82,75,70,78,65,60,58,55,53,50,52,51],editorial:'Discussion centered on Bitcoin clearing a multi-month downtrend but failing to sustain above $66K, with commentary noting large short liquidations yet persistent caution as the Fear & Greed index remains suppressed.',tags:['Range-bound','Liquidations','Fear & Greed'],related:[{sym:'BTC',m:45,tone:'br',tl:'Bearish-leaning',w1:'-2.40%'},{sym:'ETH',m:6,tone:'br',tl:'Bearish-leaning',w1:'-1.10%'}]},
-  {title:'S&P 500 hits record close',dtitle:'S&P 500 prints fresh record close on strong earnings',hot:true,arrow:'up',desc:'Best week since April on strong earnings',sources:5,mentions:53,tone:'Bullish-leaning',tclass:'bl',momentum:'Rising',vol:'Stable',spark:[20,22,25,28,30,32,35,38,40,44,48,50,53],editorial:'Conversation was dominated by services PMI readings coming in above forecast and the index printing fresh record highs alongside a broad equity rally. Commentary leaned positive on the trend.',tags:['Record highs','PMI data','Equity rally'],related:[{sym:'SPX',m:24,tone:'bl',tl:'Bullish-leaning',w1:'+2.10%'},{sym:'NVDA',m:9,tone:'nu',tl:'Neutral',w1:'+5.40%'}]},
-  {title:'Gold and silver break out',dtitle:'Gold and silver break out on weak USD and geopolitics',hot:false,arrow:'up',desc:'Gold up 6.5% on the month, silver at $64',sources:4,mentions:125,tone:'Bullish-leaning',tclass:'bl',momentum:'Rising',vol:'Expanding',spark:[40,42,50,55,60,72,80,85,95,105,110,118,125],editorial:'Discussion focused on Gold rallying to multi-week highs, including a sharp single-day surge tied to a softer US Dollar, weaker US labor data, and hopes of a US–Iran deal.',tags:['Multi-week highs','Weak USD','Geopolitics'],related:[{sym:'XAU',m:90,tone:'bl',tl:'Bullish-leaning',w1:'+6.50%'},{sym:'XAG',m:35,tone:'bl',tl:'Bullish-leaning',w1:'+8.20%'}]},
-  {title:'AI profit doubts grow',dtitle:'AI profit doubts grow despite big infrastructure deals',hot:false,arrow:'flat',desc:'Large AI deals, but margin questions rise',sources:3,mentions:49,tone:'Neutral',tclass:'nu',momentum:'Flat',vol:'Stable',spark:[45,48,50,47,52,49,46,50,48,51,47,50,49],editorial:'Coverage consisted mainly of product and partnership announcements, including a satellite-compute tie-up and joint AI-security guidelines. With little sentiment expressed, the discussion read as news-driven and neutral.',tags:['Partnerships','AI infrastructure','Margins'],related:[{sym:'NVDA',m:9,tone:'nu',tl:'Neutral',w1:'+3.40%'}]},
-  {title:'ETH accumulation continues',dtitle:'Ethereum accumulation continues with ETF inflows steady',hot:false,arrow:'up',desc:'Whale buys and ETF inflows hold pattern',sources:3,mentions:18,tone:'Bullish-leaning',tclass:'bl',momentum:'Rising',vol:'Stable',spark:[5,6,8,7,10,9,11,12,13,14,15,16,18],editorial:'Commentary described steady accumulation, including large whale and treasury purchases and net ETF inflows, and framed Ethereum as holding a constructive structure above support while stuck in a narrow range.',tags:['Accumulation','Range-bound','ETF inflows'],related:[{sym:'ETH',m:12,tone:'bl',tl:'Bullish-leaning',w1:'-1.10%'},{sym:'BTC',m:6,tone:'nu',tl:'Neutral',w1:'+0.20%'}]}
+  {title:'Oil firms rally as Iran rules out Hormuz talks this week',dtitle:'Oil slides as US–Iran Strait of Hormuz talks advance',hot:false,arrow:'up',desc:'Brent back above $83 as talks stall',sources:3,mentions:300,channels:3,tone:'Bullish-leaning',tclass:'bl',mom:'up 1.5x',vol:'Expanding',spark:[120,135,128,145,160,155,178,195,210,240,265,280,300],editorial:'The dominant thread was progress in US–Iran talks over reopening the Strait of Hormuz, with an Iran–Oman corridor reportedly taking shape. Commentary leaned cautious, noting geopolitical risk premiums adjusting higher.',tags:['Strait of Hormuz','US–Iran talks','Crude oil'],related:[{sym:'BZ',m:180,tone:'bl',tl:'Bullish-leaning',w1:'+3.80%'},{sym:'XAU',m:120,tone:'nu',tl:'Mixed',w1:'+6.50%'}]},
+  {title:'Bitcoin stalls below its weekly resistance at $66K as Fear index drops',dtitle:'Bitcoin stalls under $66K as Fear index sits at 30',hot:false,arrow:'down',desc:'BTC capped while Fear index sits at 30',sources:5,mentions:51,channels:5,tone:'Bearish-leaning',tclass:'br',mom:'cooling 1.2x',vol:'Stable',spark:[88,82,75,70,78,65,60,58,55,53,50,52,51],editorial:'Discussion centered on Bitcoin clearing a multi-month downtrend but failing to sustain above $66K, with commentary noting large short liquidations yet persistent caution as the Fear & Greed index remains suppressed.',tags:['Range-bound','Liquidations','Fear & Greed'],related:[{sym:'BTC',m:45,tone:'br',tl:'Bearish-leaning',w1:'-2.40%'},{sym:'ETH',m:6,tone:'br',tl:'Bearish-leaning',w1:'-1.10%'}]},
+  {title:'S&P 500 prints fresh record close on strong earnings',dtitle:'S&P 500 prints fresh record close on strong earnings',hot:true,arrow:'up',desc:'Best week since April on strong earnings',sources:5,mentions:53,channels:5,tone:'Bullish-leaning',tclass:'bl',mom:'up 1.5x',vol:'Stable',spark:[20,22,25,28,30,32,35,38,40,44,48,50,53],editorial:'Conversation was dominated by services PMI readings coming in above forecast and the index printing fresh record highs alongside a broad equity rally. Commentary leaned positive on the trend.',tags:['Record highs','PMI data','Equity rally'],related:[{sym:'SPX',m:24,tone:'bl',tl:'Bullish-leaning',w1:'+2.10%'},{sym:'NVDA',m:9,tone:'nu',tl:'Neutral',w1:'+5.40%'}]},
+  {title:'Gold and silver break out on weak USD and geopolitics',dtitle:'Gold and silver break out on weak USD and geopolitics',hot:false,arrow:'up',desc:'Gold up 6.5% on the month, silver at $64',sources:4,mentions:125,channels:4,tone:'Bullish-leaning',tclass:'bl',mom:'up 2.3x',vol:'Expanding',spark:[40,42,50,55,60,72,80,85,95,105,110,118,125],editorial:'Discussion focused on Gold rallying to multi-week highs, including a sharp single-day surge tied to a softer US Dollar, weaker US labor data, and hopes of a US–Iran deal.',tags:['Multi-week highs','Weak USD','Geopolitics'],related:[{sym:'XAU',m:90,tone:'bl',tl:'Bullish-leaning',w1:'+6.50%'},{sym:'XAG',m:35,tone:'bl',tl:'Bullish-leaning',w1:'+8.20%'}]},
+  {title:'AI profit doubts grow despite big infrastructure deals',dtitle:'AI profit doubts grow despite big infrastructure deals',hot:false,arrow:'flat',desc:'Large AI deals, but margin questions rise',sources:3,mentions:49,channels:3,tone:'Neutral',tclass:'nu',mom:'steady',vol:'Stable',spark:[45,48,50,47,52,49,46,50,48,51,47,50,49],editorial:'Coverage consisted mainly of product and partnership announcements, including a satellite-compute tie-up and joint AI-security guidelines. With little sentiment expressed, the discussion read as news-driven and neutral.',tags:['Partnerships','AI infrastructure','Margins'],related:[{sym:'NVDA',m:9,tone:'nu',tl:'Neutral',w1:'+3.40%'}]},
+  {title:'ETH accumulation continues as whale buys surge and ETF inflows hold steady',dtitle:'Ethereum accumulation continues with ETF inflows steady',hot:false,arrow:'up',desc:'Whale buys and ETF inflows hold pattern',sources:3,mentions:18,channels:3,tone:'Bullish-leaning',tclass:'bl',mom:'up 1.8x',vol:'Stable',spark:[5,6,8,7,10,9,11,12,13,14,15,16,18],editorial:'Commentary described steady accumulation, including large whale and treasury purchases and net ETF inflows, and framed Ethereum as holding a constructive structure above support while stuck in a narrow range.',tags:['Accumulation','Range-bound','ETF inflows'],related:[{sym:'ETH',m:12,tone:'bl',tl:'Bullish-leaning',w1:'-1.10%'},{sym:'BTC',m:6,tone:'nu',tl:'Neutral',w1:'+0.20%'}]}
 ];
 var SYM_META={BZ:{name:'Brent',color:'#8B6914'},XAU:{name:'Gold',color:'#C9A834'},XAG:{name:'Silver',color:'#8C8C8C'},BTC:{name:'Bitcoin',color:'#F7931A'},ETH:{name:'Ethereum',color:'#627EEA'},SPX:{name:'S&P 500',color:'#3B7DD8'},NVDA:{name:'Nvidia',color:'#76B900'},AAPL:{name:'Apple',color:'#A2AAAD'},SOL:{name:'Solana',color:'#9945FF'},BNB:{name:'BNB',color:'#F0B90B'},DOGE:{name:'Doge',color:'#C3A634'}};
 function buildSymIcons(related){
@@ -1130,6 +1142,8 @@ function buildSymIcons(related){
 }
 var kolFrom='home';
 var kolInfoOpen=false;
+var thumbUp='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.74651 9.25C3.53401 9.25 3.33651 9.132 3.25901 8.934C3.08738 8.49714 2.99951 8.03187 3.00001 7.5625C3.00001 6.6875 3.29951 5.8835 3.80101 5.2455C3.87651 5.1495 3.98751 5.091 4.10101 5.047C4.33751 4.9555 4.54601 4.79 4.70701 4.585C5.09514 4.08982 5.58237 3.6811 6.13751 3.385C6.49901 3.193 6.81251 2.907 6.96401 2.5275C7.07041 2.26163 7.12505 1.97788 7.12501 1.6915V1.375C7.12501 1.27554 7.16451 1.18016 7.23484 1.10983C7.30517 1.03951 7.40055 1 7.50001 1C7.79837 1 8.08452 1.11853 8.2955 1.3295C8.50648 1.54048 8.62501 1.82663 8.62501 2.125C8.62501 2.701 8.49501 3.2465 8.26351 3.734C8.13051 4.013 8.31701 4.375 8.62601 4.375H10.189C10.702 4.375 11.1615 4.722 11.216 5.2325C11.2385 5.4435 11.25 5.6575 11.25 5.875C11.2521 7.24317 10.7845 8.57061 9.92551 9.6355C9.73151 9.8765 9.43201 10 9.12301 10H7.11501C6.87351 10 6.63301 9.961 6.40351 9.885L4.84651 9.365C4.61706 9.28869 4.37681 9.24986 4.13501 9.25H3.74651ZM1.16551 5.3635C0.889965 6.06385 0.749001 6.80989 0.750005 7.5625C0.749374 8.15665 0.836997 8.7476 1.01001 9.316C1.14001 9.741 1.55251 10 1.99701 10H2.45001C2.67251 10 2.81001 9.751 2.71151 9.551C2.40657 8.93254 2.24847 8.25205 2.24951 7.5625C2.24951 6.7085 2.48751 5.91 2.90051 5.2295C3.02301 5.028 2.88651 4.75 2.65051 4.75H2.12501C1.70901 4.75 1.31851 4.9765 1.16551 5.3635Z" fill="#34C759"/></svg>';
+var thumbDn='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.865 2.75H8.3825C8.78645 3.36192 9.00122 4.07927 9 4.8125C9.00122 5.54573 8.78645 6.26308 8.3825 6.875H8.3085C7.9055 6.875 7.5415 7.098 7.293 7.415C6.90488 7.9102 6.41766 8.31892 5.8625 8.615C5.501 8.807 5.1875 9.093 5.036 9.4725C4.92961 9.73838 4.87496 10.0221 4.875 10.3085V10.625C4.875 10.7245 4.83549 10.8198 4.76516 10.8902C4.69484 10.9605 4.59946 11 4.5 11C4.20163 11 3.91548 10.8815 3.7045 10.6705C3.49353 10.4595 3.375 10.1734 3.375 9.875C3.375 9.299 3.505 8.7535 3.7365 8.266C3.8695 7.987 3.683 7.625 3.374 7.625H1.811C1.298 7.625 0.8385 7.278 0.784 6.7675C0.761313 6.55409 0.749964 6.33962 0.75 6.125C0.75 4.701 1.246 3.393 2.0745 2.3645C2.2685 2.1235 2.568 2 2.877 2H4.885C5.12681 1.99985 5.36705 2.03868 5.5965 2.115L7.1535 2.635C7.38295 2.71132 7.62319 2.75015 7.865 2.75ZM10.8345 7.0115C11.1025 6.3305 11.25 5.589 11.25 4.8125C11.25 4.2025 11.159 3.6135 10.99 3.059C10.86 2.634 10.448 2.375 10.0035 2.375H9.55C9.3275 2.375 9.19 2.624 9.2885 2.824C9.584 3.424 9.7505 4.099 9.7505 4.8125C9.75188 5.6352 9.52664 6.44238 9.0995 7.1455C8.977 7.347 9.1135 7.625 9.3495 7.625H9.876C10.292 7.625 10.6815 7.3985 10.8345 7.0115Z" fill="#FF493F"/></svg>';
 var PULSE_TAB_MAP={
   tradfi:['BZ','XAU','XAG','SPX','NVDA','AAPL','SPY'],
   perpetual:['BTC','ETH','SOL','BNB','DOGE'],
@@ -1244,6 +1258,7 @@ function go(nav){
   if(nav==='tradfi'){ loadSymbol(T.tradfiSym, true); }
   if(nav==='home' && window.resetBanner){ window.resetBanner(); }
   var scr=document.querySelector('.screen.active .scroll, .screen.active .order-scroll'); if(scr) scr.scrollTop=0;
+  if(window.parent!==window) window.parent.postMessage({type:'kol-screen',screen:nav},'*');
 }
 
 /* ---- Tabs + chips (generic delegation) ---- */
@@ -1625,45 +1640,48 @@ function renderPulseBanner(){
   if(!matches.length){ el.innerHTML=''; return; }
   pulseIdx=0;
   var trendSvgs={
-    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 8.5L4.5 5.5L6.5 7.5L10.5 3.5M10.5 3.5H7.5M10.5 3.5V6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5L4.5 6.5L6.5 4.5L10.5 8.5M10.5 8.5H7.5M10.5 8.5V5.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M10 6l-2-2M10 6l-2 2" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 2L10.5 9H1.5Z" fill="currentColor"/></svg>',
+    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 10L1.5 3H10.5Z" fill="currentColor"/></svg>',
+    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 6L4.5 3V9ZM10.5 6L7.5 3V9Z" fill="currentColor"/></svg>'
   };
-  var hotBadge='<span class="pulse-badge-hot"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 5.5 4 5.5 6.5C5.5 7.5 6 8.5 6 8.5C6 8.5 5 8 4.5 6.5C4.5 6.5 3 8.5 3 10.5C3 13 5.24 14.5 8 14.5C10.76 14.5 13 13 13 10.5C13 7 8 1.5 8 1.5Z" fill="#ff3b30"/></svg></span>';
+  var hotBadge='<span class="pulse-badge-hot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.48167 1.09221C6.42079 1.01056 6.32931 0.957189 6.22827 0.944365C6.12723 0.931542 6.02532 0.960368 5.94597 1.02422C5.01088 1.77663 4.3587 2.86819 4.17661 4.1125C3.84832 3.87452 3.56 3.58457 3.3238 3.25472C3.25882 3.16398 3.1568 3.10689 3.04547 3.09899C2.93415 3.09108 2.82508 3.13317 2.74793 3.21382C1.97523 4.02152 1.5 5.11773 1.5 6.32414C1.5 8.80942 3.51472 10.8241 6 10.8241C8.48528 10.8241 10.5 8.80942 10.5 6.32414C10.5 4.49369 9.40714 2.91931 7.83989 2.21634C7.28529 1.9456 6.82733 1.55573 6.48167 1.09221ZM7.875 7.07434C7.875 8.10987 7.03553 8.94934 6 8.94934C4.96447 8.94934 4.125 8.10987 4.125 7.07434C4.125 6.86967 4.15779 6.67266 4.21841 6.48828C4.53265 6.72058 4.89385 6.89299 5.28515 6.98864C5.3931 6.28825 5.74328 5.66779 6.24745 5.21552C7.16603 5.33662 7.875 6.12268 7.875 7.07434Z" fill="#FF493F"/></svg></span>';
   function buildMeta(it){
-    var parts=['Mentions '+it.mentions];
-    (it.related||[]).forEach(function(r){parts.push(r.sym);});
-    return '<div class="pulse-card-meta">'+parts.join('<span class="meta-dot"></span>')+'</div>';
+    var symIcons=(it.related||[]).map(function(r){
+      var sm=SYM_META[r.sym]||{color:'#555'};
+      return '<span class="meta-sym-ic" style="background:'+sm.color+'">'+r.sym.slice(0,2)+'</span>';
+    }).join('');
+    var syms=(it.related||[]).map(function(r){return r.sym;});
+    var txt=syms.length?syms.join(', ')+' <span class="meta-dot"></span> ':'';
+    txt+=it.mentions+' mentions';
+    return '<div class="pulse-card-meta">'+symIcons+txt+'</div>';
   }
   var track=matches.map(function(m,mi){
     var it=m.issue;
-    var dir=it.arrow||'flat';
-    var arrowBadge=dir!=='flat'?'<span class="pulse-badge-arrow '+dir+'">'+(trendSvgs[dir])+'</span>':'';
+    var toneBadge=it.tclass!=='nu'?'<span class="pulse-badge-arrow '+(it.tclass==='bl'?'up':'down')+'">'+(it.tclass==='bl'?thumbUp:thumbDn)+'</span>':'';
     var hotHTML=it.hot?hotBadge:'';
     return '<div class="pulse-slide" data-ki="'+m.idx+'">'
       +'<div class="pulse-card"><div class="pulse-card-body">'
       +'<div class="pulse-card-head">'
-      +'<span class="pulse-badge">Issue #'+(mi+1)+'</span>'
-      +arrowBadge+hotHTML
+      +'<span class="pulse-badge">Issue '+(mi+1)+'</span>'
+      +toneBadge+hotHTML
       +'</div>'
       +'<div class="pulse-card-title">'+it.title+'</div>'
       +buildMeta(it)
-      +'</div>'+buildSymIcons(it.related)+'<div class="pulse-card-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>';
+      +'</div><div class="pulse-card-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>';
   }).join('');
   var moreCount=KOL_ISSUES.length-matches.length;
   track+='<div class="pulse-seeall"><div class="pulse-seeall-btn" onclick="goKol(\'list\',0,\'home\')">'
-    +'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.5 5C3.5 3.9 4.4 3 5.5 3h9c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2H8.5l-3 3V13H5.5c-1.1 0-2-.9-2-2V5z" stroke="#2f98ff" stroke-width="1.2" fill="none"/><circle cx="7" cy="8" r="0.8" fill="#2f98ff"/><circle cx="10" cy="8" r="0.8" fill="#2f98ff"/><circle cx="13" cy="8" r="0.8" fill="#2f98ff"/></svg>'
-    +'<span style="font-size:15px;font-weight:600;color:#2f98ff">+'+moreCount+' more issues</span>'
-    +'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#2f98ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    +'<span style="font-size:14px;font-weight:600;color:#d4d4d4">'+moreCount+' more issues</span>'
+    +'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     +'</div></div>';
   var first=matches[0];var fDir=first.issue.arrow||'flat';var fHot=first.issue.hot?hotBadge:'';
-  var fArrow=fDir!=='flat'?'<span class="pulse-badge-arrow '+fDir+'">'+(trendSvgs[fDir])+'</span>':'';
+  var fToneBadge=first.issue.tclass!=='nu'?'<span class="pulse-badge-arrow '+(first.issue.tclass==='bl'?'up':'down')+'">'+(first.issue.tclass==='bl'?thumbUp:thumbDn)+'</span>':'';
   track+='<div class="pulse-slide pulse-clone" data-ki="'+first.idx+'">'
     +'<div class="pulse-card"><div class="pulse-card-body">'
-    +'<div class="pulse-card-head"><span class="pulse-badge">Issue #1</span>'+fArrow+fHot+'</div>'
+    +'<div class="pulse-card-head"><span class="pulse-badge">Issue 1</span>'+fToneBadge+fHot+'</div>'
     +'<div class="pulse-card-title">'+first.issue.title+'</div>'
     +buildMeta(first.issue)
-    +'</div>'+buildSymIcons(first.issue.related)+'<div class="pulse-card-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>';
+    +'</div><div class="pulse-card-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>';
   var totalSlides=matches.length+1;
   var dots='<div class="pulse-dots">'+Array.from({length:totalSlides},function(_,di){return '<span class="pulse-dot'+(di===0?' active':'')+'"></span>';}).join('')+'</div>';
   el.innerHTML='<div class="pulse-carousel"><div class="pulse-view"><div class="pulse-track" id="pulse-track">'+track+'</div></div>'+dots+'</div>';
@@ -1671,22 +1689,21 @@ function renderPulseBanner(){
   var viewEl=trackEl.parentElement;
   var dotEls=el.querySelectorAll('.pulse-dot');
   var EASE='transform .5s cubic-bezier(.4,0,.2,1)';
-  function slideW(){ return viewEl.offsetWidth-16; }
+  function slideW(){ var s=trackEl.querySelector('.pulse-slide'); return s.offsetWidth+8; }
+  function pOffset(){ return (viewEl.offsetWidth - trackEl.querySelector('.pulse-slide').offsetWidth)/2; }
   function renderP(anim){
     trackEl.style.transition=anim?EASE:'none';
-    trackEl.style.transform='translateX('+(-pulseIdx*slideW())+'px)';
+    trackEl.style.transform='translateX('+(pOffset()-pulseIdx*slideW())+'px)';
     dotEls.forEach(function(d,di){d.classList.toggle('active',di===pulseIdx);});
   }
   function goP(dir){
     if(dir===1&&pulseIdx>=totalSlides-1){
       pulseIdx=totalSlides;
       trackEl.style.transition=EASE;
-      trackEl.style.transform='translateX('+(-pulseIdx*slideW())+'px)';
+      trackEl.style.transform='translateX('+(pOffset()-pulseIdx*slideW())+'px)';
       setTimeout(function(){
         pulseIdx=0;
-        trackEl.style.transition='none';
-        trackEl.style.transform='translateX(0px)';
-        dotEls.forEach(function(d,di){d.classList.toggle('active',di===0);});
+        renderP(false);
       },500);
       dotEls.forEach(function(d,di){d.classList.toggle('active',di===0);});
       return;
@@ -1695,9 +1712,9 @@ function renderPulseBanner(){
     pulseIdx=pulseIdx+dir;
     renderP(true);
   }
-  renderP(false);
+  requestAnimationFrame(function(){ renderP(false); });
   var pDrag=false,pSX=0,pSY=0,pBase=0,pDec=false,pHz=false,pSwiped=false;
-  trackEl.addEventListener('pointerdown',function(e){pDrag=true;pDec=false;pHz=false;pSwiped=false;pSX=e.clientX;pSY=e.clientY;pBase=-pulseIdx*slideW();trackEl.style.transition='none';});
+  trackEl.addEventListener('pointerdown',function(e){pDrag=true;pDec=false;pHz=false;pSwiped=false;pSX=e.clientX;pSY=e.clientY;pBase=pOffset()-pulseIdx*slideW();trackEl.style.transition='none';});
   window.addEventListener('pointermove',function(e){
     if(!pDrag) return;
     var dx=e.clientX-pSX,dy=e.clientY-pSY;
@@ -1726,36 +1743,45 @@ function renderPulseBanner(){
 function renderKolList(){
   var el=document.getElementById('kol-list-scroll');
   var trendSvgs={
-    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 8.5L4.5 5.5L6.5 7.5L10.5 3.5M10.5 3.5H7.5M10.5 3.5V6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5L4.5 6.5L6.5 4.5L10.5 8.5M10.5 8.5H7.5M10.5 8.5V5.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M10 6l-2-2M10 6l-2 2" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 2L10.5 9H1.5Z" fill="currentColor"/></svg>',
+    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 10L1.5 3H10.5Z" fill="currentColor"/></svg>',
+    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 6L4.5 3V9ZM10.5 6L7.5 3V9Z" fill="currentColor"/></svg>'
   };
-  var hotBadgeL='<span class="pulse-badge-hot"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 5.5 4 5.5 6.5C5.5 7.5 6 8.5 6 8.5C6 8.5 5 8 4.5 6.5C4.5 6.5 3 8.5 3 10.5C3 13 5.24 14.5 8 14.5C10.76 14.5 13 13 13 10.5C13 7 8 1.5 8 1.5Z" fill="#ff3b30"/></svg></span>';
+  var hotBadgeL='<span class="pulse-badge-hot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.48167 1.09221C6.42079 1.01056 6.32931 0.957189 6.22827 0.944365C6.12723 0.931542 6.02532 0.960368 5.94597 1.02422C5.01088 1.77663 4.3587 2.86819 4.17661 4.1125C3.84832 3.87452 3.56 3.58457 3.3238 3.25472C3.25882 3.16398 3.1568 3.10689 3.04547 3.09899C2.93415 3.09108 2.82508 3.13317 2.74793 3.21382C1.97523 4.02152 1.5 5.11773 1.5 6.32414C1.5 8.80942 3.51472 10.8241 6 10.8241C8.48528 10.8241 10.5 8.80942 10.5 6.32414C10.5 4.49369 9.40714 2.91931 7.83989 2.21634C7.28529 1.9456 6.82733 1.55573 6.48167 1.09221ZM7.875 7.07434C7.875 8.10987 7.03553 8.94934 6 8.94934C4.96447 8.94934 4.125 8.10987 4.125 7.07434C4.125 6.86967 4.15779 6.67266 4.21841 6.48828C4.53265 6.72058 4.89385 6.89299 5.28515 6.98864C5.3931 6.28825 5.74328 5.66779 6.24745 5.21552C7.16603 5.33662 7.875 6.12268 7.875 7.07434Z" fill="#FF493F"/></svg></span>';
   var rows=KOL_ISSUES.map(function(it,i){
-    var dir=it.arrow||'flat';
-    var arrowBadge=dir!=='flat'?'<span class="pulse-badge-arrow '+dir+'">'+(trendSvgs[dir])+'</span>':'';
+    var toneBadgeL=it.tclass!=='nu'?'<span class="pulse-badge-arrow '+(it.tclass==='bl'?'up':'down')+'">'+(it.tclass==='bl'?thumbUp:thumbDn)+'</span>':'';
     var hotHTML=it.hot?hotBadgeL:'';
-    var metaParts=['Mentions '+it.mentions];
-    (it.related||[]).forEach(function(r){metaParts.push(r.sym);});
-    var metaHTML='<div class="kol-row-mentions">'+metaParts.join('<span class="meta-dot"></span>')+'</div>';
+    var symIcons=(it.related||[]).map(function(r){
+      var sm=SYM_META[r.sym]||{color:'#555'};
+      return '<span class="meta-sym-ic" style="background:'+sm.color+'">'+r.sym.slice(0,2)+'</span>';
+    }).join('');
+    var syms=(it.related||[]).map(function(r){return r.sym;});
+    var metaTxt=syms.length?syms.join(', ')+' <span class="meta-dot"></span> ':'';
+    metaTxt+=it.mentions+' mentions';
+    var metaHTML='<div class="kol-row-mentions">'+symIcons+metaTxt+'</div>';
     return '<div class="kol-row" onclick="goKol(\'detail\','+i+',\'list\')">'
       +'<div class="kol-row-mid">'
-      +'<div class="kol-row-badge"><span class="pulse-badge">Issue #'+(i+1)+'</span>'+arrowBadge+hotHTML+'</div>'
+      +'<div class="kol-row-badge"><span class="pulse-badge">Issue '+(i+1)+'</span>'+toneBadgeL+hotHTML+'</div>'
       +'<div class="kol-row-title">'+it.title+'</div>'
       +metaHTML
       +'</div>'
-      +buildSymIcons(it.related)
       +'<div class="kol-row-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>';
   }).join('');
-  el.innerHTML='<div class="kol-list-hero"><h1>Social signal</h1><span class="kol-upd">15m ago</span></div><div class="kol-list">'+rows+'</div>';
+  el.innerHTML='<div class="kol-list-hero"><h1>KOL Insight</h1><span class="kol-upd">15m ago</span></div><div class="kol-list">'+rows+'</div>';
+  var barTitle=document.getElementById('kol-list-bar-title');
+  el.addEventListener('scroll',function(){
+    var hero=el.querySelector('.kol-list-hero');
+    if(!hero||!barTitle)return;
+    barTitle.style.opacity=el.scrollTop>=hero.offsetHeight?'1':'0';
+  });
 }
 
 function renderKolDetail(i){
   var it=KOL_ISSUES[i];
   var el=document.getElementById('kol-detail-scroll');
   var symMeta={BZ:{name:'Brent',color:'#8B6914',tradfi:true},XAU:{name:'Gold',color:'#C9A834',tradfi:true},XAG:{name:'Silver',color:'#8C8C8C',tradfi:true},BTC:{name:'Bitcoin',color:'#F7931A'},ETH:{name:'Ethereum',color:'#627EEA'},SPX:{name:'S&P 500',color:'#3B7DD8',tradfi:true},NVDA:{name:'Nvidia',color:'#76B900',tradfi:true},SOL:{name:'Solana',color:'#9945FF'},BNB:{name:'BNB',color:'#F0B90B'},DOGE:{name:'Doge',color:'#C3A634'},AAPL:{name:'Apple',color:'#A2AAAD'}};
-  var trendUpSvg='<svg viewBox="0 0 16 16" fill="none"><path d="M2.5 12L6 8.5L8.5 11L13.5 5.5M13.5 5.5H10M13.5 5.5V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var trendDownSvg='<svg viewBox="0 0 16 16" fill="none"><path d="M2.5 4L6 7.5L8.5 5L13.5 10.5M13.5 10.5H10M13.5 10.5V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var trendUpSvg='<svg viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.8335 2.99998C4.8335 2.63179 5.13197 2.33331 5.50016 2.33331H13.0002C13.3684 2.33331 13.6668 2.63179 13.6668 2.99998V10.5C13.6668 10.8682 13.3684 11.1666 13.0002 11.1666C12.632 11.1666 12.3335 10.8682 12.3335 10.5V4.60946L3.47157 13.4714C3.21122 13.7317 2.78911 13.7317 2.52876 13.4714C2.26841 13.211 2.26841 12.7889 2.52876 12.5286L11.3907 3.66665H5.50016C5.13197 3.66665 4.8335 3.36817 4.8335 2.99998Z" fill="#34C759"/></svg>';
+  var trendDownSvg='<svg viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.52876 2.52858C2.78911 2.26823 3.21122 2.26823 3.47157 2.52858L12.3335 11.3905V5.49998C12.3335 5.13179 12.632 4.83331 13.0002 4.83331C13.3684 4.83331 13.6668 5.13179 13.6668 5.49998V13C13.6668 13.3682 13.3684 13.6666 13.0002 13.6666H5.50016C5.13197 13.6666 4.8335 13.3682 4.8335 13C4.8335 12.6318 5.13197 12.3333 5.50016 12.3333H11.3907L2.52876 3.47138C2.26841 3.21103 2.26841 2.78892 2.52876 2.52858Z" fill="#FF493F"/></svg>';
   var bubbleSvg='<svg viewBox="0 0 16 16" fill="none"><path d="M3 3h10a1 1 0 011 1v6a1 1 0 01-1 1H9l-3 2.5V11H3a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var relHTML=(it.related||[]).map(function(r){
     var isDown=r.w1&&r.w1.charAt(0)==='-';
@@ -1769,33 +1795,41 @@ function renderKolDetail(i){
       +'<div class="kol-detail-rel-info"><div class="kol-detail-rel-name">'+r.sym+'</div>'+catHTML+'</div></div>'
       +'<div class="kol-detail-rel-vals">'
       +'<div class="kol-detail-rel-stat"><span class="stat-val">'+bubbleSvg+r.m+'</span><span class="stat-lbl">Mentions</span></div>'
-      +'<div class="kol-detail-rel-w1"><span class="w1-val '+w1cls+'">'+w1Arrow+r.w1+'</span><span class="w1-label">1 week</span></div>'
+      +'<div class="kol-detail-rel-w1"><span class="w1-val '+w1cls+'">'+w1Arrow+r.w1+'</span><span class="w1-label">7days</span></div>'
       +'</div>'
       +'<div class="kol-detail-rel-chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>';
   }).join('');
   var issueIdx=KOL_ISSUES.indexOf(it);
   var dir=it.arrow||'flat';
   var badgeTrendSvgs={
-    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 8.5L4.5 5.5L6.5 7.5L10.5 3.5M10.5 3.5H7.5M10.5 3.5V6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5L4.5 6.5L6.5 4.5L10.5 8.5M10.5 8.5H7.5M10.5 8.5V5.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M10 6l-2-2M10 6l-2 2" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    up:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 2L10.5 9H1.5Z" fill="currentColor"/></svg>',
+    down:'<svg viewBox="0 0 12 12" fill="none"><path d="M6 10L1.5 3H10.5Z" fill="currentColor"/></svg>',
+    flat:'<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 6L4.5 3V9ZM10.5 6L7.5 3V9Z" fill="currentColor"/></svg>'
   };
-  var momArrowSvg='<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 8.5L4.5 5.5L6.5 7.5L10.5 3.5M10.5 3.5H7.5M10.5 3.5V6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var momCls=it.momentum==='Rising'?'chip-green':it.momentum==='Falling'?'chip-red':'chip-neutral';
+  var momRaw=it.mom||'steady';
+  var momIsUp=momRaw.indexOf('up')===0;
+  var momIsDown=momRaw.indexOf('cooling')===0;
+  var momLabel=momIsUp?'rising':momIsDown?'cooling':momRaw;
+  var mentionMomCls='chip-neutral';
+  var toneIcon=it.tclass==='bl'?' '+thumbUp:it.tclass==='br'?' '+thumbDn:'';
+  var toneLabel=it.tclass==='bl'?'Positive':it.tclass==='br'?'Negative':it.tone==='Mixed'?'Mixed tone':'Neutral tone';
+  var toneCls=it.tclass==='bl'?'chip-green':it.tclass==='br'?'chip-red':'chip-neutral';
+  var buzzLabel=it.vol==='Expanding'?'Buzz growing':it.vol==='Stable'?'Buzz steady':'';
   var volCls='chip-neutral';
   el.innerHTML='<div class="kol-detail">'
-    +'<div class="kol-detail-toprow"><span class="pulse-badge">Issue #'+(issueIdx+1)+'</span>'+(dir!=='flat'?'<span class="pulse-badge-arrow '+dir+'">'+badgeTrendSvgs[dir]+'</span>':'')+'<span class="kol-detail-ago">14m ago</span></div>'
-    +'<div class="kol-detail-h1">'+(it.dtitle||it.title)+'</div>'
+    +'<div class="kol-detail-toprow"><span class="pulse-badge">Issue '+(issueIdx+1)+'</span>'+(it.tclass!=='nu'?'<span class="pulse-badge-arrow '+(it.tclass==='bl'?'up':'down')+'">'+(it.tclass==='bl'?thumbUp:thumbDn)+'</span>':'')+(it.hot?'<span class="pulse-badge-hot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.48167 1.09221C6.42079 1.01056 6.32931 0.957189 6.22827 0.944365C6.12723 0.931542 6.02532 0.960368 5.94597 1.02422C5.01088 1.77663 4.3587 2.86819 4.17661 4.1125C3.84832 3.87452 3.56 3.58457 3.3238 3.25472C3.25882 3.16398 3.1568 3.10689 3.04547 3.09899C2.93415 3.09108 2.82508 3.13317 2.74793 3.21382C1.97523 4.02152 1.5 5.11773 1.5 6.32414C1.5 8.80942 3.51472 10.8241 6 10.8241C8.48528 10.8241 10.5 8.80942 10.5 6.32414C10.5 4.49369 9.40714 2.91931 7.83989 2.21634C7.28529 1.9456 6.82733 1.55573 6.48167 1.09221ZM7.875 7.07434C7.875 8.10987 7.03553 8.94934 6 8.94934C4.96447 8.94934 4.125 8.10987 4.125 7.07434C4.125 6.86967 4.15779 6.67266 4.21841 6.48828C4.53265 6.72058 4.89385 6.89299 5.28515 6.98864C5.3931 6.28825 5.74328 5.66779 6.24745 5.21552C7.16603 5.33662 7.875 6.12268 7.875 7.07434Z" fill="#FF493F"/></svg></span>':'')+'<span class="kol-detail-ago">14m ago</span></div>'
+    +'<div class="kol-detail-h1">'+it.title+'</div>'
     +'<div class="kol-detail-edi"><p>'+it.editorial+'</p><div class="kol-detail-sources">'+it.sources+' sources</div></div>'
     +'<div class="kol-detail-sigs">'
-    +'<span class="kol-detail-chip '+momCls+'">Momentum '+it.momentum+(it.momentum==='Rising'?' '+momArrowSvg:it.momentum==='Falling'?' '+badgeTrendSvgs.down:'')+'</span>'
-    +'<span class="kol-detail-chip chip-neutral">Mentions '+it.mentions+'</span>'
-    +'<span class="kol-detail-chip '+volCls+'">Volatility '+it.vol+'</span>'
+    +'<span class="kol-detail-chip '+toneCls+'">'+toneLabel+toneIcon+'</span>'
+    +'<span class="kol-detail-chip '+mentionMomCls+'">'+it.mentions+' mentions</span>'
+    +(buzzLabel?'<span class="kol-detail-chip '+volCls+'">'+buzzLabel+'</span>':'')
     +'</div>'
     +'<div class="kol-detail-sect">Mentions and movement</div>'
     +'<div class="kol-detail-rel">'+relHTML+'</div>'
-    +'<div class="kol-detail-foot">Aggregated public discourse · Not Flipster\'s view · Not investment advice</div>'
-    +'</div>';
+    +'<div class="kol-detail-cta"><button onclick="goKol(\'list\',0,\'detail\')">See other issues</button></div>'
+    +'</div>'
+    +'<div class="kol-detail-foot">Aggregated public discourse. Not Flipster\'s view. Not investment advice</div>';
 }
 
 function toggleKolInfo(ev){
@@ -1806,10 +1840,9 @@ function toggleKolInfo(ev){
     root.innerHTML='<div class="kol-scrim" onclick="toggleKolInfo(event)"></div>'
       +'<div class="kol-sheet">'
       +'<div class="kol-sheet-grab" onclick="toggleKolInfo(event)"></div>'
-      +'<h3>What is KOL Insight?</h3>'
-      +'<p>Crypto and TradFi communities are talking — we listen. Each week we surface the topics getting the most attention and show where the sentiment sits.</p>'
+      +'<h3>What is KOL insight?</h3>'
+      +'<p>We follow the KOL channels that move crypto and TradFi. Some are the big names everyone reads, some we picked ourselves. Each week we group what they\'re talking about into topics and show where opinion sits.</p>'
       +'<div class="kol-sheet-fine">These are their views, not Flipster\'s. Not investment advice.</div>'
-      +'<button class="kol-sheet-btn" onclick="toggleKolInfo(event)">Got it</button>'
       +'</div>';
   } else {
     root.innerHTML='';
