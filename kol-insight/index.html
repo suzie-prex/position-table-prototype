@@ -1901,6 +1901,8 @@ function toggleEmptyState(){
   toggle.classList.toggle('on',isEmptyState);
   banner.style.display=isEmptyState?'none':'';
   empty.style.display=isEmptyState?'':'none';
+  var seeAll=document.querySelector('.pulse-section .see-all');
+  if(seeAll) seeAll.style.display=isEmptyState?'none':'';
 }
 
 /* Init: pre-build order screen with default TradFi symbol (XAU) */
