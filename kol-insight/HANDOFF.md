@@ -65,8 +65,8 @@ var SYM_META = {
 | `dtitle` | string | 이슈 제목 (디테일용, 줄바꿈 허용) | Detail 타이틀 |
 | `hot` | boolean | 화제성 표시 여부 | 🔥 badge-kol-hot |
 | `arrow` | `'up'` \| `'down'` \| `'flat'` | 센티먼트 방향 | badge-kol-sentiment |
-| `tone` | string | 톤 라벨 (표시용) | Detail badge row |
-| `tclass` | `'bl'` \| `'br'` \| `'nu'` | 톤 분류 (bl=Bullish, br=Bearish, nu=Mixed) | 뱃지 색상 결정 |
+| `tone` | string | 톤 라벨 (표시용) | Detail chip |
+| `tclass` | `'bl'` \| `'br'` \| `'nu'` | 톤 분류 (bl=Positive, br=Negative, nu=Mixed) | 뱃지/칩 색상·아이콘 결정 |
 | `mentions` | number | 총 멘션 수 | 카드 meta, Detail badge |
 | `sources` | number | 원문 소스 수 | Detail "N sources" |
 | `editorial` | string | AI 요약 텍스트 | Detail 인용 블록 |
@@ -155,10 +155,25 @@ var SYM_META = {
 
 ---
 
-## 8. 주의사항
+## 8. 센티먼트 뱃지 규칙
+
+| tclass | 아이콘 | 칩 라벨 | 뱃지 색상 |
+|--------|--------|---------|----------|
+| `'bl'` | 👍 (thumbs up) | Positive | 초록 배경 |
+| `'br'` | 👎 (thumbs down) | Negative | 빨강 배경 |
+| `'nu'` | 💬 (chat bubble) | Mixed | 회색 배경 |
+
+- **Home/List 카드**: 아이콘만 표시
+- **Detail toprow**: 아이콘만 표시
+- **Detail chips**: 라벨 + 아이콘 함께 표시 (예: `Positive 👍`)
+
+---
+
+## 9. 주의사항
 
 - 이슈 넘버링(Issue 1, Issue 2…) 없음 — 뱃지에 번호를 표시하지 않는다.
 - `tclass` 값은 반드시 `'bl'`, `'br'`, `'nu'` 중 하나여야 한다. 다른 값을 넣으면 뱃지가 표시되지 않는다.
+- 모든 `tclass`에 대해 센티먼트 뱃지가 표시된다 (Mixed 포함).
 - `related[].sym`은 `SYM_META`에 등록된 키와 일치해야 아이콘이 정상 표시된다.
 - 이슈가 3개를 초과하면 Home 캐러셀에 자동으로 More 카드가 추가된다.
 - 이슈가 0개이면 Home에서 자동으로 Empty 상태가 표시된다.
